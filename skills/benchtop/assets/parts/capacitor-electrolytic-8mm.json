@@ -1,0 +1,28 @@
+{
+  "id": "capacitor-electrolytic-8mm",
+  "name": "Radial electrolytic capacitor, 8 x 11.5 mm (through-hole)",
+  "kind": "passive",
+  "blurb": "Upright can capacitor for smoothing a power rail or a motor supply; has a + and a - lead and must go in the right way round. Value and voltage are set per project.",
+  "body": { "w": 8, "d": 8, "h": 1 },
+  "maxHeight": 11.5,
+  "shapes": [
+    { "kind": "cyl", "tag": "can", "x": 4, "y": 4, "z": 0, "r": 4, "h": 10.5 }
+  ],
+  "pins": [
+    { "name": "+", "aliases": ["anode", "positive"], "role": "passive", "x": 2.25, "y": 4, "z": -1, "lead": 15, "note": "Positive: the longer lead, on the side without the stripe. Goes toward the more positive side of the circuit." },
+    { "name": "-", "aliases": ["cathode", "negative"], "role": "passive", "x": 5.75, "y": 4, "z": -1, "lead": 15, "note": "Negative: the shorter lead, on the side with the stripe printed on the sleeve. Goes toward GND. Fitted backwards the part fails, sometimes by venting." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 3.5, "ref": "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm" },
+  "sourcing": {
+    "search": ["radial electrolytic capacitor 8x11.5mm 470uF 16V", "electrolytic capacitor 8mm 1000uF 10V 105C", "elektrolyttkondensator radial 8x11,5 mm"],
+    "priceUsd": 0.2
+  },
+  "verify": "Can diameter 8 mm and lead spacing 3.5 mm are from the Rubycon PK dimension table and agree with the Nichicon UVR table (phiD 8, P 3.5, lead 0.6); the 11.5 mm length is the standard size listed there for 100 uF 50 and 63 V, 220 uF 35 V, 330 and 470 uF 25 V, 470 uF 16 V and 1000 uF 6.3 and 10 V. The sleeve adds up to 0.5 mm to the diameter and up to 1.5 mm to the length, so measure your parts if the enclosure sits close. Check the height of the value you buy against the size table; other values of the same diameter can be taller. The value and the voltage rating are set per project (value); the rating must exceed the rail with margin. Drawing-only fields: the 1 mm base slice plus one cylinder is a drawing device for a single can, z -1 puts the legs at the underside of the slice, and lead 15 mm is the minimum lead length in the table.",
+  "sources": [
+    "https://www.rubycon.co.jp/wp-content/uploads/catalog-aluminum/PK.pdf, dimensions drawing and table: phiD 8, lead phid 0.6, spacing F 3.5, leads at least 15 mm with the + lead at least 4 mm longer, sleeve at most phiD + 0.5; size table for 8 x 11.5 values",
+    "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-uvr.pdf, UVR dimensions: phiD 8 gives P 3.5 and lead 0.6; 470 uF 16 V is 8 x 11.5",
+    "KiCad Capacitor_THT:CP_Radial_D8.0mm_P3.50mm: pad 1 is +, 3.50 mm spacing"
+  ],
+  "confidence": "datasheet"
+}

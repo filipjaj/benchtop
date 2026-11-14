@@ -1,0 +1,28 @@
+{
+  "id": "fuse-holder-inline-mini-blade",
+  "name": "In-line holder for MINI (ATM/APM) blade fuses, with wire leads (Littelfuse FHM, 0FHM0001ZXJ)",
+  "kind": "passive",
+  "blurb": "A capped holder with a wire out of each end that is spliced into the positive supply wire; a small car-type blade fuse pushes into it and blows before the wiring overheats.",
+  "body": { "w": 56, "d": 14, "h": 14 },
+  "maxHeight": 18,
+  "shapes": [
+    { "kind": "box", "tag": "fuse-cap", "x": 19, "y": 3, "z": 0, "w": 18, "d": 8, "h": 4 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0, "y": 7, "z": -7, "lead": 94, "note": "One lead. A fuse has no direction: either lead goes to the supply. Put the holder in the positive wire, as close to the battery or supply as you can, so the fuse protects all the wire after it." },
+    { "name": "2", "role": "passive", "x": 56, "y": 7, "z": -7, "lead": 94, "note": "The other lead, toward the load." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Littelfuse 0FHM0001ZXJ", "inline mini blade fuse holder ATM 14 AWG waterproof", "mini blade fuse holder in-line with leads APM"],
+    "priceUsd": 4
+  },
+  "verify": "From the Littelfuse 2D print of 0FHM0001ZXJ: body 56 +-1.5 mm long, 14 +-0.25 mm high, 18 +-0.25 mm high over the closed cap, leads A and B 94 +-5 mm each with 13 mm stripped; cap 17 x 22 mm when open; fuse slot 15.4 x 4.4 mm. Lead gauge and maximum fuse from the datasheet: 0FHM0001 14 AWG, fuse up to 20 A; 0FHM0002 12 AWG, up to 30 A; 0FHM0003 16 or 18 AWG (20 A holder, some sold with a 2, 5 or 10 A fuse fitted); 58 V DC maximum (32 V for the clear Smart Glow versions), sealed to IP67 with the cap shut. The width of the body (14 here) is not dimensioned on the views read: it is set equal to the height, so measure it if the holder must fit a slot. The cap is drawn as a block for recognition; its place and size on the body are not from the print. Takes MINI blade fuses (also sold as ATM or APM); the larger regular ATO/ATC blade fuses do not fit. Unbranded holders from hobby shops are the same idea with thinner wire, often 16 or 18 AWG: choose the fuse for the wire, not for the holder. The fuse value is per project: put it in `value`. The holder hangs in the wiring; nothing in a case holds it.",
+  "sources": [
+    "https://www.littelfuse.com/assetdocs/0fhm0001zxj-2d-prints?assetguid=87518b38-ffab-49e4-913f-6612b569314e (Littelfuse outline drawing OL-0FHM0001ZXJ, opened in a browser and read: 56 +-1.5, 14 +-0.25, 18 +-0.25, 17.00 x 22 cap, 7.5, fuse slot 15.4 x 4.4 and 8.1, lead table A = B = 94 +-5 with 13 +-2 strip)",
+    "https://www.littelfuse.com/assetdocs/mini-fhm-datasheet?assetguid=339fa35e-eabc-45c5-9093-8abceaa8a2cf (Littelfuse MINI FHM series datasheet, opened and read: 20 A and 30 A versions, 58 V DC, IP67, ordering table with lead gauge per part number)",
+    "https://www.mouser.com/datasheet/2/240/Littelfuse_Fuse_Holder_Inline_2520MINI_Datasheet-2584332.pdf (Littelfuse in-line MINI holder datasheet, opened and read: fuse range 2 to 30 A, -40 to 125 C, table of wire size and lead lengths per part number)"
+  ],
+  "confidence": "typical"
+}

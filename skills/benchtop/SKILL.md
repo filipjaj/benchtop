@@ -66,9 +66,25 @@ is this the thing?** Iterate here; it is the cheapest place to change your mind.
 ### 2. Parts and circuit
 
 Read `references/circuit.md`. Pick parts from `assets/parts/` (list the folder; each file
-has a `blurb`). If the project needs a part that is not there, write a part file into
-`<projectDir>/parts/` from the datasheet, following that reference. Then write the
-`connections` and check them:
+has a `blurb`). A part that is not there goes in `<projectDir>/parts/`. Where its pad
+positions come from decides whether the guide and the case can be trusted, so before
+typing a board or module by hand, ask the parts catalog. A snapshot of it ships with the
+skill; there is nothing to set up:
+
+```bash
+bun scripts/catalog.ts find "<exact model>"     # is this board or module in the catalog?
+bun scripts/catalog.ts pads <part_id>           # does it hold pad positions from the maker's CAD file?
+bun scripts/catalog.ts import-part <part_id> --id <id> --out <projectDir>/parts/<id>.json
+```
+
+When `pads` lists a dataset, `import-part` writes the draft part file: pads and outline
+from the maker's file, ground pins, and where the catalog has them GPIO numbers, logic
+level, height and connector openings. It prints what it could not derive (power pins,
+price, often the height); fill those in from the datasheet. Import only the exact board
+you will buy, same maker and revision: a branded board's pads say nothing about a clone
+with the same chip. When the catalog has no pad data for the part, write the file from
+the datasheet or the maker's drawing, following `references/circuit.md` ("Adding a
+part"). Then write the `connections` and check them:
 
 ```bash
 bun scripts/validate.ts <projectDir>     # electrical rule check, exit 1 on errors
@@ -290,7 +306,8 @@ silently: each question in phases 1 and 3 gets a recorded default and the run go
 | `validate.ts [--json]` | parts, connections, power | findings on stdout |
 | `source.ts [--stores] [--query]` | parts | candidates on stdout (cached 24 h) |
 | `shopping.ts [--region CC]` | parts, sourcing | `out/shopping/index.html` |
-| `catalog.ts find\|show\|listings\|check-library` | a local parts catalog, if present | text on stdout (read-only) |
+| `catalog.ts find\|show\|listings\|pads\|check-library` | the bundled parts catalog (or `--db`, `BENCHTOP_CATALOG`) | text on stdout (read-only) |
+| `catalog.ts import-part <part_id> --id ID --out FILE` | the catalog's pad data for one board or module | a draft part file, normally in `<projectDir>/parts/` |
 | `catalog-cards.ts build\|show\|find`, `catalog.ts card\|cards` | the full catalog (build), a card file (`--cards` or `BENCHTOP_CARDS`) | one pre-joined reference card per part, text or `--json` (read-only) |
 | `bom.ts` | parts, sourcing | `out/bom.csv`, `out/bom.md` |
 | `guide.ts [--pdf]` | everything | `out/guide/` |

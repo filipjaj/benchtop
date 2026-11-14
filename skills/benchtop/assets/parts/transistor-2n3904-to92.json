@@ -1,0 +1,28 @@
+{
+  "id": "transistor-2n3904-to92",
+  "name": "2N3904 NPN transistor, TO-92 (through-hole)",
+  "kind": "connector",
+  "blurb": "Small NPN transistor that switches or amplifies up to 200 mA, for driving an LED, a relay coil or a small load from a controller pin through a base resistor.",
+  "body": { "w": 4.8, "d": 3.7, "h": 4.8 },
+  "maxHeight": 4.8,
+  "decals": [
+    { "kind": "text", "face": "left", "x": 0.3, "y": 1.5, "text": "2N3904", "size": 1.2 }
+  ],
+  "pins": [
+    { "name": "E", "aliases": ["emitter", "1"], "role": "passive", "x": 1.13, "y": 1.95, "z": -4.8, "lead": 12.7, "note": "Pin 1, emitter. Hold the transistor with the flat printed face toward you and the leads pointing down: pin 1 is the leftmost leg. Goes to GND for a low-side switch." },
+    { "name": "B", "aliases": ["base", "2"], "role": "passive", "x": 2.4, "y": 1.95, "z": -4.8, "lead": 12.7, "note": "Pin 2, base (middle leg). Needs a series resistor from the controller pin, typically 1 to 10 kohm; never wire it straight to a pin." },
+    { "name": "C", "aliases": ["collector", "3"], "role": "passive", "x": 3.67, "y": 1.95, "z": -4.8, "lead": 12.7, "note": "Pin 3, collector (rightmost leg with the flat face toward you). Goes to the load, whose other end goes to the supply. Rated 200 mA continuous and 40 V." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 1.27, "ref": "Package_TO_SOT_THT:TO-92_Inline" },
+  "sourcing": {
+    "search": ["2N3904 NPN transistor TO-92", "2N3904 transistor 40V 200mA through hole", "2N3904 transistor 10 stk"],
+    "priceUsd": 0.1
+  },
+  "verify": "Pin order E-B-C, 40 V collector-emitter, 200 mA continuous and 625 mW are from the onsemi 2N3903/2N3904 datasheet (TO-92 CASE 29 STYLE 1, pins numbered 1-2-3 left to right with the flat face toward you and leads down, as drawn on page 1). Body size is the middle of the datasheet limits on page 7 (width 4.45 to 5.20 mm, height 4.32 to 5.33 mm, depth 3.18 to 4.19 mm), lead pitch 1.27 mm and lead length 12.7 mm minimum are from the same page. The body is drawn as a box; the real part is D-shaped with the flat face at the front (+y). Lead row y 1.95 is 1.75 mm in from the flat face, from the KiCad footprint. Other transistors in TO-92 have other pin orders: BC547 is C-B-E. Check the pinout of the listing, or test one with a multimeter's diode mode, before building. This file is only for the named type.",
+  "sources": [
+    "https://www.onsemi.com/pdf/datasheet/2n3903-d.pdf (opened and read: page 1 shows the pin numbering 1 emitter, 2 base, 3 collector on the TO-92 CASE 29 drawing and the maximum ratings; page 7 TO-92 dimension limits)",
+    "KiCad Package_TO_SOT_THT:TO-92_Inline (opened and read: pads at x 0, 1.27, 2.54; flat face 1.75 mm from the lead row)"
+  ],
+  "confidence": "datasheet"
+}

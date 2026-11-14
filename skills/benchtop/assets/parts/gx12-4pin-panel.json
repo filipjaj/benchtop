@@ -1,0 +1,29 @@
+{
+  "id": "gx12-4pin-panel",
+  "name": "GX12 4-pin panel socket (aviation connector), solder cups",
+  "kind": "connector",
+  "blurb": "A small round metal socket with four pins that is fixed in a hole in the case with a nut; a cable with the matching screw-on plug connects a sensor or motor outside the case.",
+  "body": { "w": 15, "d": 15.6, "h": 15 },
+  "maxHeight": 15,
+  "pins": [
+    { "name": "1", "role": "passive", "x": 6, "y": 15.6, "z": -6, "lead": 3, "note": "The numbers 1 to 4 are moulded into the black insert next to each solder cup, and again next to each pin on the mating face: read them there, with a magnifier if needed. The mating face is the mirror image of the solder side, so never count from a picture of the other side. The plug carries the same numbers; pin 1 of the socket meets pin 1 of the plug." },
+    { "name": "2", "role": "passive", "x": 6, "y": 15.6, "z": -9, "lead": 3 },
+    { "name": "3", "role": "passive", "x": 9, "y": 15.6, "z": -9, "lead": 3 },
+    { "name": "4", "role": "passive", "x": 9, "y": 15.6, "z": -6, "lead": 3 }
+  ],
+  "ports": [
+    { "name": "panel-hole", "faces": "y-", "x": 7.5, "y": 0, "z": -7.5, "w": 12, "h": 12, "shape": "round", "margin": 0 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["GX12 4 pin aviation connector panel socket and plug", "GX12-4 aviation plug male female 12mm", "GX12 4-pol kontakt panel"],
+    "priceUsd": 2
+  },
+  "verify": "No maker is named on these connectors; the numbers are from a reseller's copy of the factory drawing (Handson Technology), checked against Olimex's sheet. From that drawing: mounting thread M12 x 0.75 in a 12 mm panel hole with one flat at 11 mm (a plain 12 mm round hole also works, the flat only stops it turning); collar 15 mm; mating nose 9.3 mm with an M13 x 1 thread for the plug's ring; 15.6 mm long without the solder cups; cups take wire up to about 0.8 mm (roughly AWG 20). Rated 5 A (125 V on one sheet, 250 V on the other). NOT from any drawing, drawn for recognition only: where the four cups are inside the insert (put 3 mm apart here), which cup is which number as placed in this file, the length of the cups behind the body (about 3 mm, scaled off the drawing), and which side of the wall the collar and the nut go (sockets are sold both ways). Olimex's chart shows, with the key notch up, 4 and 1 in the top row and 3 and 2 below, without saying which face it is. So: read the moulded numbers on your part, and wire the plug by its own numbers. Drawn as a block lying on its side with the mating end at y = 0; the real part is round. The plug with its ring needs about 16 mm of free diameter outside the case.",
+  "sources": [
+    "https://www.handsontec.com/dataspecs/connector/GX12.pdf (Handson Technology GX12 sheet, a reseller's copy of the factory drawing, opened and read: socket drawing with 15 dia, M12 x 0.75, M13 x 1, 9.3 dia, 5, 9.1, 15.6, panel cutout 12 with flat 11; 5 A 125 V, solder cup aperture 0.8 mm, cable up to 5 mm)",
+    "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5560/Olimex%20-%20CONNECTOR-GX12-4.pdf (Olimex CONNECTOR-GX12-4 sheet, opened and read: same socket drawing with 15.6, 5, 9.3 dia, M13 x 1, flat 11, 15 dia; contact arrangement chart for 12-4 with pins numbered 1 to 4, contacts 1.2 mm, 5 A 250 V)"
+  ],
+  "confidence": "typical"
+}

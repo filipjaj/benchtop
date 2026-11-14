@@ -1,0 +1,36 @@
+{
+  "id": "mcp6002-dip8",
+  "name": "MCP6002 dual op amp, DIP-8 (1.8 to 6 V, rail-to-rail)",
+  "kind": "connector",
+  "blurb": "An 8-pin chip with two op amps that run from 1.8 to 6 V and swing their outputs almost to the supply rails. Used to buffer or amplify a small analog signal before an ADC pin.",
+  "body": { "w": 7.62, "d": 9.27, "h": 5.33 },
+  "maxHeight": 5.33,
+  "decals": [
+    { "kind": "circle", "face": "top", "x": 1.6, "y": 1.2, "r": 0.5, "fill": "black" },
+    { "kind": "text", "face": "top", "x": 2.2, "y": 1.5, "text": "MCP6002", "size": 1.3, "along": "y" }
+  ],
+  "pins": [
+    { "name": "VOUTA", "aliases": ["1"], "role": "io", "x": 0, "y": 0.825, "z": -3.3, "lead": 3.3, "dir": "out", "note": "Pin 1, top left, next to the dot or notch at the end of the chip. Output of op amp A. It swings to within 25 mV of its own supply, so power the chip from 3.3 V when this feeds a 3.3 V ADC pin. Short-circuit current is about 6 mA at 1.8 V and 23 mA at 5.5 V." },
+    { "name": "VINA-", "aliases": ["2"], "role": "io", "x": 0, "y": 3.365, "z": -3.3, "lead": 3.3, "dir": "in", "note": "Pin 2. Inverting input of op amp A. Must stay between VSS - 1.0 V and VDD + 1.0 V (limit depends on the supply), input current at most 2 mA." },
+    { "name": "VINA+", "aliases": ["3"], "role": "io", "x": 0, "y": 5.905, "z": -3.3, "lead": 3.3, "dir": "in", "note": "Pin 3. Non-inverting input of op amp A. Must stay between VSS - 1.0 V and VDD + 1.0 V (limit depends on the supply). If amp A is unused, wire it as a follower (pin 1 to pin 2) and put this pin at a rail or mid-supply, never floating." },
+    { "name": "VSS", "aliases": ["4"], "role": "gnd", "x": 0, "y": 8.445, "z": -3.3, "lead": 3.3, "note": "Pin 4, bottom left. Negative supply: ground on a single-supply circuit." },
+    { "name": "VINB+", "aliases": ["5"], "role": "io", "x": 7.62, "y": 8.445, "z": -3.3, "lead": 3.3, "dir": "in", "note": "Pin 5, bottom right (the pin opposite pin 4). Non-inverting input of op amp B. Must stay between VSS - 1.0 V and VDD + 1.0 V (limit depends on the supply). If amp B is unused, wire it as a follower (pin 7 to pin 6) and put this pin at a rail or mid-supply, never floating." },
+    { "name": "VINB-", "aliases": ["6"], "role": "io", "x": 7.62, "y": 5.905, "z": -3.3, "lead": 3.3, "dir": "in", "note": "Pin 6. Inverting input of op amp B. Must stay between VSS - 1.0 V and VDD + 1.0 V (limit depends on the supply), input current at most 2 mA." },
+    { "name": "VOUTB", "aliases": ["7"], "role": "io", "x": 7.62, "y": 3.365, "z": -3.3, "lead": 3.3, "dir": "out", "note": "Pin 7. Output of op amp B, not an input: pin 5 is VINB+ and pin 7 is VOUTB. It swings to within 25 mV of its own supply, so power the chip from 3.3 V when this feeds a 3.3 V ADC pin." },
+    { "name": "VDD", "aliases": ["8"], "role": "power-in", "x": 7.62, "y": 0.825, "z": -3.3, "lead": 3.3, "minVolts": 1.8, "maxVolts": 6, "note": "Pin 8, top right. Positive supply, 1.8 to 6.0 V (absolute maximum 7.0 V between VDD and VSS). Add a 100 nF capacitor from this pin to VSS close to the chip." }
+  ],
+  "electrical": {
+    "currentMa": { "typical": 0.2, "peak": 0.34 }
+  },
+  "footprint": { "mount": "tht", "pitch": 2.54, "ref": "Package_DIP:DIP-8_W7.62mm" },
+  "sourcing": {
+    "search": ["MCP6002-I/P DIP-8", "MCP6002 dual op amp rail-to-rail DIP8", "operasjonsforsterker MCP6002 DIP-8"],
+    "priceUsd": 0.6
+  },
+  "verify": "Pin function table, supply range (1.8 to 6.0 V, 7.0 V absolute maximum), input range (VSS - 1.0 V to VDD + 1.0 V, +-2 mA), output short-circuit current, 25 mV output swing and quiescent current (100 uA typical, 170 uA maximum per amplifier, so 0.2 and 0.34 mA for two) are from the Microchip DS20001733L. Pin pitch (2.54), the 7.62 mm row spacing, the 9.27 mm package length and the 5.33 mm maximum height above the seating plane are from its 8-lead PDIP drawing C04-018; pin positions are the KiCad DIP-8_W7.62mm pads. The molded body there is 6.35 mm wide, but it is drawn here as wide as the lead rows (7.62) so every pin sits inside the body; the real plastic is narrower. Lead length 3.3 mm (tip to seating plane) is a drawing value, and z -3.3 and lead 3.3 are drawing values, not measured. The pins run counter-clockwise seen from above: 1 to 4 down the left side, 5 to 8 up the right side, so pin 5 is bottom right and pin 8 top right; an earlier run swapped pins 5 and 7. The datasheet gives no supply-relative input limit as a fixed number, so inputs carry no maxVolts: keep them within VDD + 1.0 V of the actual supply. An unused amplifier is wired as a follower with its + input at a rail or mid-supply, never left floating (general practice, not from the datasheet). Buy the 8-pin PDIP (-I/P) package; the same chip comes in SOIC and MSOP, which do not fit a breadboard. This file models the bare chip, not a breakout board.",
+  "sources": [
+    "https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf (opened and read: pin function table 3-1 for the 8-lead PDIP column, electrical characteristics, absolute maximum ratings, 8-lead PDIP package drawing C04-018)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Package_DIP.pretty/DIP-8_W7.62mm.kicad_mod (KiCad footprint, opened: pad 1 at 0,0, pads 2.54 apart, rows 7.62 apart, counter-clockwise)"
+  ],
+  "confidence": "typical"
+}

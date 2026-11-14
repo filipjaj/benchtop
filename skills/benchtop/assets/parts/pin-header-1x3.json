@@ -1,0 +1,30 @@
+{
+  "id": "pin-header-1x3",
+  "name": "Pin header, 1x3, 2.54 mm pitch (straight, male)",
+  "kind": "connector",
+  "blurb": "A short piece of 0.1 inch pin strip: a jumper lead pushes onto each pin, or it is the test point or plug for a module.",
+  "body": { "w": 7.62, "d": 2.54, "h": 2.54 },
+  "maxHeight": 8.54,
+  "shapes": [
+    { "kind": "box", "x": 0.95, "y": 0.95, "z": 0, "w": 0.64, "d": 0.64, "h": 6, "tag": "header" },
+    { "kind": "box", "x": 3.49, "y": 0.95, "z": 0, "w": 0.64, "d": 0.64, "h": 6, "tag": "header" },
+    { "kind": "box", "x": 6.03, "y": 0.95, "z": 0, "w": 0.64, "d": 0.64, "h": 6, "tag": "header" }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 1.27, "y": 1.27, "note": "Left pin seen from above. A bare strip has no marking: pin 1 is whichever end you decide, so label it in the wiring." },
+    { "name": "2", "role": "passive", "x": 3.81, "y": 1.27, "note": "Middle pin, 2.54 mm from pin 1." },
+    { "name": "3", "role": "passive", "x": 6.35, "y": 1.27, "note": "Right pin, 2.54 mm from pin 2." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2.54, "ref": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" },
+  "sourcing": {
+    "search": ["pin header 1x3 2.54mm male straight", "3 pin header strip 2.54 mm breakaway", "pinnliste 3-pol 2,54 mm"],
+    "priceUsd": 0.1
+  },
+  "verify": "Pitch, pin size, insulator size, pin heights and 3 A rating are from the Wurth WR-PHD 61300211121 (2-pin) sheet; only that sheet was read. The 3-pin length (7.62 mm) is computed from 2.54 mm per pin, not read from a 3-pin sheet. Pad positions match the KiCad footprint (which runs along y; this file runs along x). Strips are sold as 1x40 and snapped to length.",
+  "sources": [
+    "https://www.we-online.com/components/products/datasheet/61300211121.pdf (Wurth Elektronik WR-PHD 61300211121 2-pin header sheet, read: pitch 2.54, pin 0.64 square, insulator 2.54 wide and high, pin 6.0 above the insulator, 3.0 tail, 3 A; length per pin count computed from the pitch)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_PinHeader_2.54mm.pretty/PinHeader_1x03_P2.54mm_Vertical.kicad_mod (KiCad footprint, opened: pads 2.54 apart)"
+  ],
+  "confidence": "datasheet"
+}

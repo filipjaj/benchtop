@@ -1,0 +1,26 @@
+{
+  "id": "fuse-holder-inline-5x20",
+  "name": "In-line holder for 5 x 20 mm fuses, with wire leads (Littelfuse 150 series, 150274)",
+  "kind": "passive",
+  "blurb": "A black two-part tube with a wire out of each end that is spliced into the positive supply wire; a 5 x 20 mm glass fuse sits inside and the halves twist together.",
+  "body": { "w": 47.5, "d": 11, "h": 11 },
+  "maxHeight": 11,
+  "decals": [
+    { "kind": "rect", "face": "top", "x": 20, "y": 0, "w": 7.5, "h": 11, "fill": "none" }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0, "y": 5.5, "z": -5.5, "lead": 140, "note": "One lead. A fuse has no direction: either lead goes to the supply. Put the holder in the positive wire, close to the supply, so the fuse protects all the wire after it." },
+    { "name": "2", "role": "passive", "x": 47.5, "y": 5.5, "z": -5.5, "lead": 140, "note": "The other lead, toward the load. Disconnect the supply before opening the holder: the spring end is live." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Littelfuse 150274 in-line fuse holder", "inline fuse holder 5x20mm with leads 16 AWG", "5x20 glass fuse holder in-line twist"],
+    "priceUsd": 5
+  },
+  "verify": "From the Littelfuse 150 series datasheet: assembled body 47.5 +-1 mm long and 11.0 mm in diameter; lead 16 AWG, red, 2.6 mm (0.104 inch) outside, supplied as one 330 mm (13 inch) loop that you cut, so about 140 mm each side (the 140 here is that length worked out, not a figure on the sheet); maximum 10 A at 350 V with 5 x 20 mm fuses (5 A with 2AG fuses); nylon body, brass terminals, -40 to 80 C; above 32 V switch the power off before changing the fuse. Drawn as a square block; the real part is a round tube with a wider collar in the middle (the collar is drawn as an outline, its size is not on the sheet). Unbranded holders from hobby shops are the same shape with thinner leads, often 18 to 22 AWG, and no stated rating: choose the fuse for the wire. The fuse value is per project: put it in `value`. The holder hangs in the wiring; nothing in a case holds it.",
+  "sources": [
+    "https://www.littelfuse.com/assetdocs/fuse-holder-150-datasheet?assetguid=fb66d437-9218-4fb5-a6fa-17ac6284bb2e (Littelfuse 150 series fuseholder datasheet, rev 06/26/24, opened in a browser and read: dimension drawing 47.5 +-1 x 11.0 dia, wire red 16 AWG GPT length 330 REF, 10 A at 350 V for 5 x 20 mm, 5 A for 2AG, lead pull 10 lb, catalogue number 150274 / 01500274Z)"
+  ],
+  "confidence": "datasheet"
+}

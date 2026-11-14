@@ -1,0 +1,27 @@
+{
+  "id": "diode-1n4148",
+  "name": "1N4148 small-signal diode, DO-35 (through-hole)",
+  "kind": "passive",
+  "blurb": "Small glass diode that lets current through one way only (anode to the banded cathode end); used for signal steering and flyback clamps on small loads, not for power.",
+  "body": { "w": 7.62, "d": 1.75, "h": 1.75 },
+  "maxHeight": 1.95,
+  "shapes": [
+    { "kind": "box", "tag": "band", "x": 2.4, "y": 0, "z": 0, "w": 0.6, "d": 1.75, "h": 0.2 }
+  ],
+  "pins": [
+    { "name": "K", "aliases": ["cathode", "1"], "role": "passive", "x": 0, "y": 0.875, "z": -0.875, "lead": 25, "note": "Cathode: the end with the black band. Current flows from A to K, so K goes toward the more negative side (or the supply side of a flyback diode across a coil)." },
+    { "name": "A", "aliases": ["anode", "2"], "role": "passive", "x": 7.62, "y": 0.875, "z": -0.875, "lead": 25, "note": "Anode: the end without the band. Current flows from here through the diode to K." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 7.62, "ref": "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" },
+  "sourcing": {
+    "search": ["1N4148 diode DO-35 through hole", "1N4148 signal diode 100 V 300 mA", "1N4148 diode 100 stk"],
+    "priceUsd": 0.03
+  },
+  "verify": "Glass body and leads are from the Vishay drawing (DO-35: body diameter 1.5 to 1.75 mm, length 3.4 mm max, lead diameter 0.55 mm max, leads 25.4 mm min). The body is drawn as the envelope of the 7.62 mm lead span, not as the 3.4 mm glass, and the band sits on the glass at x 2.4 to 3.0; 7.62 mm is a fitting pitch (leads bend to 5.08 mm or more), not a datasheet figure. Lead 25 mm is the datasheet minimum, rounded down. The glass is fragile: bend the leads 2 mm or more from the glass (a common rule, not a datasheet figure). Ratings from the datasheet: 100 V repetitive reverse, 75 V DC reverse, 300 mA continuous forward. A clone with a plastic body or a different band is still the same pin order: the band is the cathode.",
+  "sources": [
+    "https://www.vishay.com/docs/81857/1n4148.pdf (opened and read: page 3 package drawing, DO-35 (DO-204AH) body diameter, length, lead diameter and lead length; cathode band; VRRM, VR, IF ratings)",
+    "KiCad Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal (opened and read: pad 1 = K at x 0, pad 2 = A at x 7.62)"
+  ],
+  "confidence": "datasheet"
+}

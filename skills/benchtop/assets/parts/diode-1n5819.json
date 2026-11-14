@@ -1,0 +1,27 @@
+{
+  "id": "diode-1n5819",
+  "name": "1N5819 Schottky diode, 1 A, DO-41 (through-hole)",
+  "kind": "passive",
+  "blurb": "1 A Schottky diode with about 0.3 to 0.6 V drop, for reverse-polarity protection, OR-ing supplies and motor flyback; current flows from the anode to the banded cathode end.",
+  "body": { "w": 10.16, "d": 2.7, "h": 2.7 },
+  "maxHeight": 2.9,
+  "shapes": [
+    { "kind": "box", "tag": "band", "x": 2.9, "y": 0, "z": 0, "w": 0.8, "d": 2.7, "h": 0.2 }
+  ],
+  "pins": [
+    { "name": "K", "aliases": ["cathode", "1"], "role": "passive", "x": 0, "y": 1.35, "z": -1.35, "lead": 25, "note": "Cathode: the end with the colour band. Current flows from A to K, so K goes toward the load side when the diode is used for reverse-polarity protection." },
+    { "name": "A", "aliases": ["anode", "2"], "role": "passive", "x": 10.16, "y": 1.35, "z": -1.35, "lead": 25, "note": "Anode: the end without the band. Goes toward the supply." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 10.16, "ref": "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal" },
+  "sourcing": {
+    "search": ["1N5819 Schottky diode DO-41 1A 40V", "1N5819 diode through hole", "1N5819 Schottky diode 10 stk"],
+    "priceUsd": 0.1
+  },
+  "verify": "Body and leads are from the Vishay 1N5817/18/19 drawing (DO-41 / DO-204AL: body diameter 2.0 to 2.7 mm, length 4.1 to 5.2 mm, lead diameter 0.71 to 0.86 mm, leads 25.4 mm min); the larger diameter is drawn. The body is drawn as the envelope of the 10.16 mm lead span, not as the 5.2 mm plastic; the band sits on a 5.2 mm body centred in the span (x 2.48 to 7.68), at x 2.9 to 3.7. 10.16 mm is a fitting pitch (leads bend to 7.62 mm), not a datasheet figure. Lead 25 mm is the datasheet minimum, rounded down. 1N5819 ratings from the datasheet: 40 V repetitive reverse, 1.0 A average forward, 0.60 V forward drop at most at 1 A. The 1N4001 to 1N4007 rectifiers use the same DO-41 outline (general knowledge, not opened) but are slow silicon diodes with about 1 V drop: do not swap them in where the low drop matters.",
+  "sources": [
+    "https://www.vishay.com/docs/88525/1n5817.pdf (opened and read: page 3 DO-204AL outline with body diameter, length, lead diameter and lead length; colour band marks the cathode; 1N5819 VRRM, IF(AV), VF)",
+    "KiCad Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal (opened and read: pad 1 = K at x 0, pad 2 = A at x 10.16)"
+  ],
+  "confidence": "datasheet"
+}

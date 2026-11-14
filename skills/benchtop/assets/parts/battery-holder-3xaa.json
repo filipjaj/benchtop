@@ -1,0 +1,34 @@
+{
+  "id": "battery-holder-3xaa",
+  "name": "3 x AA battery holder with wire leads (MPD BH3AA-W)",
+  "kind": "power",
+  "blurb": "An open plastic holder for three AA cells in series with a red and a black lead: about 4.5 V from alkaline cells, 3.6 V from rechargeable NiMH. It has no switch and no protection.",
+  "body": { "w": 57.15, "d": 46.61, "h": 15.87 },
+  "maxHeight": 15.87,
+  "decals": [
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 1.2, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 16.3, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 31.4, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "text", "face": "top", "x": 20, "y": 24.5, "text": "3 x AA", "size": 3.5 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 57.15, "y": 32.5, "volts": 4.5, "maxVolts": 4.8, "supplyMa": 1000, "note": "Red lead. Three cells in series: about 4.5 V with fresh alkaline cells (up to 4.8 V, falling to about 3 V when flat) and 3.6 V nominal with NiMH (up to about 4.2 V straight off the charger). Not a regulated rail and too high for a 3.3 V pin: feed it into a board's 5 V / VIN input or a regulator. No switch and no fuse: never short the leads." },
+    { "name": "-", "role": "gnd", "x": 57.15, "y": 29.5, "note": "Black lead. Both leads leave the same short end, side by side." }
+  ],
+  "holes": [
+    { "x": 28.58, "y": 3.56, "dia": 2.36 },
+    { "x": 28.58, "y": 43.05, "dia": 2.36 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["3 x AA battery holder with wire leads", "BH3AA-W battery holder", "3AA batteriholder med ledninger 4.5V"],
+    "priceUsd": 2
+  },
+  "verify": "Outline (57.15 x 46.61 mm, 15.87 mm high) and the 2.36 mm mounting hole 3.56 mm from the long edge are dimensioned on the MPD drawing. Not dimensioned there, so scaled or assumed here: where the two leads leave the short end (about two thirds of the way across, scaled from the drawing), that the second mounting hole mirrors the first, and that both holes sit on the centre line. The drawing also shows a 1.52 mm step under the base that is not included in the height. The cell outlines on top are for recognition only. Unbranded holders of this kind differ by a millimetre or two and some have a cover and switch: measure yours. The 1000 mA supply figure is an assumption for the spring contacts and 24 AWG leads, not a datasheet value. Leads are 150 mm long.",
+  "sources": [
+    "https://www.batteryholders.com/uploads/parts/BH3AAW/datasheets/BH3AAW-datasheet.pdf (Memory Protection Devices drawing BH3AA-W, opened and read: 57.15 x 46.61 mm, height 15.87 with a 1.52 step below, hole 2.36 dia with 4.57 x 1.01 counterbore 3.56 from the edge, first cell axis 8.18 from the side, leads 150 +-5 mm 24 AWG, black and red at the same end, series connection schematic)",
+    "https://batteryholders.com/part.php?pn=BH3AAW (MPD part page, opened: height above PCB 16.00 mm, nylon housing, wire lead termination)"
+  ],
+  "confidence": "typical"
+}

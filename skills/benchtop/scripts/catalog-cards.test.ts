@@ -896,6 +896,43 @@ describe.skipIf(!real || !existsSync(real))("real catalog", () => {
     expect(g.side_evidence).toBeGreaterThan(0);
   });
 
+  test("the drilled holes confirm the Feather's connector-based registration", () => {
+    const g = getCard(db, "adafruit:5724")!.model!.registration!;
+    expect(g.basis).toBe("connectors");
+    // 34 of the CAD file's 38 through-hole pads have a hole of the model on them (the rest are slots, which the
+    // model's circular-hole list leaves out). A half turn still lines up 26, because the two header rows are
+    // nearly symmetric: the holes agree with the connectors here but could not have decided it alone.
+    expect(g.hole_check).toMatchObject({ pad_holes: 38, matched: 34, best_other_matched: 26 });
+    // Seen from the underside, far fewer holes line up: here the holes confirm the face as well.
+    expect(g.hole_check!.best_excluded_matched!).toBeLessThan(34);
+  });
+
+  test("across the catalog, holes never contradict a connector-based registration, and decide some on their own", () => {
+    const ids = (db.query(`SELECT part_id FROM card_index WHERE header_pads > 0`).all() as { part_id: string }[]).map((r) => r.part_id);
+    let byHoles = 0;
+    let checked = 0;
+    const beaten: string[] = [];
+    for (const id of ids) {
+      const g = getCard(db, id)!.model?.registration;
+      if (!g) continue;
+      if (g.basis === "holes") byHoles++;
+      if (g.basis === "connectors" && g.hole_check) {
+        checked++;
+        if (g.hole_check.best_other_matched > g.hole_check.matched) beaten.push(`${id} ${g.hole_check.matched} vs ${g.hole_check.best_other_matched}`);
+      }
+    }
+    // Two hole-based registrations lean on the one-face rule: seen from the other face, too many holes still
+    // line up (49 of 69, and all 15 of 15). They must say so. One that the holes carry alone must say that too.
+    for (const [id, excluded] of [["adafruit:3201", 49], ["adafruit:4313", 15]] as const) {
+      const g = getCard(db, id)!.model!.registration!;
+      expect([id, g.basis, g.side_basis, g.hole_check!.best_excluded_matched, g.hole_check!.holes_alone_decide]).toEqual([id, "holes", "one_face", excluded, false]);
+    }
+    expect(getCard(db, "adafruit:1487")!.model!.registration).toMatchObject({ basis: "holes", side_basis: null, hole_check: { holes_alone_decide: true } });
+    expect(byHoles).toBeGreaterThan(5);
+    expect(checked).toBeGreaterThan(140);
+    expect(beaten).toEqual([]);
+  });
+
   test("across the catalog, a registered opening sits on its own connector's pads", () => {
     const ids = (db.query(`SELECT part_id FROM card_index WHERE header_pads > 0`).all() as { part_id: string }[]).map((r) => r.part_id);
     let registered = 0;
@@ -930,6 +967,13 @@ describe.skipIf(!real || !existsSync(real))("real catalog", () => {
       .map((m) => m!.registration_note);
     expect(notes.length).toBeGreaterThan(20);
     expect(notes.every((n) => typeof n === "string" && n.length > 10)).toBe(true);
+  });
+
+  test("a JLCPCB component is listed as assembly inventory, not as something to buy loose", () => {
+    const c = getCard(db, "jlcpcb:C2040")!;
+    expect(c.buy[0]).toMatchObject({ supplier: "JLCPCB", stock: "in_stock_assembly_inventory" });
+    expect(c.buy[0]!.basis).toContain("not sold as a loose part");
+    expect(renderCard(c)).toContain("assembly-service inventory");
   });
 
   test("a shop record points at the manufacturer's record for the same marketed product", () => {

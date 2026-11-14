@@ -1,0 +1,31 @@
+{
+  "id": "arcade-button-24mm",
+  "name": "24 mm snap-in arcade push button (Sanwa OBSF-24)",
+  "kind": "input",
+  "blurb": "A round arcade button that snaps into a 24 mm hole in the panel; pressing it joins its two tabs, which take push-on connectors or solder.",
+  "body": { "w": 23.5, "d": 23.5, "h": 18.2 },
+  "maxHeight": 24,
+  "shapes": [
+    { "kind": "cyl", "tag": "rim", "x": 11.75, "y": 11.75, "z": 0, "r": 13.6, "h": 3 },
+    { "kind": "cyl", "tag": "plunger", "x": 11.75, "y": 11.75, "z": 3, "r": 9.75, "h": 2.8 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 9.25, "y": 11.75, "z": -18.2, "lead": 13.8, "note": "One of the two tabs under the button (2.8 mm, #110 quick-connect). The button has no polarity: one tab to GND, the other to the input pin with its pull-up enabled." },
+    { "name": "2", "role": "passive", "x": 14.25, "y": 11.75, "z": -18.2, "lead": 13.8, "note": "The other tab. Pressing the button joins the two tabs." }
+  ],
+  "ports": [
+    { "name": "panel-hole", "faces": "up", "x": 11.75, "y": 11.75, "w": 24, "h": 24, "shape": "round", "margin": 0, "reach": true }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Sanwa OBSF-24 push button", "24mm snap-in arcade button", "OBSF-24 arcade button 2.8mm tab"],
+    "priceUsd": 3
+  },
+  "verify": "From the Sanwa Denshi catalogue drawing of the OBSF-24: panel hole 24 +-0.1 mm, panel thickness 3.7 mm at most (the two snap tabs must spring out behind it; Sanwa gives no minimum, and on a thick printed lid the hole needs a counterbore from inside down to that), rim 27.2 mm across and 3 mm high on the panel, plunger 19.5 mm across standing 2.8 mm above the rim (5.8 mm in all above the panel), barrel 23.5 mm across and 18.2 mm deep behind the panel face, tabs another 13.8 mm: 32 mm needed behind the panel, more with push-on connectors. The button goes in from outside and its rim sits ON the panel; the case tool only knows 'cap just proud of the lid' and will seat it lower, so set the height by hand and keep 32 mm clear under the lid. Not on the drawing, so drawn for recognition only: where the two tabs sit under the barrel and how far apart (5 mm drawn). They belong to the SW-68 switch inside; measure before making anything that plugs onto both. Buttons are spaced by taste; leave at least the 27.2 mm rim plus a gap. Copies sold as '24 mm arcade button' follow the hole size but differ in depth and snap tabs.",
+  "sources": [
+    "https://rs2006.co.jp/e/sanwaseimitsu/Sanwa2019.pdf (Sanwa Denshi Game's Parts Catalog 2019-2020, scanned, opened; page 15 OBSF-24 drawing read: dia 27.2, dia 19.5, dia 23.5, 2.8, 3, 5.8, 18.2, 13.8, 32, #110 tabs, mounting hole dia 24 +-0.1, panel thickness 3.7 max, switch SW-68)",
+    "https://www.sanwa-d.co.jp/product/button.html (Sanwa Denshi product page, opened: OBSF is the snap-in series; no drawing of the 24 mm size there)"
+  ],
+  "confidence": "typical"
+}

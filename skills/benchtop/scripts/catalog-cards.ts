@@ -24,7 +24,7 @@ import { Database } from "bun:sqlite";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, renameSync, rmSync, statSync } from "node:fs";
 import { resolve } from "node:path";
-import { registerModel, type ModelConnector, type Registration } from "./lib/model-frame";
+import { registerModel, type ModelConnector, type Registration, type Vec } from "./lib/model-frame";
 
 export const CARD_SCHEMA_VERSION = 1;
 export const CATALOG_SCHEMA_VERSION = 2;
@@ -1047,13 +1047,15 @@ export function buildBoard(objects: GeometryRow[], defs: PinDefRow[]): Board | n
 }
 
 /** The board, plus the ids of the pin-table rows that were attached to one of its pads. */
-export function buildBoardAndJoin(objects: GeometryRow[], defs: PinDefRow[]): { board: Board | null; joined: Set<number> } {
+export function buildBoardAndJoin(objects: GeometryRow[], defs: PinDefRow[]): { board: Board | null; joined: Set<number>; drills: Vec[] } {
   const joined = new Set<number>();
-  const board = buildBoardInner(objects, defs, joined);
-  return { board, joined };
+  const drills: Vec[] = [];
+  const board = buildBoardInner(objects, defs, joined, drills);
+  return { board, joined, drills };
 }
 
-function buildBoardInner(objects: GeometryRow[], defs: PinDefRow[], joinedOut: Set<number>): Board | null {
+/** `drillsOut` receives the centre of every through-hole pad in the chosen dataset, components included: the holes a 3D model of the board must have. */
+function buildBoardInner(objects: GeometryRow[], defs: PinDefRow[], joinedOut: Set<number>, drillsOut: Vec[] = []): Board | null {
   const boundIds = new Set(defs.flatMap((d) => supportedGeometry(d.notes) ?? []));
   const padSets = objects
     .filter((o) => o.kind === "pcb_pad_centers" || o.kind === "module_land_pattern")
@@ -1065,6 +1067,7 @@ function buildBoardInner(objects: GeometryRow[], defs: PinDefRow[], joinedOut: S
   const payload = chosen.payload;
   const scope: Board["scope"] = chosen.kind === "pcb_pad_centers" ? "board" : "land_pattern";
   const raw = (payload.pads ?? []).filter((p) => typeof p.x_mm === "number" && typeof p.y_mm === "number");
+  for (const p of raw) if (p.pad_type === "through_hole" || p.pad_type === "np_thru_hole") drillsOut.push([p.x_mm!, p.y_mm!]);
 
   // The CAD outline is only used as an origin when it was parsed from the same file as the pads.
   const outlines = objects
@@ -1215,6 +1218,7 @@ interface ModelPayload {
     modeled_height_scope?: string;
     pcb_thickness_model_mm?: number | null;
     pcb_bounds_mm?: { min_mm?: number[]; max_mm?: number[] };
+    drilled_holes?: { center_xy_mm?: number[]; diameter_mm?: number }[];
     pcb_positive_z_face_mm?: number | null;
     pcb_negative_z_face_mm?: number | null;
     connectors?: {
@@ -1233,6 +1237,16 @@ interface ModelPayload {
 const MAX_OPENINGS = 12;
 
 export type ModelBoard = NonNullable<ModelPayload["boards"]>[number];
+
+/** Vias are smaller than any hole a part's lead goes through, and have no pad in the CAD data to match. */
+export const MIN_PAD_HOLE_MM = 0.6;
+
+/** Centres of the model's drilled holes that can be a pad's or a mounting hole's. */
+export function modelHoles(b: ModelBoard): Vec[] {
+  return (b.drilled_holes ?? []).flatMap((h) =>
+    h.center_xy_mm?.length === 2 && typeof h.diameter_mm === "number" && h.diameter_mm >= MIN_PAD_HOLE_MM ? [[h.center_xy_mm[0]!, h.center_xy_mm[1]!] as Vec] : [],
+  );
+}
 
 /** Which face of the PCB a housing sits on, by where most of its height lies. Null when it is not clearly one side. */
 function housingSide(zMin: number | undefined, zMax: number | undefined, pcbBottom: number | null | undefined, pcbTop: number | null | undefined): "above" | "below" | null {
@@ -1277,7 +1291,7 @@ export function modelConnectors(b: ModelBoard): ModelConnector[] {
  * Given the card's board, the model is also registered to that board's pad coordinates when its
  * outline comes from the same CAD file as the pads.
  */
-export function buildModel(objects: GeometryRow[], board: Board | null = null): ModelHeights | null {
+export function buildModel(objects: GeometryRow[], board: Board | null = null, drills: Vec[] = []): ModelHeights | null {
   const models = objects
     .filter((o) => o.kind === "pcb_model_clearances")
     .map((o) => ({ row: o, payload: JSON.parse(o.payload_json) as ModelPayload }))
@@ -1306,7 +1320,7 @@ export function buildModel(objects: GeometryRow[], board: Board | null = null): 
     above_pcb_mm: num(b.maximum_height_above_pcb_mm), below_pcb_mm: num(b.maximum_height_below_pcb_mm), pcb_thickness_mm: num(b.pcb_thickness_model_mm),
     status: b.maximum_height_status ?? row.validation_status, covers: clip(b.modeled_height_scope ?? "", 200),
     openings: openings.slice(0, MAX_OPENINGS), connectors_without_opening: uniq(without), other_models: models.length - 1,
-    ...register(row.geometry_id, b, board), src: row.source_id,
+    ...register(row.geometry_id, b, board, drills), src: row.source_id,
   };
 }
 
@@ -1318,7 +1332,7 @@ export function boardSide(side: string | null): "top" | "bottom" | null {
   return null;
 }
 
-function register(modelId: number, b: ModelBoard, board: Board | null): Pick<ModelHeights, "registration" | "registration_note"> {
+function register(modelId: number, b: ModelBoard, board: Board | null, drills: Vec[]): Pick<ModelHeights, "registration" | "registration_note"> {
   const none = (registration_note: string | null): Pick<ModelHeights, "registration" | "registration_note"> => ({ registration: null, registration_note });
   if (!board) return none(null);
   if (board.scope !== "board") return none("the pad data is a module footprint in its own frame, not a placed board");
@@ -1335,6 +1349,8 @@ function register(modelId: number, b: ModelBoard, board: Board | null): Pick<Mod
     connectors: modelConnectors(b),
     padGroups: [...board.headers, ...board.connectors].map((g) => ({ ref: g.ref, center: center(g), side: boardSide(g.side) })),
     padFrameY: board.frame.y === "down" ? "down" : "up",
+    modelHoles: modelHoles(b),
+    padHoles: drills,
   });
   if (!r.ok) return none(r.reason);
   return { registration: { ...r.registration, pad_geometry_id: board.geometry_id, outline_geometry_id: board.outline.geometry_id, model_geometry_id: modelId }, registration_note: null };
@@ -1492,7 +1508,10 @@ export function buildListings(listings: ListingRow[], variants: VariantRow[]): {
     const v = l.supplier_sku ? variants.find((x) => x.supplier === l.supplier && x.sku === l.supplier_sku) : undefined;
     return {
       supplier: l.supplier, market: l.domestic_market, price: l.price, currency: l.currency,
-      basis: /incl\. mva/.test(l.price_basis) ? "incl. VAT" : /excluding VAT/.test(l.price_basis) ? "excl. VAT" : "listed price; tax and shipping not normalised",
+      // JLCPCB's parts library feeds its assembly service; the part cannot be ordered loose.
+      basis: /assembly/i.test(l.stock_status)
+        ? "assembly-service inventory: fitted to a board JLCPCB builds, not sold as a loose part"
+        : /incl\. mva/.test(l.price_basis) ? "incl. VAT" : /excluding VAT/.test(l.price_basis) ? "excl. VAT" : "listed price; tax and shipping not normalised",
       stock: l.stock_status, observed: l.observed_at.slice(0, 10), url: l.url, sku: l.supplier_sku,
       variant: v && !/^default title$/i.test(v.title) ? clip(v.title, 60) : null, match: l.identity_match, src: l.source_id,
     };
@@ -1769,6 +1788,10 @@ export function build(srcPath: string, outPath: string): BuildReport {
         if (card.model?.registration?.openings.length) bump("with_openings_in_pad_coordinates");
         if (card.model?.registration?.transform.seen_from_underside) bump("with_model_seen_from_underside");
         if (card.model?.registration?.feature_count === 1) bump("with_registration_resting_on_one_connector");
+        if (card.model?.registration?.basis === "holes") bump("with_registration_decided_by_holes");
+        if (card.model?.registration?.basis === "holes" && !card.model.registration.hole_check?.holes_alone_decide) bump("with_hole_registration_leaning_on_side_evidence");
+        if (card.model?.registration?.side_basis === "one_face") bump("with_face_settled_by_all_parts_on_one_side");
+        if (card.model?.registration?.hole_check) bump("with_registration_checked_against_holes");
         if (card.model && card.board && !card.model.registration) bump(`not_registered:${(card.model.registration_note ?? "").replace(/[\d.]+( x [\d.]+)?( and [\d.]+)? mm/g, "N mm").slice(0, 70)}`);
         if (card.see_also.length) bump("with_see_also");
         if (card.electrical.i2c_selected) bump("with_catalog_selected_i2c_address");
@@ -1844,8 +1867,8 @@ export interface CardInputs {
 export function buildCard(p: PartRow, d: CardInputs): Card {
   const outline = buildOutline(d.envelope);
   const obs = buildObservations(d.measurements, outline);
-  const { board, joined } = buildBoardAndJoin(d.geometry, d.pinDefs);
-  const model = buildModel(d.geometry, board);
+  const { board, joined, drills } = buildBoardAndJoin(d.geometry, d.pinDefs);
+  const model = buildModel(d.geometry, board, drills);
   const { electrical, specs } = distillSpecs(d.specs, d.authorityOf);
   const { caveats, omitted } = buildCaveats(d.issues, d.isBoilerplateNote);
   const { references, counts } = buildReferences(d.assets, d.derived);
@@ -2052,7 +2075,9 @@ export function renderCard(c: Card): string {
     if (m.other_models) L.push(`${m.other_models} other model(s) for this part, not merged`);
     if (m.registration) {
       const g = m.registration;
-      L.push(`registered to pad dataset #${g.pad_geometry_id}: rotation ${g.transform.rotation_deg} deg${g.transform.seen_from_underside ? ", SEEN FROM THE UNDERSIDE (the model's 'above' is the pad data's underside)" : ""} | matched on ${g.features.map((f) => `${f.ref} ${f.distance_mm} mm`).join(", ")} | ${g.side_evidence ? `top and bottom agree for ${g.side_evidence} connector(s)` : "mirror state decided by positions alone"} | residual ${g.residual_mm} mm, next best ${g.runner_up_residual_mm ?? "none"} mm`);
+      L.push(`registered to pad dataset #${g.pad_geometry_id}: rotation ${g.transform.rotation_deg} deg${g.transform.seen_from_underside ? ", SEEN FROM THE UNDERSIDE (the model's 'above' is the pad data's underside)" : ""} | matched on ${g.features.map((f) => `${f.ref} ${f.distance_mm} mm`).join(", ")} | ${g.side_basis === "paired" ? `top and bottom agree for ${g.side_evidence} connector(s)` : g.side_basis === "one_face" ? "every part is on one face in both sources" : "which face the model shows was decided by positions alone"} | residual ${g.residual_mm} mm, next best ${g.runner_up_residual_mm ?? "none"} mm`);
+      if (g.basis === "holes") L.push("orientation picked by the drilled holes; no connector is named in both sources");
+      if (g.hole_check) L.push(`drilled holes: ${g.hole_check.matched} of ${g.hole_check.pad_holes} through-hole pads have a model hole on them; the best other orientation has ${g.hole_check.best_other_matched}${g.basis === "holes" && !g.hole_check.holes_alone_decide ? `; seen from the other face ${g.hole_check.best_excluded_matched} would still match, so which face the model shows rests on the side evidence` : ""}`);
       if (g.holdout.length) L.push(`check without each connector in turn: ${g.holdout.map((h) => `${h.ref} ${h.distance_mm} mm`).join(", ")}`);
       for (const o of g.openings) L.push(`opening ${o.connector}${o.ref ? ` (${o.ref})` : ""} at ${o.center.join(",")} facing ${o.outward.join(",")} | ${o.width_mm} mm wide | ${o.lower_above_pcb_mm} to ${o.upper_above_pcb_mm} mm above the PCB | ${o.overhang_mm >= 0 ? `${o.overhang_mm} mm beyond` : `${-o.overhang_mm} mm inside`} the outline`);
     } else if (m.registration_note) L.push(`not registered to the pad coordinates: ${m.registration_note}`);

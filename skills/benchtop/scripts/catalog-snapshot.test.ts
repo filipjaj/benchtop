@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { build, keepIndex, parseArgs, slimGeometryPayload, stripTableUniques } from "./catalog-snapshot";
+import { build, keepIndex, parseArgs, slimGeometryPayload, slimPinNotes, stripTableUniques } from "./catalog-snapshot";
 
 const dir = mkdtempSync(join(tmpdir(), "catalog-snapshot-"));
 const srcPath = join(dir, "full.sqlite");
@@ -84,6 +84,62 @@ describe("helpers", () => {
   test("slimGeometryPayload leaves payloads without pads untouched", () => {
     const outline = JSON.stringify({ outline: [[0, 0]] });
     expect(slimGeometryPayload(outline)).toBe(outline);
+  });
+
+  // A refresh from a grown catalog came out at 150 MB instead of 34: newer payloads carry
+  // per-component and per-net parser records, and every drill of every pad, that nothing reads.
+  test("a bulky top-level record that nothing reads is left out, and the payload says which", () => {
+    const bulk = Array.from({ length: 200 }, (_, i) => ({ component: `R${i}`, value: "10k", evidence: "x".repeat(20) }));
+    const slim = JSON.parse(slimGeometryPayload(JSON.stringify({ frame: "eagle", pads: [PAD], native_components: bulk, skipped_pads: [{ ...PAD, why: "no net" }], parser: "v3" })));
+    expect(slim.native_components).toBeUndefined();
+    expect(slim.bundle_slim.dropped_keys).toEqual(["native_components"]);
+    // Small descriptive keys stay, read or not.
+    expect(slim.parser).toBe("v3");
+    // Skipped pads are only counted: one entry in, one entry out, without its evidence.
+    expect(slim.skipped_pads).toHaveLength(1);
+    expect(slim.skipped_pads[0].why).toBeUndefined();
+  });
+
+  test("an outline keeps its bounds and holes however large, and loses the per-pad drill list", () => {
+    const holes = Array.from({ length: 150 }, (_, i) => ({ x_mm: i, y_mm: 2, drill_mm: 3.2, note: "mounting hole candidate" }));
+    const drills = Array.from({ length: 300 }, (_, i) => ({ reference: `U${i}`, x_mm: i, y_mm: 1, drill_mm: 0.4 }));
+    const slim = JSON.parse(slimGeometryPayload(JSON.stringify({ outline_bounds: { min_mm: [0, 0], max_mm: [50, 20] }, source_pcb_thickness_mm: 1.6, explicit_holes: holes, pad_drills: drills })));
+    expect(slim.outline_bounds).toEqual({ min_mm: [0, 0], max_mm: [50, 20] });
+    expect(slim.explicit_holes).toHaveLength(150);
+    expect(slim.pad_drills).toBeUndefined();
+    expect(slim.bundle_slim.dropped_keys).toEqual(["pad_drills"]);
+    expect(slim.bundle_slim.dropped_pad_fields).toBeUndefined();
+  });
+
+  test("a 3D model's boards are kept whole", () => {
+    const model = JSON.stringify({ boards: [{ maximum_height_above_pcb_mm: 8.5, connectors: Array.from({ length: 60 }, (_, i) => ({ source_names: [`JST:X${i}`], apertures: [{ edge: "x_max", width_mm: 5 }] })) }] });
+    expect(slimGeometryPayload(model)).toBe(model);
+  });
+
+  test("a 3D model's drilled holes keep where they are and how wide, and lose the parser's evidence", () => {
+    // Catalog revision 4 lists every hole of a board with 23 fields: 22 MB over 235 models.
+    const hole = { center_xy_mm: [3.2, 4.1], diameter_mm: 1.02, kind: "drilled_hole", plating: "plated", center_x_mm: 3.2, source_topology: "cylindrical face 41", validation: "nominal_model_feature", z_min_mm: 0, z_max_mm: 1.6 };
+    const slim = JSON.parse(slimGeometryPayload(JSON.stringify({ boards: [{ maximum_height_above_pcb_mm: 8.5, drilled_holes: [hole, hole] }] })));
+    expect(slim.boards[0].drilled_holes).toEqual([
+      { center_xy_mm: [3.2, 4.1], diameter_mm: 1.02, kind: "drilled_hole", plating: "plated" },
+      { center_xy_mm: [3.2, 4.1], diameter_mm: 1.02, kind: "drilled_hole", plating: "plated" },
+    ]);
+    expect(slim.boards[0].maximum_height_above_pcb_mm).toBe(8.5);
+    expect(slim.bundle_slim.dropped_hole_fields).toEqual(["center_x_mm", "source_topology", "validation", "z_max_mm", "z_min_mm"]);
+  });
+
+  test("slimPinNotes keeps short notes and plain text, and cuts long JSON down to the dataset bindings", () => {
+    expect(slimPinNotes(null)).toBeNull();
+    expect(slimPinNotes("conflicts with the silkscreen")).toBe("conflicts with the silkscreen");
+    const long = JSON.stringify({ supported_geometry_ids: [12, 14], name_conflict: "D7 on the silkscreen, GPIO13 in the table", pin_evidence: "(pin passive line ".repeat(200) });
+    const slim = JSON.parse(slimPinNotes(long)!);
+    expect(slim.supported_geometry_ids).toEqual([12, 14]);
+    expect(slim.name_conflict).toContain("silkscreen");
+    expect(slim.pin_evidence).toBeUndefined();
+    expect(typeof slim.bundle_slim).toBe("string");
+    // Long text that is not JSON is someone's sentence, not parser output: left alone.
+    const prose = "note ".repeat(400);
+    expect(slimPinNotes(prose)).toBe(prose);
   });
 
   test("stripTableUniques removes table constraints but not a column-level UNIQUE", () => {

@@ -1,0 +1,32 @@
+{
+  "id": "battery-holder-2xaa",
+  "name": "2 x AA battery holder with wire leads (MPD BH2AA-W)",
+  "kind": "power",
+  "blurb": "An open plastic holder for two AA cells in series with a red and a black lead: about 3 V from alkaline cells, 2.4 V from rechargeable NiMH. It has no switch and no protection.",
+  "body": { "w": 57.81, "d": 31.5, "h": 16 },
+  "maxHeight": 16,
+  "decals": [
+    { "kind": "rect", "face": "top", "x": 3.6, "y": 1.2, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "rect", "face": "top", "x": 3.6, "y": 16.3, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "text", "face": "top", "x": 20, "y": 17, "text": "2 x AA", "size": 3.5 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 57.81, "y": 17.25, "volts": 3, "maxVolts": 3.2, "supplyMa": 1000, "note": "Red lead. Two cells in series: about 3 V with fresh alkaline cells (up to 3.2 V, falling to about 2 V when flat) and 2.4 V nominal with NiMH. Not a regulated rail: many 3.3 V boards brown out below about 2.7 V, so check what yours runs from or add a boost converter. No switch and no fuse: never short the leads." },
+    { "name": "-", "role": "gnd", "x": 57.81, "y": 14.25, "note": "Black lead. Both leads leave the same short end, at the wall between the two cells." }
+  ],
+  "holes": [
+    { "x": 28.9, "y": 3.56, "dia": 2.36 },
+    { "x": 28.9, "y": 27.94, "dia": 2.36 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["2 x AA battery holder with wire leads", "BH2AA-W battery holder", "2AA batteriholder med ledninger 3V"],
+    "priceUsd": 1.5
+  },
+  "verify": "Outline (57.81 x 31.50 mm, 16.00 mm high) and the 2.36 mm mounting hole 3.56 mm from the long edge are dimensioned on the MPD drawing. Not dimensioned there, so scaled or assumed here: where the two leads leave the short end (either side of the wall between the cells, about 3 mm apart, scaled from the end view), that the second mounting hole mirrors the first, and that both holes sit on the centre line. The cell outlines on top are for recognition only. Unbranded holders of this kind differ by a millimetre or two and some have a cover and switch: measure yours. The 1000 mA supply figure is an assumption for the spring contacts and 24 AWG leads, not a datasheet value. Leads are 152 mm long with 5 mm stripped.",
+  "sources": [
+    "https://www.batteryholders.com/uploads/parts/BH2AAW/datasheets/BH2AAW-datasheet.pdf (Memory Protection Devices drawing BH2AA-W rev D, opened and read: 57.81 x 31.50 mm, height 16.00, hole 2.36 dia with 4.57 x 1.01 counterbore 3.56 from the edge, leads 152.4 +-5 mm 24 AWG stripped 5 mm, black and red at the same end, series connection schematic)"
+  ],
+  "confidence": "typical"
+}

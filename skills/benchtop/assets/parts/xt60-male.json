@@ -1,0 +1,29 @@
+{
+  "id": "xt60-male",
+  "name": "XT60 male connector, solder cups (Amass XT60-M)",
+  "kind": "connector",
+  "blurb": "The yellow two-pin battery connector found on most hobby battery packs, 30 A. This is the half with the two pins inside a shroud; thick wires are soldered into the cups at the back and it only plugs in one way round.",
+  "body": { "w": 15.5, "d": 16, "h": 8.1 },
+  "maxHeight": 8.1,
+  "decals": [
+    { "kind": "text", "face": "top", "x": 3, "y": 9, "text": "-", "size": 3 },
+    { "kind": "text", "face": "top", "x": 10.2, "y": 9, "text": "+", "size": 3 }
+  ],
+  "pins": [
+    { "name": "-", "aliases": ["1", "NEG"], "role": "passive", "x": 4.15, "y": 16, "z": -4.05, "lead": 4.5, "note": "The cup at the end of the housing with the two cut-off (chamfered) corners. A - is moulded into the housing beside it: go by that mark." },
+    { "name": "+", "aliases": ["2", "POS"], "role": "passive", "x": 11.35, "y": 16, "z": -4.05, "lead": 4.5, "note": "The cup at the square end of the housing, marked + in the plastic. This file gives the pin no voltage: it carries whatever is on the other half. Slide heat-shrink over the wire first, and solder with the other half plugged in so the heat does not let the pin drift in the plastic. The cups need a 60 W or larger iron." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire", "pitch": 7.2, "ref": "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical" },
+  "sourcing": {
+    "search": ["Amass XT60-M", "XT60 male connector yellow solder", "XT60 male female pair genuine Amass"],
+    "priceUsd": 1
+  },
+  "verify": "From the Amass XT60-M drawing: housing face 15.50 x 8.10 mm, housing 16.00 mm long, 20.50 mm overall with the solder cups (so the cups stand 4.5 mm out), pins 7.20 mm apart. The Amass drawing shows one square end and one end with cut corners but prints no polarity. That the cut-corner end is - and the square end is + is from KiCad's footprints (the XT60PW-M footprint marks pad 1 '-' and pad 2 '+', and the XT60-M footprint has its chamfered corners at pad 1); the housing itself carries moulded + and - marks, and those decide. Ratings from the same catalogue page: 30 A continuous, 60 A peak, 500 V DC, 1000 matings (the 12 AWG wire recommendation is printed in the XT60-F table on that page). Male here means the pins; by convention it goes on the load side and the socket half (XT60-F) on the battery, so the live side has no exposed pins. Drawn lying flat with the mating end at y = 0 and the cups at the back; on a carrier PCB the pads are 4.5 mm holes 7.2 mm apart with the connector standing up. No port is defined: add an opening by hand if the connector must sit in a case wall. XT60H and XT60U are the same face with a different back.",
+  "sources": [
+    "https://file.huaqiu.com/web2/M00/4D/94/poYBAGK5afaAMP1tARYUknMlSrQ604.pdf (Amass product catalogue, opened and read, XT series pages: XT60-M drawing with 20.50, 16.00, 8.10, 15.50, 7.20; 30 A rated, 60 A max, 500 V DC, 0.55 milliohm; no polarity printed)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_AMASS.pretty/AMASS_XT60-M_1x02_P7.20mm_Vertical.kicad_mod (KiCad footprint citing the Amass XT60 spec, opened: pads 7.2 apart, 4.5 mm drill, outline 15.5 x 8.1 with the chamfered corners at the pad 1 end)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_AMASS.pretty/AMASS_XT60PW-M_1x02_P7.20mm_Horizontal.kicad_mod (KiCad footprint of the board-mount XT60, opened: silkscreen '-' at pad 1 and '+' at pad 2)"
+  ],
+  "confidence": "datasheet"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "capacitor-electrolytic-6-3mm",
+  "name": "Radial electrolytic capacitor, 6.3 x 11 mm (through-hole)",
+  "kind": "passive",
+  "blurb": "Upright can capacitor for smoothing a power rail; has a + and a - lead and must go in the right way round. Value and voltage are set per project.",
+  "body": { "w": 6.3, "d": 6.3, "h": 1 },
+  "maxHeight": 11,
+  "shapes": [
+    { "kind": "cyl", "tag": "can", "x": 3.15, "y": 3.15, "z": 0, "r": 3.15, "h": 10 }
+  ],
+  "pins": [
+    { "name": "+", "aliases": ["anode", "positive"], "role": "passive", "x": 1.9, "y": 3.15, "z": -1, "lead": 15, "note": "Positive: the longer lead, on the side without the stripe. Goes toward the more positive side of the circuit." },
+    { "name": "-", "aliases": ["cathode", "negative"], "role": "passive", "x": 4.4, "y": 3.15, "z": -1, "lead": 15, "note": "Negative: the shorter lead, on the side with the stripe printed on the sleeve. Goes toward GND. Fitted backwards the part fails, sometimes by venting." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2.5, "ref": "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm" },
+  "sourcing": {
+    "search": ["radial electrolytic capacitor 6.3x11mm 220uF 25V", "electrolytic capacitor 6.3mm 470uF 10V 105C", "elektrolyttkondensator radial 6,3x11 mm"],
+    "priceUsd": 0.12
+  },
+  "verify": "Can diameter 6.3 mm and lead spacing 2.5 mm are from the Rubycon PK dimension table; the 11 mm length is the standard size listed there for 100 uF 35 V, 220 uF 16 and 25 V, 330 uF 6.3 to 16 V and 470 uF 6.3 and 10 V. The sleeve adds up to 0.5 mm to the diameter and up to 1.5 mm to the length, so measure your parts if the enclosure sits close. Check the height of the value you buy against the size table; other values of the same diameter can be taller. The value and the voltage rating are set per project (value); the rating must exceed the rail with margin. Drawing-only fields: the 1 mm base slice plus one cylinder is a drawing device for a single can, z -1 puts the legs at the underside of the slice, and lead 15 mm is the minimum lead length in the table.",
+  "sources": [
+    "https://www.rubycon.co.jp/wp-content/uploads/catalog-aluminum/PK.pdf, dimensions drawing and table: phiD 6.3, lead phid 0.5, spacing F 2.5, leads at least 15 mm with the + lead at least 4 mm longer, sleeve at most phiD + 0.5; size table for 6.3 x 11 values",
+    "KiCad Capacitor_THT:CP_Radial_D6.3mm_P2.50mm: pad 1 is +, 2.50 mm spacing"
+  ],
+  "confidence": "datasheet"
+}

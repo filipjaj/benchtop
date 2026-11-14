@@ -1,0 +1,27 @@
+{
+  "id": "lipo-1s-103454",
+  "name": "1S LiPo pouch cell 103454, about 2000 mAh, with protection board and leads",
+  "kind": "power",
+  "blurb": "A rechargeable 3.7 V lithium-polymer battery of about 2000 mAh (10 x 34 x 54 mm) with a protection board and two wire leads, for builds that must run for days.",
+  "body": { "w": 56, "d": 34.5, "h": 10.3 },
+  "maxHeight": 10.3,
+  "decals": [
+    { "kind": "text", "face": "top", "x": 8, "y": 17.5, "text": "3.7V 2000mAh", "size": 3.5 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 56, "y": 9.75, "volts": 3.7, "maxVolts": 4.2, "supplyMa": 2000, "note": "Red lead. 3.0 to 4.2 V depending on charge, not a regulated rail. The cell itself allows 4 A discharge; the 2000 mA here is a cautious figure for the protection board and thin leads of a typical pack, not a datasheet value. Never short it. Check the plug polarity against your charger: it is not standardised." },
+    { "name": "-", "role": "gnd", "x": 56, "y": 24.75, "note": "Black lead." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["103454 lipo battery 3.7V 2000mAh with protection board", "103450 lipo battery 3.7V 2000mAh PCM JST", "3.7V 2000mAh lithium polymer battery with wires"],
+    "priceUsd": 8
+  },
+  "verify": "Body is the maker's maximum envelope of the bare cell: 10.3 x 34.5 x 55 mm, 56 mm with the sealed edge (L1). This is the 103454 size; the shop size 103450 is about 4 mm shorter and a maker drawing for it was not found, so measure the pack you buy (length, width and thickness) and leave 1 mm or more for swelling. No sheet for the pack with protection board was opened: that the board fits inside the 56 mm length, the lead length and the 2000 mA supply limit are assumptions. The leads leave at the tab end (x = 56); their y positions here are the cell's tab positions from the drawing (tabs 15 mm apart, + on the left with the tabs pointing away from you), not measured lead exits. Confirm a protection board is fitted, and the connector type and polarity.",
+  "sources": [
+    "https://eemb.oss-accelerate.aliyuncs.com//uploads/20230310/238a3765db60b3d0c770182b3e44cd4c.pdf (EEMB LP103454 cell specification ZJQM-RD-SPC-H0486, opened and read, pages 3 and 4: T max 10.3, W max 34.5, L max 55, L1 max 56, tab length 10, tab spacing M 15, tab width 4; 2000 mAh nominal, 3.7 V, charge max 2000 mA to 4.2 V, discharge max 4000 mA, cut-off 2.75 V)",
+    "https://www.eemb.com/product-136 (EEMB product page, opened: LP103454, 2000 mAh, 34.5 x 56 x 10.3 mm, about 40 g)"
+  ],
+  "confidence": "typical"
+}

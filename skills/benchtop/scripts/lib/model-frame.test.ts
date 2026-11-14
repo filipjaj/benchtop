@@ -143,6 +143,67 @@ describe("registerModel", () => {
     if (r.ok) expect(r.registration).toMatchObject({ side_evidence: 0, transform: { seen_from_underside: false } });
   });
 
+  // Through-hole pads of an asymmetric board: a row of four near the bottom-left and two holes top-right.
+  const padHoles: Vec[] = [[5, 2], [7.54, 2], [10.08, 2], [12.62, 2], [44, 17], [47, 14]];
+
+  test("drilled holes pick the orientation when no connector is shared", () => {
+    // The model is the board turned half a turn: pad (x, y) = model (50 - x, 20 - y).
+    const modelHoles: Vec[] = padHoles.map((p) => [50 - p[0], 20 - p[1]]);
+    const unnamed: ModelConnector[] = [{ name: "1X04", ref: null, center: [41, 18], side: "above", openings: [{ center: [50.3, 10], outward: [1, 0], width_mm: 9, lower_above_pcb_mm: 0, upper_above_pcb_mm: 3 }] }];
+    const groups: PadFeature[] = [{ ref: "JP1", center: [8.8, 2], side: "top" }];
+    const r = registerModel({ modelPcb: outline, outline, connectors: unnamed, padGroups: groups, padFrameY: "up", modelHoles, padHoles });
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(r.registration).toMatchObject({ basis: "holes", feature_count: 0, side_basis: "one_face", transform: { rotation_deg: 180, seen_from_underside: false }, hole_check: { pad_holes: 6, matched: 6 } });
+    expect(r.registration.hole_check!.best_other_matched).toBeLessThan(4);
+    // The four orientations seen from the underside were ruled out by the one-face rule; for this
+    // asymmetric pattern the holes would have ruled them out too.
+    expect(r.registration.hole_check!.best_excluded_matched).toBeLessThan(4);
+    expect(r.registration.hole_check!.holes_alone_decide).toBe(true);
+    // The opening on the model's right edge is on the pad data's left edge.
+    expect(r.registration.openings[0]).toMatchObject({ center: [0, 10], outward: [-1, 0] });
+  });
+
+  test("a mirror-symmetric hole pattern is reported as resting on the side evidence", () => {
+    // One row of holes along the centre line of the board's length: flipping the board over leaves it in place.
+    const row: Vec[] = [[5, 10], [7.54, 10], [10.08, 10], [12.62, 10], [15.16, 10]];
+    const r = registerModel({
+      modelPcb: outline, outline, padFrameY: "up", modelHoles: row, padHoles: row,
+      connectors: [{ name: "1X05", ref: null, center: [10, 10], side: "above", openings: [] }],
+      padGroups: [{ ref: "JP1", center: [10, 10], side: "top" }],
+    });
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.registration).toMatchObject({ basis: "holes", side_basis: "one_face", hole_check: { pad_holes: 5, matched: 5, best_excluded_matched: 5, holes_alone_decide: false } });
+  });
+
+  test("holes that fit two orientations equally pick none", () => {
+    // Two rows of holes, symmetric under a half turn: nothing tells the two ends of the board apart.
+    const symmetric: Vec[] = [[5, 2], [45, 18], [5, 18], [45, 2]];
+    const r = registerModel({ modelPcb: outline, outline, connectors: [], padGroups: [], padFrameY: "up", modelHoles: symmetric, padHoles: symmetric });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.reason).toContain("the drilled holes do not single one out either (4 and 4 of 4 pads matched)");
+  });
+
+  test("with a connector fit, the holes are a check that took no part in it", () => {
+    const { modelPcb, connectors } = modelScene((v) => v, (v) => v);
+    const r = registerModel({ modelPcb, outline, connectors, padGroups, padFrameY: "up", modelHoles: padHoles, padHoles });
+    expect(r.ok).toBe(true);
+    // No side evidence here, so no orientation was ruled out before the holes were counted.
+    if (r.ok) expect(r.registration).toMatchObject({ basis: "connectors", hole_check: { pad_holes: 6, matched: 6, best_excluded_matched: null } });
+  });
+
+  test("connectors and holes that point to different orientations are both distrusted", () => {
+    const { modelPcb, connectors } = modelScene((v) => v, (v) => v);
+    const turned: Vec[] = padHoles.map((p) => [50 - p[0], 20 - p[1]]);
+    const r = registerModel({ modelPcb, outline, connectors, padGroups, padFrameY: "up", modelHoles: turned, padHoles });
+    expect(r).toEqual({ ok: false, reason: "the connectors and the drilled holes point to different orientations" });
+  });
+
+  test("too few holes are not evidence", () => {
+    const r = registerModel({ modelPcb: outline, outline, connectors: [], padGroups: [], padFrameY: "up", modelHoles: padHoles.slice(0, 3), padHoles: padHoles.slice(0, 3) });
+    expect(r).toEqual({ ok: false, reason: "no connector is named in both the model and the pad data, so nothing fixes the orientation" });
+  });
+
   test("one connector well off both centre lines is enough", () => {
     const r = registerModel({
       modelPcb: outline, outline, padFrameY: "up",

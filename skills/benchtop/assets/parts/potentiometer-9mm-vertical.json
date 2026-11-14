@@ -1,0 +1,31 @@
+{
+  "id": "potentiometer-9mm-vertical",
+  "name": "9 mm vertical PCB potentiometer, 6 mm shaft (Alps Alpine RK09K, 15 mm flat shaft)",
+  "kind": "input",
+  "blurb": "A small knob-type variable resistor that stands on a circuit board with its shaft pointing up; read its middle pin with an analogue input. 10 k linear is the usual value; the value is set per project.",
+  "body": { "w": 9.8, "d": 12.5, "h": 6.8 },
+  "maxHeight": 15,
+  "shapes": [
+    { "kind": "cyl", "tag": "shaft", "x": 4.9, "y": 5.5, "z": 0, "r": 3, "h": 8.2 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 2.4, "y": 12.5, "z": -6.8, "lead": 3.5, "note": "Seen from above (shaft toward you) with the three pins nearest you, pin 1 is the left one. One end of the track: wire to GND so the reading rises when the knob is turned clockwise." },
+    { "name": "2", "aliases": ["W"], "role": "passive", "x": 4.9, "y": 12.5, "z": -6.8, "lead": 3.5, "note": "Middle pin: the wiper. Goes to the analogue input. Fully counter-clockwise it sits at pin 1, fully clockwise at pin 3." },
+    { "name": "3", "role": "passive", "x": 7.4, "y": 12.5, "z": -6.8, "lead": 3.5, "note": "Right pin, the other end of the track: wire to the controller's 3.3 V (the ADC reference), not to 5 V." }
+  ],
+  "ports": [
+    { "name": "shaft", "faces": "up", "x": 4.9, "y": 5.5, "w": 6, "h": 6, "shape": "round", "margin": 0.5, "reach": true }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2.5, "ref": "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical" },
+  "sourcing": {
+    "search": ["Alps RK09K1130A6S 10k", "9mm vertical potentiometer 10k linear B10K PCB", "RK09K 9mm pot 10k B"],
+    "priceUsd": 1.5
+  },
+  "verify": "From Alps Alpine drawing No. 1 (RK09K113004U / RK09K1130A6S, 10 k linear, flat shaft). Pins 2.5 mm apart in a row, 1.0 mm holes; the shaft axis is 7 mm from the pin row and 5.5 mm from the far edge of the 9.8 mm wide body; two snap-in mounting lugs sit on a line through the shaft, 8.8 mm apart, and need slots of 1.8 x 2.1 mm (they are not electrical and not listed as pins; the KiCad footprint has them as MP). The hole pattern is drawn 'viewed from mounting side' and matches the view onto the shaft, so the layout here is as seen from above. Body 6.8 mm high above the board, shaft 6 mm diameter ending 15 mm above the board with a 6 mm long flat (4.5 mm across). Other RK09K versions have 20 mm, knurled or slotted shafts and a centre detent: check the order code and edit the shaft height. Body length 12.5 mm is the pin row to the far edge; the plastic stops about 0.8 mm short of the pins (scaled from the drawing, not dimensioned). Pin length under the board is 3.2 or 3.8 mm on the drawing (pins and lugs; which is which is not clear), 3.5 used. KiCad places the shaft 7.5 mm from the pins; the Alps drawing says 7: measure before drilling a tight panel. Panel hole for the shaft 7 mm; there is no threaded bushing, the board carries the pot. The Alpha RD901F and Bourns PTV09A are similar 9 mm pots with different lugs and are not hole-compatible in every detail. Which way the wiper moves is the usual convention and the drawing's 'full CCW' note with pin numbering; confirm with a meter.",
+  "sources": [
+    "https://tech.alpsalpine.com/cms.media/product_catalog_rv_02_rk09k_rk09d_en_26d4cb95ac.pdf (Alps Alpine RK09K/RK09D catalogue, update 2510, opened and read: drawing No. 1 with 9.8 width, (6.8) body height, (0.8) collar, LM1 15, shaft dia 6, flat 6 long and 4.5, 5.5 shaft to edge, 3.2 / 3.8 under the mounting surface; mounting holes: 3 x dia 1 at 2.5 pitch, 7 to the lug line, lug slots 1.8 x 2.1 with 10.6 over both; terminals 1 2 3 and circuit)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Potentiometer_THT.pretty/Potentiometer_Alps_RK09K_Single_Vertical.kicad_mod (KiCad footprint, opened: pads 1 2 3 at 2.5 mm pitch, 1 mm drill, lugs 8.8 mm apart and 7 mm from the pin row, shaft circle at 7.5 mm, body 12 x 9.8)"
+  ],
+  "confidence": "datasheet"
+}

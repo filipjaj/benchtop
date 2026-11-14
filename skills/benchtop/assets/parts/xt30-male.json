@@ -1,0 +1,29 @@
+{
+  "id": "xt30-male",
+  "name": "XT30 male connector, solder cups (Amass XT30U-M)",
+  "kind": "connector",
+  "blurb": "The small yellow two-pin battery connector, 15 A. This is the half with the two pins inside a shroud; wires are soldered into the cups at the back and it only plugs in one way round.",
+  "body": { "w": 10.2, "d": 10.7, "h": 5.2 },
+  "maxHeight": 5.2,
+  "decals": [
+    { "kind": "text", "face": "top", "x": 1.6, "y": 6, "text": "-", "size": 2.5 },
+    { "kind": "text", "face": "top", "x": 6.6, "y": 6, "text": "+", "size": 2.5 }
+  ],
+  "pins": [
+    { "name": "-", "aliases": ["1", "NEG"], "role": "passive", "x": 2.6, "y": 10.7, "z": -2.6, "lead": 3, "note": "The cup at the end of the housing with the two cut-off (chamfered) corners. A small - is moulded into the housing beside it: go by that mark." },
+    { "name": "+", "aliases": ["2", "POS"], "role": "passive", "x": 7.6, "y": 10.7, "z": -2.6, "lead": 3, "note": "The cup at the square end of the housing, marked + in the plastic. This file gives the pin no voltage: it carries whatever is on the other half. Slide heat-shrink over the wire before soldering, and solder with the other half plugged in so the heat does not let the pin drift in the plastic." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire", "pitch": 5, "ref": "Connector_AMASS:AMASS_XT30U-M_1x02_P5.0mm_Vertical" },
+  "sourcing": {
+    "search": ["Amass XT30U-M", "XT30 male connector yellow solder", "XT30U male female pair genuine Amass"],
+    "priceUsd": 0.8
+  },
+  "verify": "From the Amass XT30U-M drawing: housing face 10.20 x 5.20 mm, 13.70 mm long overall of which the solder cups are the last 3.00 mm, pins 5.00 mm apart; 15 A continuous, 30 A peak, 500 V DC, 18 AWG wire recommended. The Amass drawing shows the shape (one end square, one end with cut corners) but prints no polarity. That the cut-corner end is - and the square end is + is from the KiCad footprint of the same part, which marks pad 1 at the chamfered end '-' and pad 2 '+'; the housing itself carries moulded + and - marks, and those decide. Male here means the pins: on XT connectors the half with the pins sits in the shroud, and by convention it goes on the load side, the socket half (XT30U-F) on the battery, so the live side has no exposed pins. Drawn lying flat with the mating end at y = 0 and the cups at the back; the pads on a carrier PCB are 2.7 mm holes 5.0 mm apart with the connector standing up. No port is defined: add an opening by hand if the connector must sit in a case wall. Clones vary in how tightly they mate.",
+  "sources": [
+    "https://www.blizzcartz.com/files/Data%20Sheets/Power/Batteries%20and%20Chargers/Battery%20Connectors/XT30U-M_AMASS_Datasheet.pdf (Amass XT30U-M drawing sheet, opened and read: 5.20, 10.20, 13.70, 3.00, 5.00; 15 A rated, 30 A max, 0.70 milliohm, 500 V DC, 18 AWG, 1000 cycles)",
+    "https://file.huaqiu.com/web2/M00/4D/94/poYBAGK5afaAMP1tARYUknMlSrQ604.pdf (Amass product catalogue, opened and read, XT series pages: the same XT30U-M drawing and table)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_AMASS.pretty/AMASS_XT30U-M_1x02_P5.0mm_Vertical.kicad_mod (KiCad footprint citing the Amass sheet, opened: pads 5.0 apart, 2.7 mm drill, outline 10.2 x 5.2 with the chamfered corners at the pad 1 end, silkscreen '-' at pad 1 and '+' at pad 2)"
+  ],
+  "confidence": "datasheet"
+}

@@ -195,15 +195,36 @@ export function wirePathProblems(g: SceneGeom, names: Names = PLAIN): Problem[] 
     for (let i = Math.ceil(n * 0.1); i < Math.floor(n * 0.9); i++) {
       for (const s of solids) if (isInside(w.path3[i]!, s.solid, 0.25)) through.add(s.solid);
     }
-    if (through.size) {
-      const parts = [...new Set([...through].map((s) => s.part).filter((p): p is string => !!p))];
+    // A leg on the underside of its own part (a through-hole key switch, a barrel jack) can
+    // only be reached through that part: no place on the bench clears it. That is how the
+    // part is built, not something to move, so it is a note. Any other solid is a finding.
+    // "Under" is judged against every solid of the part, not only the one the wire crosses: a key
+    // switch's leg comes out beside the housing but beneath its flange, and the wire then clips both.
+    const covers = (s: Solid, at: V3): boolean => at[2] <= s.z + s.h * 0.25 && at[0] >= s.x - 0.5 && at[0] <= s.x + s.w + 0.5 && at[1] >= s.y - 0.5 && at[1] <= s.y + s.d + 0.5;
+    const legUnder = new Set<string>();
+    for (const [end, at] of [[a, w.path3[0]!] as const, [b, w.path3[n - 1]!] as const]) {
+      const ref = end.pad?.ref;
+      if (ref && solids.some((s) => s.solid.part === ref && covers(s.solid, at))) legUnder.add(ref);
+    }
+    const avoidable = [...through].filter((s) => !(s.part && legUnder.has(s.part)));
+    if (avoidable.length) {
+      const parts = [...new Set(avoidable.map((s) => s.part).filter((p): p is string => !!p))];
       out.push({
         check: "wire-through-part",
         part: parts[0],
-        what: `${who} passes through ${list([...through].map(solidName))}.`,
+        what: `${who} passes through ${list(avoidable.map(solidName))}.`,
         fix: parts.length
           ? `Move ${list(parts.map((p) => `"${p}"`))} out of the wire's way with "bench": { "x": .., "y": .. } in project.json, or turn the part the wire starts from so its pad faces the other end.`
           : RENDERER_FAULT,
+      });
+    } else if (through.size) {
+      const own = [...new Set([...through].map((s) => s.part).filter((p): p is string => !!p))];
+      out.push({
+        level: "note",
+        check: "wire-through-part",
+        part: own[0],
+        what: `${who} ends at a leg on the underside of ${list(own.map((p) => names.label(p)))}, so its last stretch is drawn through the part.`,
+        fix: "Nothing to move: this part's legs are under its body. Turn the part over to solder the wire on, then set it back.",
       });
     }
   }

@@ -1,0 +1,31 @@
+{
+  "id": "microswitch-ss5gl",
+  "name": "Omron SS-5GL lever microswitch (SPDT, hinge lever, solder terminals)",
+  "kind": "input",
+  "blurb": "A small snap-action switch with a metal lever: pressing the lever moves the common contact from NC to NO. Used as a limit switch, door switch or endstop.",
+  "body": { "w": 19.8, "d": 10.2, "h": 6.4 },
+  "maxHeight": 6.4,
+  "shapes": [
+    { "kind": "box", "tag": "lever", "x": 4, "y": -3, "z": -5, "w": 15.6, "d": 0.3, "h": 3.6 }
+  ],
+  "pins": [
+    { "name": "COM", "aliases": ["C"], "role": "passive", "x": 1.6, "y": 10.2, "z": -3.2, "lead": 3.5, "note": "Common terminal, marked C on the case. It is the terminal at the end where the lever is hinged. The three terminals are in a row on the edge opposite the lever." },
+    { "name": "NO", "role": "passive", "x": 10.4, "y": 10.2, "z": -3.2, "lead": 3.5, "note": "Normally open, marked N.O.: the middle terminal, 8.8 mm from COM. Joined to COM only while the lever is pressed." },
+    { "name": "NC", "role": "passive", "x": 17.7, "y": 10.2, "z": -3.2, "lead": 3.5, "note": "Normally closed, marked N.C.: the terminal at the free end of the lever, 7.3 mm from NO. Joined to COM while the lever is released. Leave empty if you only need 'pressed'." }
+  ],
+  "holes": [
+    { "x": 5.1, "y": 7.3, "dia": 2.35 },
+    { "x": 14.6, "y": 7.3, "dia": 2.35 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Omron SS-5GL microswitch", "SS-5GL lever micro switch SPDT", "KW12-3 micro limit switch lever 3 pin"],
+    "priceUsd": 2
+  },
+  "verify": "From the Omron SS datasheet (general tolerance +-0.4 mm). The switch is drawn lying on its side, printed face up, lever along the far edge with its hinge on the left and terminals toward you; turned over it is the mirror image, so go by the C / N.O. / N.C. marks on the case. Case 19.8 x 10.2 mm (9.5 mm at the low end of the top edge) and 6.4 mm thick. Mounting holes 2.35 mm, 9.5 +-0.1 mm apart, 5.1 mm from the hinge end and 2.9 mm from the terminal edge, for M2.3 or M2 screws. Terminals 0.5 mm thick and 3.2 mm wide with a 1.6 mm solder hole 3.5 mm outside the case (that is the lead length given; the tip is a little further and is not dimensioned). Lever: stainless, 0.3 mm thick, 3.6 mm wide, pressed 14.5 mm from the first mounting hole. It is drawn as a flat strip 3 mm off the case; really it slopes: the free end rests up to 6.3 mm off the case edge (free position 13.6 mm max. from the hole line) and switches at 1.5 +-0.8 mm (operating position 8.8 +-0.8), so leave that room and place the actuating part accordingly. Rating 5 A 125 V AC; minimum load 160 mA at 5 V DC on this model, so for a logic input the gold-contact SS-01GL (same outline, 1 mA minimum) is the better choice. KW12-3 and other copies follow this outline, but measure hole spacing and lever length on a copy.",
+  "sources": [
+    "https://omronfs.omron.com/en_US/ecb/products/pdf/en-ss.pdf (Omron SS subminiature basic switch datasheet, Cat. No. B032-E1-14, opened and read: hinge lever drawing with 19.8, 10.2, 9.5, 6.4, 5.1, 9.5 +-0.1, 2.9, 2.35 holes, terminals at 1.6, 8.8, 7.3, terminal 3.2 wide with 1.6 hole 6.4 from the hole line, lever t=0.3, 3.6 wide, 14.5, FP 13.6 max, OP 8.8 +-0.8; terminal labels C, NO, NC on the long hinge lever drawing; ratings and minimum load)"
+  ],
+  "confidence": "datasheet"
+}

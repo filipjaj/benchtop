@@ -103,6 +103,26 @@ describe("public catalog", () => {
     expect(auditPublic(db)).toEqual([]);
   });
 
+  test("drops quoted source text and local paths from scope notes, keeps the flags cards read", () => {
+    const db = fixture();
+    db.exec(`ALTER TABLE specifications ADD COLUMN scope_note TEXT`);
+    const note = JSON.stringify({
+      selected_i2c_address: true,
+      evidence_fragments: ["The chip has a base address of 0x48 and a clever scheme."],
+      full_evidence_as_submitted: "The chip has a base address of 0x48 and a clever scheme.",
+      source_notes: { extra: [{ source_url: "https://maker.test/ds.pdf", evidence_fragments: ["quoted"] }], visual: { local_path: "/Users/someone/cap/x.png", capture_path: "work/enrichment/x.md", page: 3 } },
+    });
+    db.prepare(`UPDATE specifications SET scope_note = ? WHERE key = 'operating_voltage' AND source_id = 1`).run(note);
+    expect(auditPublic(db)).toEqual(
+      expect.arrayContaining(["specifications.scope_note holds quoted source text or a workspace path", "specifications.scope_note holds a local file path"]),
+    );
+
+    makePublic(db);
+    const kept = JSON.parse(db.query<{ n: string }, []>(`SELECT scope_note AS n FROM specifications`).get()!.n);
+    expect(kept).toEqual({ selected_i2c_address: true, source_notes: { extra: [{ source_url: "https://maker.test/ds.pdf" }], visual: { page: 3 } } });
+    expect(auditPublic(db)).toEqual([]);
+  });
+
   test("a table without a rule stops the build", () => {
     const db = fixture();
     db.exec(`CREATE TABLE new_prices(part_id TEXT, price REAL)`);

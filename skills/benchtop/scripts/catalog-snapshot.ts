@@ -7,8 +7,12 @@
 //      definitions, plus any part ids passed with --include.
 //   2. No retained source text and no cached files: sources keep url/publisher/hash, and
 //      asset rows keep their url. Nothing under references/ is copied.
-//   3. Pad geometry keeps coordinates and identifiers and drops per-pad parser evidence.
-// What was dropped is recorded in the snapshot's metadata table under bundle_* keys.
+//   3. Geometry payloads keep what the skill reads (pad coordinates and identifiers, outline
+//      bounds and holes, 3D-model boards) and drop per-pad parser evidence and any other
+//      top-level record that is bulky and unread. Long pin-definition notes keep only their
+//      dataset bindings, and metadata values above a size limit (audit reports) are left out.
+// What was dropped is recorded in the snapshot's metadata table under bundle_* keys, and in
+// each slimmed payload under bundle_slim.
 //
 // Usage:
 //   bun catalog-snapshot.ts --src <full maker_catalog.sqlite> --out <snapshot.sqlite>
@@ -23,7 +27,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, renameSync, rmSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 
-export const SNAPSHOT_BUILDER_VERSION = "1";
+export const SNAPSHOT_BUILDER_VERSION = "2";
 export const SOURCE_SCHEMA_VERSION = 2;
 
 type Cell = string | number | null;
@@ -37,7 +41,31 @@ const PAD_FIELDS = [
   "reference", "pad_number", "net_name", "x_mm", "y_mm", "footprint_side", "pad_type", "drill_mm",
   "footprint_name", "package", "external_connection_role", "electrical_contact_candidate",
 ];
-const PAD_GEOMETRY_KINDS = ["pcb_pad_centers", "module_land_pattern"];
+/**
+ * Top-level keys of a geometry payload that the bridge, the importer or the card generator
+ * reads: pads and their frame, outline bounds and holes, a 3D model's boards. These are always
+ * kept. Any other key is kept while it is small and dropped once it is bulky (per-component and
+ * per-net parser records, every drill of every pad), so a key the catalog adds later cannot
+ * quietly multiply the bundle's size.
+ */
+const READ_PAYLOAD_KEYS = new Set([
+  "pads", "frame", "format", "coordinate_scope", "completeness", "reference_path", "native_reference_path", "skipped_pads", "payload_schema_version",
+  "outline_bounds", "bounds_mm", "source_pcb_thickness_mm", "explicit_holes", "plated_package_pad_holes",
+  "boards",
+]);
+/** Per-hole fields kept in a 3D model's `boards[].drilled_holes`: where it is, how wide, and what the catalog calls it. */
+const HOLE_FIELDS = ["center_xy_mm", "diameter_mm", "kind", "plating"];
+/** An unread key is dropped when its JSON is longer than this. */
+const BULKY_KEY_BYTES = 2048;
+
+/** Keys of a pin definition's notes JSON that the importer and the cards read: which datasets a row is bound to. */
+const READ_PIN_NOTE_KEYS = ["supported_geometry_ids", "geometry_bindings"];
+/** Notes longer than this are cut down to those keys (and any that speak of a conflict, which `show` prints). */
+const BULKY_NOTES_BYTES = 1024;
+
+/** Metadata values the skill reads whatever their size; other values above the limit are audit reports and are left out. */
+const READ_METADATA_KEYS = new Set(["product_revision_reference_links", "product_sku_identity_links"]);
+const BULKY_METADATA_BYTES = 65536;
 
 /**
  * How each source table is carried over. A table missing from this map stops the build, so a
@@ -48,11 +76,11 @@ const PAD_GEOMETRY_KINDS = ["pcb_pad_centers", "module_land_pattern"];
  *   custom  handled by name in copyTable
  */
 const PLAN: Record<string, "part" | "all" | "empty" | "custom"> = {
-  metadata: "all",
+  metadata: "custom", // audit reports above a size limit are left out
   parts: "part",
   envelopes: "part",
   measurements: "part",
-  pin_definitions: "part",
+  pin_definitions: "custom", // long notes cut down to what is read
   specifications: "custom", // optional evidence_text blanking
   listings: "part",
   variants: "part",
@@ -62,7 +90,7 @@ const PLAN: Record<string, "part" | "all" | "empty" | "custom"> = {
   manufacturer_market_links: "part",
   data_issues: "custom", // selected parts plus catalog-wide rows (part_id NULL)
   assets: "custom", // ASSET_KINDS only
-  geometry_objects: "custom", // slimmed pad payloads
+  geometry_objects: "custom", // slimmed payloads
   market_evidence: "custom", // families of selected parts
   parts_fts: "custom", // virtual table
   sources: "custom", // referenced rows only, text removed; copied last
@@ -138,21 +166,77 @@ function columns(db: Database, table: string): string[] {
 /** Keep coordinates and identifiers of each pad; drop nulls and per-pad parser evidence. */
 export function slimGeometryPayload(payloadJson: string): string {
   const payload = JSON.parse(payloadJson) as Record<string, unknown>;
-  if (!Array.isArray(payload.pads)) return payloadJson;
-  const dropped = new Set<string>();
-  payload.pads = (payload.pads as Record<string, unknown>[]).map((pad) => {
+  const droppedFields = new Set<string>();
+  const slimPad = (pad: Record<string, unknown>): Record<string, unknown> => {
     const kept: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(pad)) {
-      if (!PAD_FIELDS.includes(k)) dropped.add(k);
+      if (!PAD_FIELDS.includes(k)) droppedFields.add(k);
       else if (v !== null) kept[k] = v;
     }
     return kept;
-  });
+  };
+  const hasPads = Array.isArray(payload.pads);
+  if (hasPads) {
+    payload.pads = (payload.pads as Record<string, unknown>[]).map(slimPad);
+    // Pads the parser set aside: only how many there are is read, so each keeps its identifiers and nothing else.
+    if (Array.isArray(payload.skipped_pads)) payload.skipped_pads = (payload.skipped_pads as Record<string, unknown>[]).map((p) => (p && typeof p === "object" ? slimPad(p) : p));
+  }
+  // A 3D model lists every drilled hole of the board with two dozen fields each. Matching a
+  // model to the pad data reads where a hole is and how wide; the rest is parser evidence.
+  const droppedHoleFields = new Set<string>();
+  if (Array.isArray(payload.boards)) {
+    for (const board of payload.boards as Record<string, unknown>[]) {
+      if (!board || typeof board !== "object" || !Array.isArray(board.drilled_holes)) continue;
+      board.drilled_holes = (board.drilled_holes as Record<string, unknown>[]).map((hole) => {
+        const kept: Record<string, unknown> = {};
+        for (const [k, v] of Object.entries(hole)) {
+          if (HOLE_FIELDS.includes(k)) kept[k] = v;
+          else droppedHoleFields.add(k);
+        }
+        return kept;
+      });
+    }
+  }
+  const droppedKeys: string[] = [];
+  for (const [k, v] of Object.entries(payload)) {
+    if (READ_PAYLOAD_KEYS.has(k)) continue;
+    if (JSON.stringify(v).length > BULKY_KEY_BYTES) {
+      delete payload[k];
+      droppedKeys.push(k);
+    }
+  }
+  if (!hasPads && !droppedKeys.length && !droppedHoleFields.size) return payloadJson;
   payload.bundle_slim = {
-    note: "Pad entries keep coordinates and identifiers only; null fields are omitted. The full catalog holds the complete payload under the same geometry_id.",
-    dropped_pad_fields: [...dropped].sort(),
+    note: `${hasPads ? "Pad entries keep coordinates and identifiers only; null fields are omitted. " : ""}${
+      droppedHoleFields.size ? "Drilled holes keep position, diameter, kind and plating only. " : ""
+    }${droppedKeys.length ? "Bulky top-level records that nothing in the skill reads are left out. " : ""}The full catalog holds the complete payload under the same geometry_id.`,
+    ...(hasPads ? { dropped_pad_fields: [...droppedFields].sort() } : {}),
+    ...(droppedHoleFields.size ? { dropped_hole_fields: [...droppedHoleFields].sort() } : {}),
+    ...(droppedKeys.length ? { dropped_keys: droppedKeys.sort() } : {}),
   };
   return JSON.stringify(payload);
+}
+
+/**
+ * A pin definition's notes, cut down when long. The catalog keeps the parser's whole evidence
+ * there (symbol text, crosswalks); the skill reads which datasets the row is bound to, and
+ * prints a note that speaks of a conflict. Short notes and plain text pass through.
+ */
+export function slimPinNotes(notes: string | null): string | null {
+  if (notes === null || notes.length <= BULKY_NOTES_BYTES) return notes;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(notes);
+  } catch {
+    return notes;
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return notes;
+  const kept: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+    if (READ_PIN_NOTE_KEYS.includes(k) || /conflict/i.test(k)) kept[k] = v;
+  }
+  kept.bundle_slim = "Parser evidence left out; the full catalog holds the complete notes for this pin row.";
+  return JSON.stringify(kept);
 }
 
 /**
@@ -240,6 +324,7 @@ export function build(a: Args): BuildReport {
 
     const usedSources = new Set<number>();
     const rowCounts: Record<string, number> = {};
+    const omittedMetadata: string[] = [];
 
     const insert = (table: string, data: Row[]): void => {
       rowCounts[table] = data.length;
@@ -262,14 +347,26 @@ export function build(a: Args): BuildReport {
       if (rule === "empty") rowCounts[name] = 0;
       else if (rule === "all") insert(name, rows(src, `SELECT * FROM "${name}" ORDER BY rowid`));
       else if (rule === "part") insert(name, byPart(name));
-      else if (name === "specifications") {
+      else if (name === "metadata") {
+        insert(
+          name,
+          rows(src, `SELECT * FROM metadata ORDER BY rowid`).map((r) => {
+            const value = r.value === null ? "" : String(r.value);
+            if (value.length <= BULKY_METADATA_BYTES || READ_METADATA_KEYS.has(String(r.key))) return r;
+            omittedMetadata.push(String(r.key));
+            return { ...r, value: `omitted from the bundle (${value.length} characters); the full catalog holds it under the same key` };
+          }),
+        );
+      } else if (name === "pin_definitions") {
+        insert(name, byPart(name).map((r) => ("notes" in r ? { ...r, notes: slimPinNotes(r.notes === null ? null : String(r.notes)) } : r)));
+      } else if (name === "specifications") {
         insert(name, byPart(name).map((r) => (a.keepSpecEvidence ? r : { ...r, evidence_text: "" })));
       } else if (name === "data_issues") {
         insert(name, rows(src, `SELECT * FROM data_issues ORDER BY issue_id`).filter((r) => r.part_id === null || keep.has(String(r.part_id))));
       } else if (name === "assets") {
         insert(name, byPart(name).filter((r) => ASSET_KINDS.includes(String(r.kind))));
       } else if (name === "geometry_objects") {
-        insert(name, byPart(name).map((r) => (PAD_GEOMETRY_KINDS.includes(String(r.kind)) ? { ...r, payload_json: slimGeometryPayload(String(r.payload_json)) } : r)));
+        insert(name, byPart(name).map((r) => ({ ...r, payload_json: slimGeometryPayload(String(r.payload_json)) })));
       } else if (name === "market_evidence") {
         const families = new Set(rows(src, `SELECT part_id, family FROM family_memberships`).filter((r) => keep.has(String(r.part_id))).map((r) => String(r.family)));
         insert(name, rows(src, `SELECT * FROM market_evidence ORDER BY evidence_id`).filter((r) => families.has(String(r.family))));
@@ -308,7 +405,9 @@ export function build(a: Args): BuildReport {
         "Table-level UNIQUE constraints and indexes that do not start with part_id are not carried over; tables, columns and views match the source.",
         a.keepSpecEvidence ? "specifications.evidence_text is kept." : "specifications.evidence_text is empty; the source url is kept.",
         `assets holds only these kinds: ${ASSET_KINDS.join(", ")}. No file is cached: asset_files and derived_assets are empty and references/ is not bundled.`,
-        "geometry_objects pad payloads keep coordinates and identifiers; see bundle_slim inside each payload.",
+        "geometry_objects payloads keep what the skill reads (pad coordinates and identifiers, outline bounds and holes, 3D-model boards) and leave out bulky parser records; see bundle_slim inside each payload.",
+        "pin_definitions.notes longer than a few lines keep only the dataset bindings.",
+        omittedMetadata.length ? `metadata values left out as too large (audit reports): ${[...omittedMetadata].sort().join(", ")}.` : "No metadata value was left out.",
         "Views compute over bundled rows only, so counts and coverage flags describe the snapshot, not the full catalog.",
         "Prices and stock are the source catalog's point-in-time observations.",
       ].join(" "),

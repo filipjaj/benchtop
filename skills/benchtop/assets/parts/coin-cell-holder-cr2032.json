@@ -1,0 +1,30 @@
+{
+  "id": "coin-cell-holder-cr2032",
+  "name": "CR2032 coin cell holder, through-hole (Keystone 103)",
+  "kind": "power",
+  "blurb": "A PCB holder for one 3 V CR2032 coin cell (CR2016 and CR2025 also fit); it powers a clock chip or a very low-power sensor for months, not a Wi-Fi board.",
+  "body": { "w": 28.7, "d": 22.8, "h": 8.5 },
+  "maxHeight": 8.5,
+  "decals": [
+    { "kind": "circle", "face": "top", "x": 11.4, "y": 11.4, "r": 10, "fill": "none" },
+    { "kind": "rect", "face": "top", "x": 11.4, "y": 8.25, "w": 17.3, "h": 6.3, "fill": "none", "r": 1 },
+    { "kind": "text", "face": "top", "x": 23.5, "y": 12.4, "text": "+", "size": 3 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 22.59, "y": 11.4, "z": -8.5, "lead": 4.6, "volts": 3, "maxVolts": 3.3, "supplyMa": 3, "note": "The leg under the metal spring clip that reaches over the cell, at the end where the clip sticks out past the round body; the holder is marked + there. The cell goes in with its flat + face (the side with the print) up, against the clip. A coin cell delivers only a few milliamps: the 3 mA here is an assumption for a CR2032, not a datasheet value." },
+    { "name": "-", "aliases": ["NEG"], "role": "gnd", "x": 2.1, "y": 11.4, "z": -8.5, "lead": 4.6, "note": "The leg at the opposite, round end, 20.5 mm from the + leg. It joins the contact in the floor of the holder, marked NEG." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 20.5, "ref": "Battery:BatteryHolder_Keystone_103_1x20mm" },
+  "sourcing": {
+    "search": ["Keystone 103 coin cell holder", "CR2032 battery holder through hole PCB", "CR2032 knappcelleholder hullmontert"],
+    "priceUsd": 1.5
+  },
+  "verify": "From the Keystone catalogue drawing: 28.7 mm long including the clip end, 22.8 mm across the round body, 8.5 mm high, clip 6.3 mm wide, the two legs 20.5 mm apart on the centre line, legs 4.6 mm long, 1.27 mm holes. The position of the legs along the length (2.1 mm from the round end) is from the KiCad footprint, which cites the same Keystone sheet; the catalogue drawing does not dimension it. The drawing also shows three plastic locating legs of 1.57 mm on a 19 mm circle, which are not modelled: a carrier board needs those holes too, so use the KiCad footprint. Cheap unbranded CR2032 holders have other leg spacings (20 to 21 mm is common): measure before making a board. The circle and clip on top are for recognition only. No cell datasheet was opened: 3 V nominal and up to 3.3 V fresh are the usual figures for a CR2032.",
+  "sources": [
+    "https://www.keyelco.com/userAssets/file/K75p5.pdf (Keystone catalogue page 5, 20 mm through-hole coin cell holders, opened and read: cat. no. 103 H 8.5, L 28.7, O.D. 22.8, clip 6.3 wide, mounting detail - and + holes 20.5 apart at 1.27 dia, legs 4.6, three 1.57 legs on a 19.00 circle, NEG marked in the floor and + on the clip end; takes one 20 mm cell including CR2032)",
+    "https://www.keyelco.com/product.cfm/product_id/719 (Keystone product page for 103, opened: one 20 mm coin cell, 2012 to 2032, PBT, through-hole)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Battery.pretty/BatteryHolder_Keystone_103_1x20mm.kicad_mod (KiCad footprint, opened: pads at 0 and 20.49 mm, 1.5 mm drill, outline from -2.10 to 26.60 mm along the length)"
+  ],
+  "confidence": "typical"
+}

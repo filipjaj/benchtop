@@ -1,0 +1,28 @@
+{
+  "id": "pin-header-1x2",
+  "name": "Pin header, 1x2, 2.54 mm pitch (straight, male)",
+  "kind": "connector",
+  "blurb": "A short piece of 0.1 inch pin strip: a jumper lead pushes onto each pin, or it is the test point or plug for a module.",
+  "body": { "w": 5.08, "d": 2.54, "h": 2.54 },
+  "maxHeight": 8.54,
+  "shapes": [
+    { "kind": "box", "x": 0.95, "y": 0.95, "z": 0, "w": 0.64, "d": 0.64, "h": 6, "tag": "header" },
+    { "kind": "box", "x": 3.49, "y": 0.95, "z": 0, "w": 0.64, "d": 0.64, "h": 6, "tag": "header" }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 1.27, "y": 1.27, "note": "Left pin seen from above. A bare strip has no marking: pin 1 is whichever end you decide, so label it in the wiring." },
+    { "name": "2", "role": "passive", "x": 3.81, "y": 1.27, "note": "Right pin, 2.54 mm from pin 1." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2.54, "ref": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" },
+  "sourcing": {
+    "search": ["pin header 1x2 2.54mm male straight", "2 pin header strip 2.54 mm breakaway", "pinnliste 2-pol 2,54 mm"],
+    "priceUsd": 0.1
+  },
+  "verify": "From the Wurth WR-PHD 61300211121 sheet: 2.54 mm pitch, 0.64 mm (+-0.15) square pin, insulator 2.54 wide and 2.54 high, pin 6.0 mm above the insulator, 3.0 mm tail below, 11.54 mm total pin length, 3 A. Pad positions match the KiCad footprint (which runs along y; this file runs along x). Strips are sold as 1x40 and snapped to length: a snapped piece is the same 2.54 mm per pin.",
+  "sources": [
+    "https://www.we-online.com/components/products/datasheet/61300211121.pdf (Wurth Elektronik WR-PHD 61300211121 2-pin header sheet, read: pitch 2.54, pin 0.64 square, body 5.08 x 2.54 x 2.54, pin 6.0 above the insulator, 3.0 tail, 11.54 total, 3 A)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_PinHeader_2.54mm.pretty/PinHeader_1x02_P2.54mm_Vertical.kicad_mod (KiCad footprint, opened: pads 2.54 apart)"
+  ],
+  "confidence": "datasheet"
+}

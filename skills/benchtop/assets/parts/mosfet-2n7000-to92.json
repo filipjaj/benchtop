@@ -1,0 +1,28 @@
+{
+  "id": "mosfet-2n7000-to92",
+  "name": "2N7000 N-channel MOSFET, TO-92 (through-hole)",
+  "kind": "connector",
+  "blurb": "Small N-channel MOSFET that switches loads up to 200 mA from a controller pin; the gate takes no steady current, so no base resistor is needed.",
+  "body": { "w": 4.76, "d": 3.62, "h": 4.83 },
+  "maxHeight": 4.83,
+  "decals": [
+    { "kind": "text", "face": "left", "x": 0.3, "y": 1.5, "text": "2N7000", "size": 1.2 }
+  ],
+  "pins": [
+    { "name": "S", "aliases": ["source", "1"], "role": "passive", "x": 1.11, "y": 1.87, "z": -4.83, "lead": 13, "note": "Pin 1, source. Hold the transistor with the flat printed face toward you and the leads pointing down: pin 1 is the leftmost leg. Goes to GND for a low-side switch." },
+    { "name": "G", "aliases": ["gate", "2"], "role": "passive", "x": 2.38, "y": 1.87, "z": -4.83, "lead": 13, "note": "Pin 2, gate (middle leg). Threshold VGS(th) is 0.8 V min, 2.1 V typical, 3 V max at 1 mA, so a 3.3 V pin may only half-open some parts; the datasheet gives RDS(on) of 5.3 ohm max at VGS 4.5 V (75 mA) and 5 ohm max at 10 V (500 mA), none at 3.3 V. Fine for an LED or a small load, test it for anything near 200 mA. Add a 10 kohm pull-down to GND so the gate does not float (general practice)." },
+    { "name": "D", "aliases": ["drain", "3"], "role": "passive", "x": 3.65, "y": 1.87, "z": -4.83, "lead": 13, "note": "Pin 3, drain (rightmost leg with the flat face toward you). Goes to the load, whose other end goes to the supply. 60 V max, 200 mA continuous. Add a flyback diode across a coil or motor." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 1.27, "ref": "Package_TO_SOT_THT:TO-92_Inline" },
+  "sourcing": {
+    "search": ["2N7000 MOSFET TO-92", "2N7000 N-channel MOSFET 60V 200mA", "2N7000 MOSFET transistor 10 stk"],
+    "priceUsd": 0.15
+  },
+  "verify": "Pin order S-G-D, 60 V drain-source, 200 mA continuous, 400 mW, gate threshold and on-resistance are from the onsemi 2N7000/2N7002/NDS7002A datasheet (page 1 pinout, pages 2 and 3 tables). Body size is the middle of the limits on the 2N7000 TO-92 CASE 135AN drawing on page 8 (width 4.32 to 5.20 mm, height 4.32 to 5.33 mm, depth 3.05 to 4.19 mm, lead pitch 1.27 mm, lead length 13.20 to 15.62 mm, so 13 mm is drawn). The body is drawn as a box; the real part is D-shaped with the flat face at the front (+y). Lead row y 1.87 is 1.75 mm in from the flat face (KiCad footprint). Other makers and other TO-92 parts use other pin orders: a BC547 is C-B-E, for example. This file is only for the 2N7000. Measure with a diode-mode multimeter if the listing does not say.",
+  "sources": [
+    "https://www.onsemi.com/pdf/datasheet/nds7002a-d.pdf (opened and read: page 1 pinout 1 source, 2 gate, 3 drain; page 2 VDSS, ID, PD and VGS(th); page 3 RDS(on) at VGS 10 V and 4.5 V; page 8 CASE 135AN drawing with body size, lead pitch and lead length)",
+    "KiCad Package_TO_SOT_THT:TO-92_Inline (opened and read: pads at x 0, 1.27, 2.54; flat face 1.75 mm from the lead row)"
+  ],
+  "confidence": "datasheet"
+}

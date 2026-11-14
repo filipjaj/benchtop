@@ -1,0 +1,27 @@
+{
+  "id": "ldr-gl5528",
+  "name": "GL5528 light-dependent resistor, 5 mm (through-hole)",
+  "kind": "sensor",
+  "blurb": "A resistor whose value drops in light: 8 to 20 kohm at 10 lux, over 1 Mohm in the dark. Read it with a voltage divider on an analog pin.",
+  "body": { "w": 5.1, "d": 4.3, "h": 2.4 },
+  "maxHeight": 2.4,
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0.85, "y": 2.15, "z": -2.4, "lead": 33, "note": "No polarity: either leg goes either way. To read light, wire the LDR from 3V3 to an ADC pin and 10 kohm from that pin to GND; the pin voltage rises with light. 10 kohm is a starting value (general practice), not a datasheet figure." },
+    { "name": "2", "role": "passive", "x": 4.25, "y": 2.15, "z": -2.4, "lead": 33 }
+  ],
+  "ports": [
+    { "name": "window", "faces": "up", "x": 2.55, "y": 2.15, "w": 5.1, "h": 5.1, "shape": "round", "margin": 0.3 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 3.4, "ref": "OptoDevice:R_LDR_5.1x4.3mm_P3.4mm_Vertical" },
+  "sourcing": {
+    "search": ["GL5528 LDR photoresistor", "GL5528 light dependent resistor 5mm", "LDR fotomotstand GL5528"],
+    "priceUsd": 0.1
+  },
+  "verify": "Outline is from the GL5528 datasheet (SparkFun copy of SEN-09088): disc diameter 5.1 mm (4.3 mm across the flats), head thickness 2.4 mm max, leads 0.5 mm diameter, 3.4 mm apart, overall length 36 mm (the lead 33 mm drawn is that length minus the head, rounded down). Light resistance 8 to 20 kohm at 10 lux, dark resistance 1.0 Mohm min, 100 mW, 150 V max, peak response 540 nm. Clones vary: measure the head and the lead spacing on yours. The sensitive zig-zag face looks up through the lid; the port is sized to the 5.1 mm disc. A cell with a different number (GL5516, GL5537) has a different light resistance.",
+  "sources": [
+    "https://cdn.sparkfun.com/datasheets/Sensors/LightImaging/SEN-09088.pdf (opened and read, page 1 viewed: outline drawing with 5.1 mm diameter, 4.3 mm flats, 2.4 mm head, 3.4 mm lead spacing, 36 mm length; light and dark resistance, power, voltage, spectral peak)",
+    "KiCad OptoDevice:R_LDR_5.1x4.3mm_P3.4mm_Vertical (footprint name only, from the facts file)"
+  ],
+  "confidence": "datasheet"
+}
