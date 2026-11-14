@@ -129,6 +129,42 @@ describe("wire paths", () => {
     expect(checks(found)).toEqual(["wire-through-part"]);
     expect(found[0]!.what).toContain("sonar can");
     expect(found[0]!.part).toBe("sonar");
+    expect(found[0]!.level).toBeUndefined();
+  });
+
+  // A through-hole key switch or barrel jack has its legs under the body. Every bench turn gave
+  // the same finding, with advice to move the part, which cannot help.
+  test("a wire to a leg under its own part is a note: there is nothing to move", () => {
+    // The switch body stands on the bench; the wire ends at a leg under its middle.
+    const body = box(-10, 0, 0, 14, 14, 5, { part: "key", tag: "body" });
+    const leg: V3 = [-3, 7, 0];
+    const w = wire(A, leg);
+    w.ends[1].pad = { ref: "key", pin: "1" };
+    w.path3 = w.path3.map((_, i): V3 => {
+      const t = i / (w.path3.length - 1);
+      return [A[0] + (leg[0] - A[0]) * t, A[1] + (leg[1] - A[1]) * t, 2 * (1 - t)];
+    });
+    const found = wirePathProblems(geom({ solids: [drawn(body)], wires: [w] }));
+    expect(found.map((f) => [f.check, f.level])).toEqual([["wire-through-part", "note"]]);
+    expect(found[0]!.what).toContain("underside");
+    expect(found[0]!.fix).toContain("Turn the part over");
+  });
+
+  test("the same wire through another part on its way is still a finding", () => {
+    const body = box(-10, 0, 0, 14, 14, 5, { part: "key", tag: "body" });
+    const other = box(-20, 0, 0, 6, 14, 10, { part: "sonar", tag: "can" });
+    const leg: V3 = [-3, 7, 0];
+    const start: V3 = [-30, 7, 2];
+    const w = wire(start, leg);
+    w.ends[1].pad = { ref: "key", pin: "1" };
+    w.path3 = w.path3.map((_, i): V3 => {
+      const t = i / (w.path3.length - 1);
+      return [start[0] + (leg[0] - start[0]) * t, 7, 2 * (1 - t)];
+    });
+    const found = wirePathProblems(geom({ solids: [drawn(body), drawn(other)], wires: [w] }));
+    expect(found.map((f) => [f.check, f.level ?? "finding"])).toEqual([["wire-through-part", "finding"]]);
+    expect(found[0]!.what).toContain("sonar can");
+    expect(found[0]!.what).not.toContain("key body");
   });
 });
 
