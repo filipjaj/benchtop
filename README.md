@@ -1,6 +1,6 @@
 # Benchtop
 
-**Describe a thing. Get a box you can build.**
+Build packages for microcontroller and 3D-printing projects, generated from a short description.
 
 <p align="center">
   <a href="https://filipjaj.github.io/benchtop/nokta/"><img src="docs/img/nokta.png" width="640" alt="Nokta, a handheld game console designed with Benchtop"></a>
@@ -25,8 +25,8 @@ thing that..." to a folder someone can build from:
 - a firmware scaffold with a generated pin map and a bring-up test (ESP32, RP2040, AVR)
 - renders, dimensioned drawings and a landing page that links every file
 
-Everything is generated from one `project.json`. Nothing is drawn or typed by hand, so the
-guide, the firmware pins and the case cannot disagree with each other.
+Everything is generated from one `project.json`, so the guide, the firmware pins and the
+case cannot disagree with each other.
 
 ## Examples
 
@@ -45,7 +45,7 @@ The package includes a four-minute animated build video generated from the same 
 
 Fifty real open-source hardware projects (WLED, Meshtastic, ZMK, Retro-Go, GP2040-CE and
 more), each designed by the skill from a one-paragraph brief with no one at the keyboard.
-Every project has a case you can turn around in 3D, a wiring plan and an illustrated guide.
+Each has a wiring plan and an illustrated guide; 46 have a printable case you can rotate in 3D.
 
 | | |
 | --- | --- |
@@ -57,8 +57,8 @@ Every project has a case you can turn around in 3D, a wiring plan and an illustr
 
 <a href="https://filipjaj.github.io/benchtop/luft/"><img src="docs/img/luft.png" width="360" align="right" alt="Luft desk air monitor"></a>
 
-A desk air monitor: temperature, humidity and pressure on a small OLED. Four parts, one
-evening. [Package](https://filipjaj.github.io/benchtop/luft/) ·
+A desk air monitor that shows temperature, humidity and pressure on a small OLED. Four
+parts, about an hour to build. [Package](https://filipjaj.github.io/benchtop/luft/) ·
 [Download the kit](https://filipjaj.github.io/benchtop/luft/luft.zip)
 
 <br clear="right">
