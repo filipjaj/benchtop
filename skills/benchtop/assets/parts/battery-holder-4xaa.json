@@ -1,0 +1,34 @@
+{
+  "id": "battery-holder-4xaa",
+  "name": "4 x AA battery holder with wire leads (MPD BH4AA-W)",
+  "kind": "power",
+  "blurb": "An open plastic holder for four AA cells in series with a red and a black lead: about 6 V from alkaline cells, 4.8 V from rechargeable NiMH. It has no switch and no protection.",
+  "body": { "w": 57.15, "d": 61.72, "h": 15.88 },
+  "maxHeight": 15.88,
+  "decals": [
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 1.2, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 16.3, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 31.4, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "rect", "face": "top", "x": 3.3, "y": 46.5, "w": 50.5, "h": 14, "fill": "none", "r": 2 },
+    { "kind": "text", "face": "top", "x": 20, "y": 32, "text": "4 x AA", "size": 3.5 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 57.15, "y": 47.8, "volts": 6, "maxVolts": 6.4, "supplyMa": 1000, "note": "Red lead. Four cells in series: about 6 V with fresh alkaline cells (up to 6.4 V, falling to about 4 V when flat) and 4.8 V nominal with NiMH (up to about 5.6 V straight off the charger). Not a regulated rail: with alkaline cells it is above what a 5 V pin tolerates, so feed a regulator or a VIN input rated for it. No switch and no fuse: never short the leads." },
+    { "name": "-", "role": "gnd", "x": 57.15, "y": 44.8, "note": "Black lead. Both leads leave the same short end, side by side." }
+  ],
+  "holes": [
+    { "x": 28.58, "y": 3.56, "dia": 2.36 },
+    { "x": 28.58, "y": 58.16, "dia": 2.36 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["4 x AA battery holder with wire leads", "BH4AA-W battery holder", "4AA batteriholder med ledninger 6V"],
+    "priceUsd": 2
+  },
+  "verify": "Outline (57.15 x 61.72 mm, 15.88 mm high) and the 2.36 mm mounting hole 3.56 mm from the long edge are dimensioned on the MPD drawing. Not dimensioned there, so scaled or assumed here: where the two leads leave the short end (about three quarters of the way across, scaled from the drawing), that the second mounting hole mirrors the first, and that both holes sit on the centre line. The cell outlines on top are for recognition only. Unbranded holders of this kind differ by a millimetre or two, and many 4 x AA holders are a 2 x 2 block instead of this flat row: measure yours. The 1000 mA supply figure is an assumption for the spring contacts and 24 AWG leads, not a datasheet value. Leads are 152 mm long with 5 mm stripped.",
+  "sources": [
+    "https://www.batteryholders.com/uploads/parts/BH4AAW/datasheets/BH4AAW-datasheet.pdf (Memory Protection Devices drawing BH4AA-W rev D, opened and read: 57.15 x 61.72 mm, height 15.88, hole 2.36 dia with 4.57 x 1.01 counterbore 3.56 from the edge, first cell axis 8.16 from the side, leads 152.4 +-5 mm 24 AWG stripped 5 mm, black and red at the same end, series connection schematic)"
+  ],
+  "confidence": "typical"
+}

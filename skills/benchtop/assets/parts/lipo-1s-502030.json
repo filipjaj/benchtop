@@ -1,0 +1,28 @@
+{
+  "id": "lipo-1s-502030",
+  "name": "1S LiPo pouch cell 502030, about 250 mAh, with protection board and leads",
+  "kind": "power",
+  "blurb": "A small rechargeable 3.7 V lithium-polymer battery (about 5 x 20 x 30 mm, 250 mAh) with a protection board and two wire leads, for wearables and other small builds.",
+  "body": { "w": 32, "d": 20.5, "h": 5.3 },
+  "maxHeight": 5.3,
+  "decals": [
+    { "kind": "text", "face": "top", "x": 4, "y": 10.5, "text": "3.7V 250mAh", "size": 2.5 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 32, "y": 6, "volts": 3.7, "maxVolts": 4.2, "supplyMa": 500, "note": "Red lead. 3.0 to 4.2 V depending on charge, not a regulated rail. The cell maker allows 500 mA discharge at most (2C) and 250 mA charge: set the charger to 250 mA or less (a TP4056 module ships set to 1 A, which is too much for this cell). Never short it. Check the plug polarity against your charger: it is not standardised." },
+    { "name": "-", "role": "gnd", "x": 32, "y": 14.5, "note": "Black lead." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["502030 lipo battery 3.7V 250mAh with protection board", "LP502030 3.7V 250mAh PCM wires", "3.7V 250mAh lithium polymer battery JST 502030"],
+    "priceUsd": 4
+  },
+  "verify": "Body is the maker's maximum envelope: cell 5.3 x 20.5 x 31 mm, 32 mm long with the sealed edge (L1) and, per the pack sheet, with the protection board folded on the tab end. Cells from other makers sold as 502030 differ by up to 1 mm and all pouch cells swell with age: measure yours and leave 1 mm or more of clearance. The two leads leave the protection board at the tab end (x = 32); their y positions here are the cell's tab positions from the drawing (tabs 8.5 mm apart, + on the left with the tabs pointing away from you), not the lead exits, which the pack sheet does not dimension. The pack sheet was read as a converted text copy, not the original drawing: 100 mm AWG26 leads, red +, black -, over-discharge cut-off 3.0 V, overcharge 4.28 V. Confirm a protection board is actually fitted, and the connector type and polarity, on the pack you buy.",
+  "sources": [
+    "https://eemb.oss-accelerate.aliyuncs.com//uploads/20230309/b2e2e0f9d6717cad520c61d9d9deb4bd.pdf (EEMB LP502030 cell specification ZJQM-RD-SPC-H2305, opened and read, drawing on page 4: T max 5.3, W max 20.5, L max 31, L1 max 32, tab length 10, tab spacing M 8.5, tab width 2, + tab on the left; 250 mAh nominal, 3.7 V, charge max 250 mA to 4.2 V, discharge max 500 mA, cut-off 2.75 V)",
+    "https://www.eemb.com/product-130 (EEMB product page, opened: 20.5 x 31 x 5.3 mm, 5 g, links the specification above)",
+    "https://manuals.plus/m/d27166aa9d6e10631f4b059318a3afd83aba71a3ef9a5ceb488c07231dc9f67c (text conversion of the EEMB LP502030HA-PCM-LD pack sheet, opened; the PDF itself refused the download: pack 32.0 max x 20.5 max x 5.3 max, leads 100 +-3 mm UL1571 AWG26 red + and black -, protection 4.28 V / 3.0 V)"
+  ],
+  "confidence": "typical"
+}

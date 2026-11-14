@@ -1,0 +1,33 @@
+{
+  "id": "buzzer-passive-12mm",
+  "name": "12 mm passive magnetic buzzer, PCB pins (Same Sky CEM-1203(42))",
+  "kind": "audio",
+  "blurb": "A small round buzzer with no built-in oscillator: it only sounds when it is fed a tone (a PWM square wave around 2 kHz), so it can play different pitches. It needs a transistor to drive it.",
+  "body": { "w": 12, "d": 12, "h": 1 },
+  "maxHeight": 8.5,
+  "shapes": [
+    { "kind": "cyl", "tag": "buzzer-can", "x": 6, "y": 6, "z": 0, "r": 6, "h": 7.5 }
+  ],
+  "pins": [
+    { "name": "+", "aliases": ["1"], "role": "passive", "x": 2.75, "y": 6, "z": -1, "lead": 5.3, "note": "The pin under the + mark on the case. Goes to the supply (3.3 V). Do NOT drive this buzzer straight from a microcontroller pin: the coil is 42 ohm and the datasheet gives 35 mA at 3.5 V with a 2048 Hz square wave, about 80 mA if the pin is left high, which is more than a GPIO pin gives. Use the datasheet circuit: an NPN transistor (base through about 180 ohm to 1 k from the PWM pin) switching the - pin to GND, and a diode across the buzzer." },
+    { "name": "-", "aliases": ["2"], "role": "passive", "x": 9.25, "y": 6, "z": -1, "lead": 5.3, "note": "The other pin, 6.5 mm from +. Goes to the collector of the driver transistor, not straight to GND and not to a GPIO pin." }
+  ],
+  "ports": [
+    { "name": "sound-hole", "faces": "up", "x": 6, "y": 6, "w": 3, "h": 3, "shape": "round", "margin": 1 }
+  ],
+  "electrical": {
+    "currentMa": { "typical": 35, "peak": 97 }
+  },
+  "footprint": { "mount": "tht", "pitch": 6.5, "ref": "Buzzer_Beeper:MagneticBuzzer_ProSignal_ABT-410-RC" },
+  "sourcing": {
+    "search": ["CEM-1203(42) magnetic buzzer transducer", "passive buzzer 12mm 12085 42 ohm 3V", "passiv summer 12 mm 6.5 mm pinneavstand"],
+    "priceUsd": 1
+  },
+  "verify": "From the Same Sky drawing: 12.0 mm diameter, 8.5 mm high, two 0.6 mm pins 6.5 mm apart and 5.3 mm long, + marked on the case. This is NOT the 12 x 9.5 mm, 7.6 mm pitch outline of KiCad's Buzzer_12x9.5RM7.6: that pitch belongs to the common active (self-oscillating) 12 mm buzzers, while the externally driven Same Sky 12 mm parts (CEM-1203(42) and CEM-1206S) both have 6.5 mm pitch. Measure the pin spacing of the buzzer you have before making a board; the footprint named here is another maker's 12 mm, 6.5 mm pitch buzzer with the same pad positions. Unbranded passive buzzers are often 16 ohm and draw more: measure the coil with a multimeter. The body is a 1 mm placeholder plate; the real part is the cylinder. The sound hole diameter is not dimensioned on the drawing (3 mm assumed for the case opening). Peak current is calculated, 3.5 V across the minimum coil resistance of 36 ohm, for a drive pin stuck high; 35 mA is the datasheet maximum with a half-duty square wave. No bring-up pulse is set because the current is above what a pin may source.",
+  "sources": [
+    "https://www.sameskydevices.com/product/resource/cem-1203-42-.pdf (Same Sky, formerly CUI Devices, CEM-1203(42) datasheet rev 1.05, opened and read: magnetic buzzer transducer, externally driven, rated 3.5 Vo-p, operating 3 to 5 Vo-p, max 35 mA at rated voltage 2048 Hz square wave half duty, coil 42 +-6 ohm, 85 dBA min at 10 cm; drawing: dia 12.0, height 8.5, pin pitch 6.5, pins 0.6 dia 5.3 long, + mark, sound hole in the centre of the top; application circuit with NPN transistor, 180 ohm base resistor and diode)",
+    "https://www.sameskydevices.com/product/resource/cem-1206s.pdf (Same Sky CEM-1206S datasheet, opened for comparison: 12.0 x 9.5 mm, also 6.5 mm pitch, 47 ohm, 45 mA at 5 Vo-p)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Buzzer_Beeper.pretty/MagneticBuzzer_ProSignal_ABT-410-RC.kicad_mod (KiCad footprint, opened: 12 mm circle, pads 6.5 mm apart, 1 mm drill; Buzzer_12x9.5RM7.6 in the same library has 7.6 mm and does not fit)"
+  ],
+  "confidence": "datasheet"
+}

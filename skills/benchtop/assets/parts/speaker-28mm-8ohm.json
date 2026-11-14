@@ -1,0 +1,31 @@
+{
+  "id": "speaker-28mm-8ohm",
+  "name": "28 mm 8 ohm 1 W miniature speaker (Visaton K 28 WP)",
+  "kind": "audio",
+  "blurb": "A flat 28 mm loudspeaker for voice and beeps in a small case; wire it to an amplifier's speaker terminals, never straight to a microcontroller pin.",
+  "body": { "w": 28, "d": 28, "h": 1 },
+  "maxHeight": 5.5,
+  "shapes": [
+    { "kind": "cyl", "tag": "speaker-magnet", "x": 14, "y": 14, "z": 0, "r": 8, "h": 0.8 },
+    { "kind": "cyl", "tag": "speaker-basket", "x": 14, "y": 14, "z": 0.8, "r": 13, "h": 1.9 },
+    { "kind": "cyl", "tag": "speaker-frame", "x": 14, "y": 14, "z": 2.7, "r": 14, "h": 1.8 }
+  ],
+  "pins": [
+    { "name": "+", "role": "passive", "x": 11.5, "y": 24.5, "z": -1, "note": "Solder pad on the back, on the small terminal strip beside the magnet; marked + if marked at all. Polarity only matters for phase when you use two speakers. Solder quickly: the pads sit on thin plastic." },
+    { "name": "-", "role": "passive", "x": 16.5, "y": 24.5, "z": -1, "note": "The other pad on the back. Connect to the amplifier's speaker output, not to ground." }
+  ],
+  "ports": [
+    { "name": "grille", "faces": "up", "x": 14, "y": 14, "w": 21, "h": 21, "shape": "round" }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Visaton K 28 WP 8 Ohm 2909", "28mm speaker 8 ohm 1W mylar", "28 mm minihøyttaler 8 ohm"],
+    "priceUsd": 4
+  },
+  "verify": "From the Visaton drawing: 28 mm across the front rim, 5.5 mm deep in all (magnet 16 mm across and the rear 1.8 mm, basket 26 mm, rim 27 to 28 mm and the front 1.8 mm), baffle cutout 21 mm. It is drawn cone up: the body is a 1 mm placeholder plate standing for the lowest millimetre of the magnet, the real part is the three cylinders. The drawing shows the terminal strip on the back between the magnet and the basket edge but does not dimension the two pads: their positions here (5 mm apart, 10.5 mm from the centre) are for recognition only, which is why the file says typical. Other 28 mm speakers are 4 to 8 mm deep and often 8 ohm 0.5 W or 2 W: measure diameter and depth of yours. 1 W into 8 ohm is 2.8 V RMS or 0.35 A RMS; a 3 W amplifier such as the MAX98357A can exceed that at full volume, so limit the gain. Visaton art. no. 2909 is the 8 ohm version; 2910 is 50 ohm.",
+  "sources": [
+    "https://www.visaton.de/sites/default/files/dd_product/k28wp_8.pdf (Visaton K 28 WP 8 Ohm, art. no. 2909, datasheet dated 01.12.2017, opened and read: drawing with dia 28, 24.8, 27, 26 and 16, depths 5.5, 3.7, 1.8 and 0.7; rated power 1 W, maximum 2 W, 8 ohm, 300 to 20000 Hz, cutout diameter 21 mm, 7 g)"
+  ],
+  "confidence": "typical"
+}
