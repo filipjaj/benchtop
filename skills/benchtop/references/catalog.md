@@ -17,17 +17,20 @@ half-written database (retried once) or a changed schema (the line names what is
 
 ### The bundled public catalog
 
-The skill ships a public subset of the catalog (636 of 4,238 parts): parts identified by
-their maker, with the facts that maker published about them (dimensions, pin definitions,
-pad geometry, voltages, document links), each with its source URL. It is built so it can be
+The skill ships a public subset of the catalog (827 of 4,338 parts; pad data for 214 boards,
+3D-model clearances for 129): parts identified by their maker, with the facts that maker
+published about them (dimensions, pin definitions, pad geometry, voltages, document links),
+each with its source URL. It is built so it can be
 redistributed (`scripts/catalog-public.ts` lists the rules):
 
 - No retailer data: no parts keyed by a shop's listing, no facts sourced from a shop, no
   listings, variants, prices or stock. `listings` returns nothing; use the shopping page's
   shop searches instead.
-- No copied text: part descriptions, evidence quotes, source text and sentence-like
-  specification values are removed. Each value keeps its `[S<id>]` source URL: open it to
-  read the claim in context.
+- No copied text: part descriptions, evidence quotes (including those inside scope notes),
+  source text and sentence-like specification values are removed. Each value keeps its
+  `[S<id>]` source URL: open it to read the claim in context.
+- No paths from the machine that built it: absolute paths and paths into the builder's
+  workspace (captures, renders, downloaded originals) are dropped.
 - Ranked by name, not popularity (the curation ranking was built from shop data).
 - Licence: facts compiled under CC BY 4.0 (`metadata.license`). Brand and product names
   only identify parts.
@@ -41,7 +44,11 @@ full catalog prints no such line.
   so and name `--db <path>` and `BENCHTOP_CATALOG`; `--json` gets a `hint` field. Clone
   modules (HC-SR04, INMP441 and similar) are mostly absent: they have no maker of record.
 - Pad coordinates (reference, number, net, side, type, drill) are kept; per-pad parser
-  evidence is not.
+  evidence is not. The snapshot step also drops parser records in geometry payloads that
+  nothing in the skill reads (per-component and per-net records, the separate per-pad drill
+  list, all but four fields of
+  each drilled hole in a 3D model; each payload's `bundle_slim` lists what it lost) and the
+  parser evidence in long `pin_definitions.notes`.
 - Regenerate it from the full catalog, after the library changes:
 
 ```
