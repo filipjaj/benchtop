@@ -1,0 +1,36 @@
+{
+  "id": "active-buzzer-module",
+  "name": "Active buzzer module (3-pin)",
+  "kind": "audio",
+  "blurb": "A buzzer board with its own oscillator: apply power to the signal pin and it beeps at a fixed pitch, no tone generation needed.",
+  "body": { "w": 32, "d": 13, "h": 1.6 },
+  "maxHeight": 11.1,
+  "shapes": [
+    { "kind": "cyl", "x": 20, "y": 6.5, "z": 0, "r": 6, "h": 9.5, "tag": "buzzer-can" },
+    { "kind": "box", "x": 1.7, "y": 9.9, "z": 0, "w": 7.62, "d": 2.54, "h": 2.5, "tag": "header" }
+  ],
+  "pins": [
+    { "name": "VCC", "role": "power-in", "x": 3, "y": 11.17, "volts": 5, "minVolts": 3.3, "maxVolts": 5, "note": "3.3 to 5 V. The beep is louder at 5 V." },
+    { "name": "I/O", "role": "io", "x": 5.54, "y": 11.17, "dir": "in", "maxVolts": 5, "highWithinOfSupply": 0.6, "idle": "high", "note": "Most modules are low-level trigger: the buzzer sounds while this pin is LOW, so it beeps on power-up until the firmware sets the pin HIGH. The pin switches a transistor tied to VCC, so HIGH has to be close to VCC: from a 3.3 V controller, power the module from 3.3 V, not 5 V, or it never goes quiet. Check yours." },
+    { "name": "GND", "role": "gnd", "x": 8.08, "y": 11.17, "note": "Ground." }
+  ],
+  "ports": [
+    { "name": "sound-hole", "faces": "up", "x": 20, "y": 6.5, "w": 4, "h": 4, "shape": "round", "margin": 1 }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": true,
+    "currentMa": { "typical": 30, "peak": 40 },
+    "bringUp": "pulse"
+  },
+  "footprint": { "mount": "header", "pitch": 2.54 },
+  "sourcing": {
+    "search": ["active buzzer module 3 pin", "low level trigger buzzer module 5V", "KY-012 active buzzer module"],
+    "priceUsd": 1.5
+  },
+  "verify": "Highly variable layout. With calipers measure: board length and width, buzzer diameter and height (12 x 9.5 mm assumed), header position and pin order as printed, and mounting hole presence (none assumed). Confirm trigger polarity (low-level or high-level) with a multimeter. Sound hole size is a design value for the enclosure, not a measured one.",
+  "sources": [
+    "No datasheet opened. Commonly reported size of 3-pin low-level-trigger buzzer modules (about 32 x 13 mm, 12 mm buzzer)."
+  ],
+  "confidence": "typical"
+}

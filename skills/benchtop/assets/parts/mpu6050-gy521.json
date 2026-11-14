@@ -1,0 +1,48 @@
+{
+  "id": "mpu6050-gy521",
+  "name": "MPU-6050 breakout (GY-521)",
+  "kind": "sensor",
+  "blurb": "Six-axis motion sensor (3-axis accelerometer and 3-axis gyroscope) on I2C; detects tilt, shake and rotation.",
+  "body": { "w": 20.3, "d": 15.5, "h": 1.6 },
+  "maxHeight": 2.5,
+  "shapes": [
+    { "kind": "box", "tag": "mpu6050-chip", "x": 8.15, "y": 6, "z": 0, "w": 4, "d": 4, "h": 0.9 }
+  ],
+  "pins": [
+    {
+      "name": "VCC",
+      "role": "power-in",
+      "x": 1.26,
+      "y": 1.5,
+      "volts": 3.3,
+      "minVolts": 3.3,
+      "maxVolts": 5.5,
+      "note": "The board has a 3.3 V regulator, so 3.3 V or 5 V both work."
+    },
+    { "name": "GND", "role": "gnd", "x": 3.8, "y": 1.5 },
+    { "name": "SCL", "role": "io", "x": 6.34, "y": 1.5, "needs": ["i2c"], "dir": "in", "maxVolts": 3.6, "note": "I2C clock. The board's pull-ups go to its 3.3 V rail." },
+    { "name": "SDA", "role": "io", "x": 8.88, "y": 1.5, "needs": ["i2c"], "maxVolts": 3.6, "note": "I2C data." },
+    { "name": "XDA", "role": "io", "x": 11.42, "y": 1.5, "note": "Auxiliary I2C data for a second sensor. Leave unconnected." },
+    { "name": "XCL", "role": "io", "x": 13.96, "y": 1.5, "note": "Auxiliary I2C clock. Leave unconnected." },
+    { "name": "AD0", "role": "io", "x": 16.5, "y": 1.5, "note": "Leave open or tie to GND for address 0x68; tie to 3.3 V for 0x69. Use this to run two on one bus." },
+    { "name": "INT", "role": "io", "x": 19.04, "y": 1.5, "dir": "out", "volts": 3.3, "note": "Interrupt output (motion, data ready). Optional." }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": { "typical": 4, "peak": 5 },
+    "i2cAddresses": [104, 105],
+    "i2cPullups": true
+  },
+  "footprint": { "mount": "header", "pitch": 2.54 },
+  "sourcing": {
+    "search": ["GY-521 MPU6050 module", "MPU-6050 accelerometer gyroscope breakout 6 axis", "GY-521 MPU6050 3 axis gyro accelerometer"],
+    "priceUsd": 3
+  },
+  "verify": "Not from a drawing. Measure with calipers: board outline (20.3 x 15.5 mm assumed), header position and pitch, chip position, and the mounting holes, which are left out of this file because their positions were not confirmed: measure and add them if the enclosure needs standoffs. Read the silkscreen for the pin order (VCC GND SCL SDA XDA XCL AD0 INT is the usual one). The 3.3 to 5 V supply claim assumes the usual onboard regulator; the chip itself tolerates only about 3.46 V. Typical current of about 3.9 mA with gyro and accelerometer active, the 0x68/0x69 addresses and the 3.3 V pull-ups come from memory of the InvenSense datasheet and common GY-521 schematics: not opened here. Many listings sold as MPU-6050 carry fake chips that answer WHO_AM_I differently (0x70 for MPU-6500, 0x72): scan the bus.",
+  "sources": [
+    "https://www.adafruit.com/product/3886 (opened: Adafruit MPU-6050 board, a different, larger board 26 x 17.8 mm; cross-check only, supports 3.3 and 5 V logic)",
+    "GY-521 outline: commonly reported clone size; no drawing opened"
+  ],
+  "confidence": "typical"
+}

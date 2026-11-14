@@ -1,0 +1,141 @@
+{
+  "id": "inmp441-mic",
+  "name": "INMP441 I2S MEMS microphone breakout",
+  "kind": "audio",
+  "blurb": "An I2S digital microphone. This legacy record provides logical pin names only: its single-row physical model is unsupported. Resolve the exact seller board before physical wiring drawings, a case or a carrier PCB.",
+  "body": {
+    "w": 14,
+    "d": 14,
+    "h": 1.6
+  },
+  "maxHeight": 4.1,
+  "decals": [
+    {
+      "kind": "circle",
+      "face": "top",
+      "x": 7,
+      "y": 5,
+      "r": 0.8,
+      "fill": "black"
+    }
+  ],
+  "shapes": [
+    {
+      "kind": "box",
+      "x": 0.65,
+      "y": 11,
+      "z": 0,
+      "w": 12.7,
+      "d": 2.54,
+      "h": 2.5,
+      "tag": "header"
+    }
+  ],
+  "pins": [
+    {
+      "name": "SCK",
+      "role": "io",
+      "x": 0.65,
+      "y": 12.3,
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "Bit clock from the controller. Inputs must also stay at or below VDD + 0.3 V and 3.63 V (absolute limits); the simple validator does not enforce this supply-relative limit."
+    },
+    {
+      "name": "WS",
+      "role": "io",
+      "x": 3.19,
+      "y": 12.3,
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "Word select (left/right clock) from the controller. Inputs must also stay at or below VDD + 0.3 V and 3.63 V (absolute limits); the simple validator does not enforce this supply-relative limit."
+    },
+    {
+      "name": "SD",
+      "role": "io",
+      "x": 5.73,
+      "y": 12.3,
+      "dir": "out",
+      "volts": 3.3,
+      "maxVolts": 3.6,
+      "note": "Audio data out. It goes high-impedance on the channel the mic does not occupy, so two mics can share it."
+    },
+    {
+      "name": "L/R",
+      "role": "io",
+      "x": 8.27,
+      "y": 12.3,
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "Channel select. GND = left, 3.3 V = right. Do not leave it floating. Inputs must also stay at or below VDD + 0.3 V and 3.63 V (absolute limits); the simple validator does not enforce this supply-relative limit."
+    },
+    {
+      "name": "VDD",
+      "role": "power-in",
+      "x": 10.81,
+      "y": 12.3,
+      "volts": 3.3,
+      "minVolts": 1.8,
+      "maxVolts": 3.3,
+      "note": "Use a 3.3 V rail. TDK Rev1.1 Table6 describes VDD as 1.8–3.3 V; Table1 gives 1.62–3.63 V electrical limits. Never connect to 5 V. Current is specified for the chip, not additional module components."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 13.35,
+      "y": 12.3,
+      "note": "Ground."
+    }
+  ],
+  "ports": [
+    {
+      "name": "sound-hole",
+      "faces": "up",
+      "x": 7,
+      "y": 5,
+      "w": 2.5,
+      "h": 2.5,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 2.2,
+      "peak": 2.5
+    }
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "INMP441 I2S MEMS microphone module",
+      "INMP441 omnidirectional microphone breakout",
+      "INMP441 ESP32 I2S mic"
+    ],
+    "priceUsd": 3
+  },
+  "verify": "PHYSICAL GEOMETRY UNRESOLVED. The retained 14×14 mm, single-row pad coordinates, PCB thickness, header height and acoustic opening are legacy model assumptions, not measured or source-supported geometry. Reviewed Elkim, Fibel and HusHageHobby photographs show two rows of three terminals; Fibel/HusHageHobby are round/notched boards, not this square single-row model. Elkim states approximately 10×10 mm PCB; HusHageHobby has a general 14×14×3 mm Dimensions field with unresolved physical scope. These are separate seller claims, not two proven standardized variants. No numeric module pad positions were found. See assets/geometry-evidence/variant-records.json. Electrical values now cite the opened TDK/InvenSense DS-INMP441-00 Rev1.1: at3.3V normal-mode chip current is2.2mA typical,2.5mA maximum; the former1.4/1.6mA figures apply at1.8V. Table6 recommends1.8–3.3V, Table1 gives1.62–3.63V electrical limits. Chip-level bottom-port/package drawings do not establish the board sound-hole side or coordinates. Exact chip authenticity and any additional module circuitry remain unverified.",
+  "sources": [
+    "https://product.tdk.cn/system/files/dam/doc/product/sw_piezo/mic/mems-mic/data_sheet/inmp441.pdf (opened official TDK-hosted DS-INMP441-00 Rev1.1; pages4,5,6,8,17,19; chip electrical facts only)",
+    "https://elkim.no/produkt/inmp441-i2s-mems-mikrofonmodul/ (captured listing and photographs, approximate PCB claim only)",
+    "https://fibel.no/product/inmp441-i2s-mikrofon/ (captured listing and photographs; no numeric module dimensions)",
+    "https://butikk.hushagehobby.no/produkt/omnidireksjonell-mikrofon-i2s/ (captured listing and photographs; general Dimensions field has unresolved scope)"
+  ],
+  "confidence": "typical",
+  "geometryEvidence": {
+    "status": "unresolved",
+    "reason": "Legacy single-row pad layout is not supported by a manufacturer drawing and conflicts with the two rows of three terminals shown by the reviewed Norwegian listings. This file is retained for logical pin-name compatibility only; its numeric geometry is not physical evidence.",
+    "unknown": [
+      "exact maker and board revision",
+      "PCB outline and thickness for the supplied variant",
+      "six pad coordinates and physical label order",
+      "assembled height including fitted headers",
+      "acoustic port side, location and diameter"
+    ]
+  }
+}

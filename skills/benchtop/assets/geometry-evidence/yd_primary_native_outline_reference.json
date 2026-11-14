@@ -1,0 +1,142 @@
+{
+  "kind": "pcb_outline",
+  "scope": "native_Board6_board_vertices",
+  "ole_stream": "Board6/Data",
+  "source_sha256": "6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35",
+  "closed": true,
+  "units": "mm",
+  "frame": {
+    "coordinate_scope": "native_board",
+    "origin": "Altium absolute origin; native stored XY retained, user relative origin retained separately",
+    "axis_x": "right",
+    "axis_y": "up",
+    "unit": "mm",
+    "native_unit": "0.0001mil",
+    "scale_to_mm": "0.00000254",
+    "relative_origin_as_source": {
+      "x": "4845.5mil",
+      "y": "1904.2mil"
+    },
+    "transform": "scale only; no translation, rotation or mirror"
+  },
+  "vertices": [
+    {
+      "x_mm": 109.1057,
+      "y_mm": 48.36667746,
+      "raw_properties": {
+        "VX0": "4295.5mil",
+        "VY0": "1904.1999mil",
+        "KIND0": "0"
+      },
+      "source_locators": {
+        "VX0": {
+          "stream_byte_offset": 984,
+          "byte_length": 14,
+          "exact_text": "|VX0=4295.5mil"
+        },
+        "VY0": {
+          "stream_byte_offset": 998,
+          "byte_length": 17,
+          "exact_text": "|VY0=1904.1999mil"
+        }
+      }
+    },
+    {
+      "x_mm": 109.10568476,
+      "y_mm": 105.51668,
+      "raw_properties": {
+        "VX1": "4295.4994mil",
+        "VY1": "4154.2mil",
+        "KIND1": "0"
+      },
+      "source_locators": {
+        "VX1": {
+          "stream_byte_offset": 1105,
+          "byte_length": 17,
+          "exact_text": "|VX1=4295.4994mil"
+        },
+        "VY1": {
+          "stream_byte_offset": 1122,
+          "byte_length": 14,
+          "exact_text": "|VY1=4154.2mil"
+        }
+      }
+    },
+    {
+      "x_mm": 137.04568984,
+      "y_mm": 105.51668,
+      "raw_properties": {
+        "VX2": "5395.4996mil",
+        "VY2": "4154.2mil",
+        "KIND2": "0"
+      },
+      "source_locators": {
+        "VX2": {
+          "stream_byte_offset": 1226,
+          "byte_length": 17,
+          "exact_text": "|VX2=5395.4996mil"
+        },
+        "VY2": {
+          "stream_byte_offset": 1243,
+          "byte_length": 14,
+          "exact_text": "|VY2=4154.2mil"
+        }
+      }
+    },
+    {
+      "x_mm": 137.0457,
+      "y_mm": 48.36668,
+      "raw_properties": {
+        "VX3": "5395.5mil",
+        "VY3": "1904.2mil",
+        "KIND3": "0"
+      },
+      "source_locators": {
+        "VX3": {
+          "stream_byte_offset": 1347,
+          "byte_length": 14,
+          "exact_text": "|VX3=5395.5mil"
+        },
+        "VY3": {
+          "stream_byte_offset": 1361,
+          "byte_length": 14,
+          "exact_text": "|VY3=1904.2mil"
+        }
+      }
+    },
+    {
+      "x_mm": 109.1057,
+      "y_mm": 48.36667746,
+      "raw_properties": {
+        "VX4": "4295.5mil",
+        "VY4": "1904.1999mil",
+        "KIND4": "0"
+      },
+      "source_locators": {
+        "VX4": {
+          "stream_byte_offset": 1465,
+          "byte_length": 14,
+          "exact_text": "|VX4=4295.5mil"
+        },
+        "VY4": {
+          "stream_byte_offset": 1479,
+          "byte_length": 17,
+          "exact_text": "|VY4=1904.1999mil"
+        }
+      }
+    }
+  ],
+  "bounds_mm": {
+    "min_x": 109.10568476,
+    "max_x": 137.0457,
+    "min_y": 48.36667746,
+    "max_y": 105.51668
+  },
+  "extents_mm": [
+    27.94001524,
+    57.15000254
+  ],
+  "bounds_method": "extrema of explicit native straight polygon vertices; no raster measurement",
+  "numerical_note": "Native vertices retain tiny stored coordinate differences; printed drawing gives27.94×57.15mm. No snapping to rounded printed values.",
+  "format_evidence": "KiCad altium_parser_pcb.cpp:ABOARD6 calls altium_parse_polygons(props,board_vertices); VX/VY keys are preserved."
+}

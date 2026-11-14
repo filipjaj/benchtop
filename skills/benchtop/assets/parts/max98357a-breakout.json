@@ -1,0 +1,39 @@
+{
+  "id": "max98357a-breakout",
+  "name": "MAX98357A I2S class-D amplifier breakout",
+  "kind": "audio",
+  "blurb": "Takes digital I2S audio from the microcontroller and drives a 4 to 8 ohm speaker directly at up to about 3 W; no DAC or separate amplifier is needed.",
+  "body": { "w": 17.8, "d": 19.3, "h": 1.6 },
+  "maxHeight": 7.6,
+  "shapes": [
+    { "kind": "box", "x": 5.4, "y": 0.5, "z": 0, "w": 7, "d": 7, "h": 6, "tag": "screw-terminal" },
+    { "kind": "box", "x": 0, "y": 16.03, "z": 0, "w": 17.78, "d": 2.54, "h": 2.5, "tag": "header" }
+  ],
+  "pins": [
+    { "name": "LRC", "role": "io", "x": 1.27, "y": 17.3, "dir": "in", "maxVolts": 5, "note": "Left/right (word select) clock from the controller." },
+    { "name": "BCLK", "role": "io", "x": 3.81, "y": 17.3, "dir": "in", "maxVolts": 5, "note": "Bit clock from the controller." },
+    { "name": "DIN", "role": "io", "x": 6.35, "y": 17.3, "dir": "in", "maxVolts": 5, "note": "Audio data from the controller." },
+    { "name": "GAIN", "role": "io", "x": 8.89, "y": 17.3, "note": "Leave unconnected for 9 dB. To GND 12 dB, to VIN 6 dB, 100 kOhm to GND 15 dB, 100 kOhm to VIN 3 dB. Re-power after changing it." },
+    { "name": "SD", "role": "io", "x": 11.43, "y": 17.3, "dir": "in", "maxVolts": 5, "note": "Shutdown and channel select. Leave alone: the board pulls it up, giving the (left+right)/2 mono mix at 5 V. Pull below 0.16 V to mute. A 3.3 V high selects left channel only." },
+    { "name": "GND", "role": "gnd", "x": 13.97, "y": 17.3, "note": "Ground." },
+    { "name": "VIN", "role": "power-in", "x": 16.51, "y": 17.3, "volts": 5, "minVolts": 2.5, "maxVolts": 5.5, "note": "2.5 to 5.5 V. Use 5 V from a supply that can give 800 mA for full volume; weak USB ports or a 3.3 V regulator will sag and click." },
+    { "name": "SPK+", "aliases": ["+"], "role": "passive", "x": 7.15, "y": 2, "note": "Speaker terminal. Bridge-tied output: connect only to the speaker, never to ground or to another amp." },
+    { "name": "SPK-", "aliases": ["-"], "role": "passive", "x": 10.65, "y": 2, "note": "Speaker terminal, not ground. Do not connect it to GND." }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": true,
+    "currentMa": { "typical": 100, "peak": 800 }
+  },
+  "footprint": { "mount": "header", "pitch": 2.54 },
+  "sourcing": {
+    "search": ["MAX98357A I2S amplifier breakout", "MAX98357A I2S 3W class D amplifier module", "Adafruit 3006 MAX98357A"],
+    "priceUsd": 4,
+    "links": [{ "store": "Adafruit", "url": "https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/pinouts" }]
+  },
+  "verify": "Board outline (17.8 x 19.3 mm assumed, matching the Adafruit style board) and layout vary between clone makers. Measure board length and width, header position, screw terminal pitch (3.5 mm assumed) and height, and mounting holes (none assumed). Confirm the silkscreen order of the 7 header pins and the terminal polarity. Current figures are assumptions: the Adafruit page recommends a 650 to 800 mA supply, idle current is unverified.",
+  "sources": [
+    "https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/pinouts (pin functions, supply 2.5 to 5.5 V, SD and GAIN behaviour, 2.8 W at 5 V; opened). The Analog Devices datasheet did not load. Board dimensions are not from this page."
+  ],
+  "confidence": "typical"
+}

@@ -1,0 +1,109 @@
+{
+  "id": "dht22-module",
+  "name": "DHT22 / AM2302 temperature and humidity sensor module",
+  "kind": "sensor",
+  "blurb": "Reads temperature and humidity once every two seconds on one data wire; 3-pin module with the pull-up resistor already fitted.",
+  "body": {
+    "w": 15.1,
+    "d": 25.1,
+    "h": 7.7
+  },
+  "maxHeight": 8.1,
+  "shapes": [
+    {
+      "kind": "box",
+      "tag": "grille",
+      "x": 3.1,
+      "y": 3,
+      "z": 0,
+      "w": 8.9,
+      "d": 10,
+      "h": 0.4,
+      "decals": [
+        {
+          "kind": "rect",
+          "face": "top",
+          "x": 1,
+          "y": 1,
+          "w": 6.9,
+          "h": 8,
+          "fill": "hatch"
+        }
+      ]
+    }
+  ],
+  "pins": [
+    {
+      "name": "VCC",
+      "aliases": [
+        "+",
+        "5V"
+      ],
+      "role": "power-in",
+      "x": 5.01,
+      "y": 23.5,
+      "volts": 3.3,
+      "minVolts": 3.3,
+      "maxVolts": 5.5,
+      "note": "Works from 3.3 V or 5 V. The DATA line swings to whatever VCC is, so power it from the same voltage as the controller's logic."
+    },
+    {
+      "name": "DATA",
+      "aliases": [
+        "OUT",
+        "S"
+      ],
+      "role": "io",
+      "x": 7.55,
+      "y": 23.5,
+      "note": "One-wire style data, not I2C. Needs a controller pin that can do precise timing; read no faster than once every 2 seconds."
+    },
+    {
+      "name": "GND",
+      "aliases": [
+        "-"
+      ],
+      "role": "gnd",
+      "x": 10.09,
+      "y": 23.5
+    }
+  ],
+  "ports": [
+    {
+      "name": "vent",
+      "faces": "up",
+      "x": 7.55,
+      "y": 8,
+      "w": 8.9,
+      "h": 10,
+      "shape": "rect",
+      "margin": 1
+    }
+  ],
+  "electrical": {
+    "currentMa": {
+      "typical": 1.5,
+      "peak": 2.5
+    },
+    "i2cPullups": false
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "DHT22 module 3 pin AM2302",
+      "AM2302 DHT22 breakout with pull-up resistor",
+      "DHT22 temperature humidity sensor module"
+    ],
+    "priceUsd": 5
+  },
+  "verify": "Confirmed by the Aosong AM2302 datasheet (opened and read): sensor housing 15.1 x 25.1 x 7.7 mm, 3 mm hole near the top, bare-sensor pins 8.5 mm long at 2.54 mm pitch and 0.5 mm thick, supply 3.3 to 5.5 V (table says 3.3 to 6 V absolute), 1 to 1.5 mA while measuring, 40 to 50 uA standby, one reading per 2 seconds, wait 1 s after power-up, 100 nF between VDD and GND recommended. The bare sensor has FOUR pins in this order from the left with the grille facing you: 1 VDD, 2 DATA, 3 NC, 4 GND (the datasheet table lists pin 3 as GND but the wiring diagram uses pins 1, 2 and 4; leave pin 3 open). Module boards break this out to three pins and the order differs between them (VCC DATA GND vs DATA VCC GND): read the silkscreen. NOT confirmed: this file puts the pad row 1.5 mm inside the housing end (y 23.5) as on a module PCB; on the bare sensor the pins run 8.5 mm beyond the housing instead, and module PCB size varies, so measure the whole module (PCB length and width, pad row position and pitch, how far the PCB extends past the housing) and the grille position. The 2.5 mA peak is the Adafruit figure; the Aosong table gives 1 to 1.5 mA. Pull-up: the datasheet wiring diagram shows an external pull-up from VDD to DATA (labelled 1K there); Adafruit says the wired AM2302 has 5.1 kohm inside. 3-pin modules usually have 4.7 to 10 kohm fitted, bare 4-pin sensors do not: check with a meter. A larger case (26.7 x 58.8 x 13.8 mm with 4.1 mm hole) also exists as the wired AM2302.",
+  "sources": [
+    "https://cdn-shop.adafruit.com/datasheets/Digital+humidity+and+temperature+sensor+AM2302.pdf (Aosong AM2302 datasheet, opened: housing 15.1 x 25.1 x 7.7, 8.5 mm pins at 2.54 pitch, pin order VDD DATA GND, 3.3 to 5.5 V, 1 to 1.5 mA measuring, 40 to 50 uA standby, 2 s period)",
+    "https://learn.adafruit.com/dht (opened in an earlier pass: 3 to 5 V, 2.5 mA max during conversion, 0.5 Hz max sampling, 15.1 x 25 x 7.7 mm)",
+    "https://www.adafruit.com/product/393 (opened in an earlier pass: AM2302 wired version has a 5.1 kohm pull-up between VCC and DATA inside, 3 to 5 V)"
+  ],
+  "confidence": "typical"
+}

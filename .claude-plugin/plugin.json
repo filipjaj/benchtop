@@ -1,0 +1,17 @@
+{
+  "name": "benchtop",
+  "version": "0.1.0",
+  "description": "Take a microcontroller or 3D-printing project from idea to a buildable package: checked circuit, sourced parts, a flat-pack-style illustrated guide drawn to scale, a printable enclosure, a carrier PCB, firmware scaffold and a landing page.",
+  "author": {
+    "name": "Filip Johansen"
+  },
+  "license": "MIT",
+  "keywords": [
+    "hardware",
+    "esp32",
+    "electronics",
+    "3d-printing",
+    "pcb",
+    "maker"
+  ]
+}

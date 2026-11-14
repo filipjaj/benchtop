@@ -1,0 +1,11 @@
+{
+  "name": "benchtop-scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@jscad/3mf-serializer": "2.1.17",
+    "@jscad/modeling": "2.13.0",
+    "@jscad/stl-serializer": "2.1.23",
+    "tscircuit": "0.0.3168"
+  }
+}

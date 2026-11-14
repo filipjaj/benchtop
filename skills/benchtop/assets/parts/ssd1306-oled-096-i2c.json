@@ -1,0 +1,141 @@
+{
+  "id": "ssd1306-oled-096-i2c",
+  "name": "0.96 inch SSD1306 OLED, 128x64, I2C",
+  "kind": "display",
+  "blurb": "Tiny 128x64 pixel monochrome OLED screen driven over two wires; shows text, icons and simple graphs.",
+  "body": {
+    "w": 27.3,
+    "d": 27.8,
+    "h": 1.6
+  },
+  "maxHeight": 3.1,
+  "shapes": [
+    {
+      "kind": "box",
+      "tag": "glass",
+      "x": 0.3,
+      "y": 4.27,
+      "z": 0,
+      "w": 26.7,
+      "d": 19.27,
+      "h": 1.5,
+      "decals": [
+        {
+          "kind": "rect",
+          "face": "top",
+          "x": 2.5,
+          "y": 2.1,
+          "w": 21.74,
+          "h": 10.86,
+          "fill": "hatch"
+        }
+      ]
+    }
+  ],
+  "pins": [
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 9.84,
+      "y": 2.3
+    },
+    {
+      "name": "VCC",
+      "role": "power-in",
+      "x": 12.38,
+      "y": 2.3,
+      "volts": 3.3,
+      "minVolts": 3.3,
+      "maxVolts": 5.5,
+      "note": "Most modules have a 3.3 V regulator and accept 3.3 to 5 V. A few clones have no regulator and die at 5 V. Use 3.3 V unless you have checked."
+    },
+    {
+      "name": "SCL",
+      "role": "io",
+      "x": 14.92,
+      "y": 2.3,
+      "needs": [
+        "i2c"
+      ],
+      "dir": "in",
+      "note": "I2C clock."
+    },
+    {
+      "name": "SDA",
+      "role": "io",
+      "x": 17.46,
+      "y": 2.3,
+      "needs": [
+        "i2c"
+      ],
+      "note": "I2C data."
+    }
+  ],
+  "holes": [
+    {
+      "x": 2,
+      "y": 2,
+      "dia": 2
+    },
+    {
+      "x": 25.3,
+      "y": 2,
+      "dia": 2
+    },
+    {
+      "x": 2,
+      "y": 25.8,
+      "dia": 2
+    },
+    {
+      "x": 25.3,
+      "y": 25.8,
+      "dia": 2
+    }
+  ],
+  "ports": [
+    {
+      "name": "display",
+      "faces": "up",
+      "x": 13.65,
+      "y": 11.8,
+      "w": 21.74,
+      "h": 10.86,
+      "shape": "rect",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": true,
+    "currentMa": {
+      "typical": 10,
+      "peak": 20
+    },
+    "i2cAddresses": [
+      60,
+      61
+    ],
+    "i2cPullups": true
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "0.96 inch OLED 128x64 I2C SSD1306 4 pin",
+      "SSD1306 OLED module 0.96 GND VCC SCL SDA"
+    ],
+    "priceUsd": 3
+  },
+  "verify": "Variants: this file is the most common 4-pin 27.3 x 27.8 mm module (PCB, panel 26.7 x 19.27, active area 21.74 x 10.86, header pads 9.84 mm from the left edge at 2.54 pitch, four 2 mm holes with 3.5 mm pads, all from the module maker's drawing). Pin order differs between factories: this file is GND VCC SCL SDA (Adafruit-style and the lcdwiki text), but the maker's own drawing for the same outline is silkscreened VCC GND SCL SDA. Read the silkscreen on the board and wire by label; a board wired backwards dies. Other 0.96 inch modules exist with 26 x 26, 30 x 30 or 41 x 26 mm outlines (Waveshare, Soldered, DFRobot Gravity); use a part file of their own for those. Not dimensioned in the drawing, so still estimates: pad row distance from the top edge (modelled 2.3, drawing suggests about 1.9), hole centres (modelled 2.0 from each edge), PCB thickness (modelled 1.6, drawing shows 1.2 and 1.5 mm callouts that cannot be matched to PCB versus glass), glass height above the PCB. Measure those with calipers. Panel position from the drawing: glass top edge 4.27 mm below the PCB top edge, active area starts 2.10 mm below that. Address is 0x3C by default (0x78 write address in the maker's text); a resistor jumper on some boards selects 0x3D (0x7A). Whether VCC takes 5 V depends on a regulator on the board: the maker lists 3 to 5 V, but a few clones have none and die at 5 V. On-board I2C pull-ups are not confirmed by any source opened: check with a meter before relying on i2cPullups.",
+  "sources": [
+    "https://lcdwiki.com/0.96inch_OLED_Module_MC096GX (module maker's page: 27.3 x 27.8 mm, active area 21.744 x 10.864 mm, 3 to 5 V, address 0x78/0x7A write form, text pin order GND VCC SCL SDA)",
+    "https://www.lcdwiki.com/res/MC096GX/MC096GX-size-EN.jpg (maker's dimensioned drawing: panel 26.70 x 19.27, glass top 4.27 from PCB edge, active area 2.10 below glass edge, pads 9.84 from edge, 2 mm holes, silkscreen VCC GND SCL SDA)",
+    "https://www.adafruit.com/product/326 (cross-check only: a different board, PCB 29.2 x 26.7 mm, screen 26.6 x 19 mm, I2C address 0x3C-0x3D, ~20 mA in practice)",
+    "https://www.buydisplay.com/i2c-white-0-96-inch-oled-display-module-128x64-arduino-raspberry-pi (seen in search result snippet only, page returned 403: outline 27.30 x 27.80, active area 21.74 x 10.86)",
+    "https://wiki.dfrobot.com/dfr0486/ (search snippet only: DFRobot Gravity 41.2 x 26.2 mm variant exists)"
+  ],
+  "confidence": "typical"
+}

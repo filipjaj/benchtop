@@ -1,0 +1,110 @@
+{
+  "id": "bme280-breakout",
+  "name": "BME280 breakout (GY-BME280, 3.3 V, I2C)",
+  "kind": "sensor",
+  "blurb": "Measures temperature, humidity and air pressure over I2C; the small purple 4-pin GY-BME280 board.",
+  "body": {
+    "w": 15,
+    "d": 11.5,
+    "h": 1.6
+  },
+  "maxHeight": 2.53,
+  "shapes": [
+    {
+      "kind": "box",
+      "tag": "sensor-can",
+      "x": 6.25,
+      "y": 6,
+      "z": 0,
+      "w": 2.5,
+      "d": 2.5,
+      "h": 0.93
+    }
+  ],
+  "pins": [
+    {
+      "name": "VCC",
+      "role": "power-in",
+      "x": 3.69,
+      "y": 1.5,
+      "volts": 3.3,
+      "minVolts": 1.8,
+      "maxVolts": 3.6,
+      "note": "3.3 V only on this board. The BME280 chip runs from 1.71 to 3.6 V and its absolute maximum is 4.25 V (Bosch datasheet), so never use the 5 V pin on a bare 3.3 V board. Boards sold as 3.3 V to 5 V have an extra regulator, but you cannot tell from the outside: use 3.3 V."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 6.23,
+      "y": 1.5
+    },
+    {
+      "name": "SCL",
+      "role": "io",
+      "x": 8.77,
+      "y": 1.5,
+      "needs": [
+        "i2c"
+      ],
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "I2C clock. 3.3 V logic: use a level shifter from 5 V controllers."
+    },
+    {
+      "name": "SDA",
+      "role": "io",
+      "x": 11.31,
+      "y": 1.5,
+      "needs": [
+        "i2c"
+      ],
+      "maxVolts": 3.6,
+      "note": "I2C data. 3.3 V logic."
+    }
+  ],
+  "ports": [
+    {
+      "name": "vent",
+      "faces": "up",
+      "x": 7.5,
+      "y": 7.25,
+      "w": 2.5,
+      "h": 2.5,
+      "shape": "round",
+      "margin": 1.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 0.004,
+      "peak": 0.7
+    },
+    "i2cAddresses": [
+      118,
+      119
+    ],
+    "i2cPullups": true
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "GY-BME280 3.3V I2C breakout",
+      "BME280 temperature humidity pressure module 4 pin",
+      "BME280 breakout purple"
+    ],
+    "priceUsd": 4
+  },
+  "verify": "The board outline is NOT confirmed. Sellers of the GY-BME280 give 15.4 x 11.6 mm, 15.5 x 12 mm and 9 x 11 mm, and no source gives 15 x 11.5, so the modelled body, header position and sensor-can position are a guess within about 1 mm: measure length, width, header-to-edge distances, can position and PCB thickness (modelled 1.6) with calipers. Two 3.5 mm mounting holes are reported by several sellers on the 15 mm boards, not modelled here. Variants: this file is the 4-pin VCC GND SCL SDA board (the pin label may read VIN). 6-pin boards add CSB and SDO and some have an on-board regulator for 3.3 to 5 V; Adafruit's board is 25.2 x 18 mm with different pins and STEMMA QT; none of those fit this file. Chip facts from the Bosch datasheet: VDD 1.71 to 3.6 V, VDDIO 1.2 to 3.6 V, absolute maximum 4.25 V, interface pins at most VDDIO + 0.3 V, 3.6 uA at 1 Hz humidity + pressure + temperature, 0.1 uA sleep, SDO low = 0x76 and SDO high = 0x77, SDI/SCK need external pull-ups to VDDIO (so whether the module has them depends on the clone: check with a meter, i2cPullups is unconfirmed). Confirm the address with a scanner. A BMP280 sold as BME280 has no humidity: the BME280 can is square (2.5 x 2.5 mm) and the BMP280 can rectangular (2.0 x 2.5 mm), which is hard to judge by eye; the reliable test is chip ID register 0xD0, which reads 0x60 for BME280 and 0x58 for BMP280. Variant warning for sourcing: boards sold as \"3.3V/5V\" or \"5 V version\" carry a regulator and level shifting, are larger, and take up to 5 V on VIN; this file is the small 3.3 V-only GY-BME280. The only Norwegian listing found in the local parts catalog (robonordic.no item 499) is the 5 V version. If that is what arrives, override this part in the project with its real size and supply range.",
+  "sources": [
+    "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf (Bosch datasheet, opened: package 2.5 x 2.5 x 0.93 mm LGA, VDD 1.71-3.6 V, VDDIO 1.2-3.6 V, abs max 4.25 V, 3.6 uA at 1 Hz, address 0x76/0x77 by SDO, SDI needs external pull-up)",
+    "https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/ (Bosch product page: same package and supply figures)",
+    "https://cdn.shopify.com/s/files/1/1509/1638/files/BME280_Barometrischer_Sensor_Modul_Datenblatt_AZ-Delivery_Vertriebs_GmbH.pdf (AZ-Delivery GY-BME280 sheet: lists 9 x 11 x 2 mm, 3.3 to 5 V, below 1 mA; disagrees with the modelled outline)",
+    "https://www.adafruit.com/product/2652 (cross-check only: Adafruit board 25.2 x 18 x 4.6 mm, a different board)"
+  ],
+  "confidence": "typical"
+}

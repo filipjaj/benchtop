@@ -1,0 +1,498 @@
+{
+  "format_version": 1,
+  "updated_at": "2026-11-14T09:22:34.983801+00:00",
+  "physical_measurements_performed": 0,
+  "purpose": "Source-specific incomplete geometry; these records are not runnable PartDefs or verified fits.",
+  "microphone_seller_records": [
+    {
+      "part_id": "elkim.no:23684",
+      "supplier_sku": "MOD-AUD-INMP441",
+      "source": {
+        "url": "https://elkim.no/produkt/inmp441-i2s-mems-mikrofonmodul/",
+        "retrieved_at": "2026-11-14T07:54:53.652992+00:00",
+        "local_path": "sources/2cbb95e0d15e304213ca14971c661c225aa9f6b87272f55962a9873137470d1e.html",
+        "sha256": "2cbb95e0d15e304213ca14971c661c225aa9f6b87272f55962a9873137470d1e",
+        "mime": "text/html",
+        "catalog_reference_path": "references/2c/2cbb95e0d15e304213ca14971c661c225aa9f6b87272f55962a9873137470d1e.html"
+      },
+      "module_manufacturer": null,
+      "manufacturing_revision": null,
+      "identity_scope": "exact_seller_listing",
+      "user_board_identity_confirmed": false,
+      "listing_verified": true,
+      "observed_at": "2026-11-14T09:17:05.534087+00:00",
+      "selectable_size_variants_found": false,
+      "variant_note": "No explicit selectable module size or revision found in the captured listing.",
+      "source_measurements": [
+        {
+          "kind": "bounding_box",
+          "scope": "pcb",
+          "values_mm": [
+            10,
+            10
+          ],
+          "axis_labels": null,
+          "approximate": true,
+          "source_evidence": "Kompakt format: Lite kretskort på ca. 10 x 10 mm som er enkelt å bygge inn i trange kabinetter.",
+          "corroborating_evidence": "Dimensjoner: Ca. 10 x 10 mm",
+          "fit_ready": false,
+          "limits": "Approximate PCB plan size only; no height, tolerance, pad positions, or header clearances."
+        }
+      ],
+      "visual_observations": [
+        {
+          "source_image": {
+            "url": "https://elkim.no/wp-content/uploads/2026/10/INMP441-Omnidirectional-Microphone-main.avif",
+            "retrieved_at": "2026-11-14T07:55:54.232468+00:00",
+            "local_path": "sources/59ce94d3788dc69af704e02fd10dc80480fff845747edc4adbf9078b6ad798f5.avif",
+            "sha256": "59ce94d3788dc69af704e02fd10dc80480fff845747edc4adbf9078b6ad798f5",
+            "mime": "image/avif",
+            "catalog_reference_path": "references/59/59ce94d3788dc69af704e02fd10dc80480fff845747edc4adbf9078b6ad798f5.avif"
+          },
+          "observation": "Square PCB with two opposite rows of three header terminals; main photograph shows fitted headers.",
+          "numeric_geometry_inferred": false
+        },
+        {
+          "source_image": {
+            "url": "https://elkim.no/wp-content/uploads/2026/10/INMP441-Omnidirectional-Microphone-side.avif",
+            "retrieved_at": "2026-11-14T07:55:56.237406+00:00",
+            "local_path": "sources/226b090ccb936f0966d28bfdbcd9e9a4ba1e50984c2a0b4594eecef5922b5623.avif",
+            "sha256": "226b090ccb936f0966d28bfdbcd9e9a4ba1e50984c2a0b4594eecef5922b5623",
+            "mime": "image/avif",
+            "catalog_reference_path": "references/22/226b090ccb936f0966d28bfdbcd9e9a4ba1e50984c2a0b4594eecef5922b5623.avif"
+          },
+          "observation": "Side photograph shows populated board and fitted header pins. No numerical drawing callouts.",
+          "numeric_geometry_inferred": false
+        }
+      ],
+      "unknown_fields": [
+        "pad_center_coordinates_mm",
+        "pad_pitch_mm",
+        "row_spacing_mm",
+        "pad_drill_diameter_mm",
+        "pcb_thickness_mm",
+        "sound_hole_position_mm",
+        "sound_hole_diameter_mm",
+        "manufacturing_revision",
+        "complete_assembled_envelope_mm"
+      ],
+      "fit_ready": false,
+      "geometry_objects": [],
+      "quality_notes": [
+        "The user has not identified an exact purchased SKU. This record describes the captured seller listing only.",
+        "No dimensioned module drawing or native module CAD was found in this bounded review.",
+        "No positions or distances were measured from photographs. Similar chip names or similar-looking boards do not establish matching geometry.",
+        "The description includes a separate pin strip, while photographs show fitted headers. Header assembly state is not an explicitly resolved product option."
+      ]
+    },
+    {
+      "part_id": "fibel.no:5859",
+      "supplier_sku": "m-inmp441-i2s",
+      "source": {
+        "url": "https://fibel.no/product/inmp441-i2s-mikrofon/",
+        "retrieved_at": "2026-11-14T07:54:56.940646+00:00",
+        "local_path": "sources/6fa2ad798180402206ad5364112b317673e381159464370fcf3153ff3722e75f.html",
+        "sha256": "6fa2ad798180402206ad5364112b317673e381159464370fcf3153ff3722e75f",
+        "mime": "text/html",
+        "catalog_reference_path": "references/6f/6fa2ad798180402206ad5364112b317673e381159464370fcf3153ff3722e75f.html"
+      },
+      "module_manufacturer": null,
+      "manufacturing_revision": null,
+      "identity_scope": "exact_seller_listing",
+      "user_board_identity_confirmed": false,
+      "listing_verified": true,
+      "observed_at": "2026-11-14T09:17:05.534087+00:00",
+      "selectable_size_variants_found": false,
+      "variant_note": "No explicit selectable module size or revision found in the captured listing.",
+      "source_measurements": [],
+      "visual_observations": [
+        {
+          "source_image": {
+            "url": "https://i0.wp.com/fibel.no/wp-content/uploads/2023/12/inmp-microphone-back.webp?fit=1200%2C800&ssl=1",
+            "retrieved_at": "2026-11-14T07:56:00.526510+00:00",
+            "local_path": "sources/7c1b0fb96c9fccd9f9b64422f02f0584ceb8759361cb9135d2bf4276cc18bb8f.jpg",
+            "sha256": "7c1b0fb96c9fccd9f9b64422f02f0584ceb8759361cb9135d2bf4276cc18bb8f",
+            "mime": "image/jpeg",
+            "catalog_reference_path": "references/7c/7c1b0fb96c9fccd9f9b64422f02f0584ceb8759361cb9135d2bf4276cc18bb8f.jpg"
+          },
+          "observation": "Round PCB with opposite edge notches and two rows of three through-hole pads. Silkscreen labels visible in this rear view: SCK, WS, L/R and SD, VDD, GND.",
+          "numeric_geometry_inferred": false
+        }
+      ],
+      "unknown_fields": [
+        "pad_center_coordinates_mm",
+        "pad_pitch_mm",
+        "row_spacing_mm",
+        "pad_drill_diameter_mm",
+        "pcb_thickness_mm",
+        "sound_hole_position_mm",
+        "sound_hole_diameter_mm",
+        "manufacturing_revision",
+        "complete_assembled_envelope_mm"
+      ],
+      "fit_ready": false,
+      "geometry_objects": [],
+      "quality_notes": [
+        "The user has not identified an exact purchased SKU. This record describes the captured seller listing only.",
+        "No dimensioned module drawing or native module CAD was found in this bounded review.",
+        "No positions or distances were measured from photographs. Similar chip names or similar-looking boards do not establish matching geometry.",
+        "No numerical module dimension is stated in the captured listing. The 14 mm claim from another seller must not be assigned to this SKU."
+      ]
+    },
+    {
+      "part_id": "butikk.hushagehobby.no:5787",
+      "supplier_sku": "984",
+      "source": {
+        "url": "https://butikk.hushagehobby.no/produkt/omnidireksjonell-mikrofon-i2s/",
+        "retrieved_at": "2026-11-14T07:55:02.258676+00:00",
+        "local_path": "sources/219a429382c91accf5cd4fb56d1e5da65898061de96d492ced919087654155ee.html",
+        "sha256": "219a429382c91accf5cd4fb56d1e5da65898061de96d492ced919087654155ee",
+        "mime": "text/html",
+        "catalog_reference_path": "references/21/219a429382c91accf5cd4fb56d1e5da65898061de96d492ced919087654155ee.html"
+      },
+      "module_manufacturer": null,
+      "manufacturing_revision": null,
+      "identity_scope": "exact_seller_listing",
+      "user_board_identity_confirmed": false,
+      "listing_verified": true,
+      "observed_at": "2026-11-14T09:17:05.534087+00:00",
+      "selectable_size_variants_found": false,
+      "variant_note": "No explicit selectable module size or revision found in the captured listing.",
+      "source_measurements": [
+        {
+          "kind": "bounding_box",
+          "scope": "product_unspecified",
+          "values_mm": [
+            14,
+            14,
+            3
+          ],
+          "axis_labels": null,
+          "approximate": false,
+          "source_evidence": "Dimensjoner | 14 × 14 × 3 mm",
+          "source_html_fragment": "<tr class=\"woocommerce-product-attributes-item woocommerce-product-attributes-item--dimensions\">\n\t\t\t<th class=\"woocommerce-product-attributes-item__label\" scope=\"row\">Dimensjoner</th>\n\t\t\t<td class=\"woocommerce-product-attributes-item__value\">14 &times; 14 &times; 3 mm</td>\n\t\t</tr>",
+          "source_locator": "tr.woocommerce-product-attributes-item--dimensions",
+          "source_field_semantics": "WooCommerce Additional information Dimensions field; adjacent Weight is 1 g.",
+          "physical_scope_unresolved": true,
+          "fit_ready": false,
+          "limits": "The listing does not label these as PCB, populated module, headers, or packaging dimensions. Explicit unit is mm; axis names, tolerances and assembly state are not stated."
+        }
+      ],
+      "visual_observations": [
+        {
+          "source_image": {
+            "url": "https://butikk.hushagehobby.no/wp-content/uploads/2024/04/Omnidireksjonell-mikrofon-I2S-2.jpg",
+            "retrieved_at": "2026-11-14T07:55:58.369501+00:00",
+            "local_path": "sources/04741a2e39a7847ae4c2e4a7db8c7da2542006272608d94a4ab247cdd0cfe6a0.jpg",
+            "sha256": "04741a2e39a7847ae4c2e4a7db8c7da2542006272608d94a4ab247cdd0cfe6a0",
+            "mime": "image/jpeg",
+            "catalog_reference_path": "references/04/04741a2e39a7847ae4c2e4a7db8c7da2542006272608d94a4ab247cdd0cfe6a0.jpg"
+          },
+          "observation": "Round PCB with opposite edge notches, two rows of three pads, and loose three-pin header strips. Rear silkscreen names are SCK, WS, L/R and SD, VDD, GND.",
+          "numeric_geometry_inferred": false
+        },
+        {
+          "source_image": {
+            "url": "https://butikk.hushagehobby.no/wp-content/uploads/2024/04/Omnidireksjonell-mikrofon-I2S-3.jpg",
+            "retrieved_at": "2026-11-14T07:55:56.368344+00:00",
+            "local_path": "sources/27eb7247b7f9f71785bde763fd0f5d7db67b2d21e2705153c715147d85a92701.jpg",
+            "sha256": "27eb7247b7f9f71785bde763fd0f5d7db67b2d21e2705153c715147d85a92701",
+            "mime": "image/jpeg",
+            "catalog_reference_path": "references/27/27eb7247b7f9f71785bde763fd0f5d7db67b2d21e2705153c715147d85a92701.jpg"
+          },
+          "observation": "Component-side photograph shows a microphone marked 441 and loose header strips. A chip marking is not a board revision or a source of module dimensions.",
+          "numeric_geometry_inferred": false
+        }
+      ],
+      "unknown_fields": [
+        "pad_center_coordinates_mm",
+        "pad_pitch_mm",
+        "row_spacing_mm",
+        "pad_drill_diameter_mm",
+        "pcb_thickness_mm",
+        "sound_hole_position_mm",
+        "sound_hole_diameter_mm",
+        "manufacturing_revision",
+        "complete_assembled_envelope_mm"
+      ],
+      "fit_ready": false,
+      "geometry_objects": [],
+      "quality_notes": [
+        "The user has not identified an exact purchased SKU. This record describes the captured seller listing only.",
+        "No dimensioned module drawing or native module CAD was found in this bounded review.",
+        "No positions or distances were measured from photographs. Similar chip names or similar-looking boards do not establish matching geometry.",
+        "Retain the recovered seller dimension field as an observation, but do not select it as a fit-ready enclosure envelope."
+      ]
+    }
+  ],
+  "controller_manufacturer_reference": {
+    "reference_id": "vcc-gnd:yd-esp32-s3:mechanical-reference",
+    "name": "VCC-GND Studio YD-ESP32-S3 mechanical reference",
+    "manufacturer": "VCC-GND Studio",
+    "record_scope": "documentation_only_board_family; exact target hardware revision unresolved",
+    "created_at": "2026-11-14T09:18:13.312894+00:00",
+    "not_a_runnable_benchtop_part": true,
+    "fit_status": "incomplete_reference_only",
+    "identity": {
+      "manufacturer_model": "YD-ESP32-S3",
+      "revision": null,
+      "exact_seller_matches": [],
+      "applicability": "Only the manufacturer mechanical reference represented by the retained files; no automatic applicability to dualUSB-C clones or IPEX variants."
+    },
+    "pcb": {
+      "width_mm": 27.94,
+      "length_mm": 57.15,
+      "thickness_mm": null,
+      "shape": "rectangle as printed; native closed polygon separately retained",
+      "source_url": "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-Metric.pdf",
+      "source_sha256": "23098cc8e1195bff1f6040cca85c4e2536a6a7eae21d3bda1c2c2962ec3cbd19",
+      "page": 1,
+      "evidence": "Explicit27.94mm across PCB left/right edges and57.15mm across PCB top/bottom edges.",
+      "outline_reference": "yd_primary_native_outline_reference.json"
+    },
+    "shown_plan_view_span": {
+      "width_mm": 27.94,
+      "length_mm": 63.39,
+      "scope": "module antenna end to opposite PCB edge as shown in manufacturer drawing; complete USB/assembly projection not established",
+      "source_url": "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-Metric.pdf",
+      "source_sha256": "23098cc8e1195bff1f6040cca85c4e2536a6a7eae21d3bda1c2c2962ec3cbd19",
+      "page": 1
+    },
+    "header_geometry": {
+      "rows": 2,
+      "positions_per_row": 22,
+      "row_centre_spacing_mm": 25.4,
+      "first_to_last_centre_span_mm": 53.34,
+      "published_rounded_end_offset_mm": 1.91,
+      "native_pitch_mm": 2.54,
+      "source_url": "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-Metric.pdf",
+      "source_sha256": "23098cc8e1195bff1f6040cca85c4e2536a6a7eae21d3bda1c2c2962ec3cbd19",
+      "native_coordinates_file": "yd_primary_native_header_coordinates.json",
+      "note": "Rounded1.91mm drawing offsets do not exactly sum with53.34mm to57.15mm; retain native precision and printed labels separately."
+    },
+    "assembled_envelope": {
+      "width_mm": null,
+      "length_mm": null,
+      "height_mm": null,
+      "maxHeight_mm": null,
+      "body_h_mm": null,
+      "status": "unknown; no complete assembled 3D envelope published in checked sources"
+    },
+    "mounting_holes": null,
+    "mounting_holes_note": "No dimensioned mounting-hole pattern was established. Header holes and USB shell anchor holes are not treated as case mounting holes.",
+    "usb_connector_geometry": {
+      "count": 2,
+      "interface": "USB-C",
+      "connector_footprint_as_source": "USB-C-SMD_TYPEC-304-BCP16",
+      "component_anchors": "see native_pad_reference components USB1/USB2; these are footprint origins, not established port mouth centres",
+      "port_mouth_centres_mm": null,
+      "port_face_width_height_mm": null,
+      "port_face_z_mm": null,
+      "plug_clearance_mm": null,
+      "cutouts": null,
+      "note": "Native component HEIGHT=39.3701mil is retained as CAD metadata only, not accepted as physical connector height."
+    },
+    "native_source": {
+      "url": "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-size-pcb-ad.PcbDoc",
+      "sha256": "6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35",
+      "local_path": "sources/6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35.pcbdoc",
+      "saved_date_as_source": "2022/3/17",
+      "saved_time_as_source": "10:10:48",
+      "revision": null,
+      "pads_file": "yd_primary_native_pad_reference.json",
+      "total_pad_anchors": 121,
+      "header_pad_anchors": 44,
+      "net_table_empty": true,
+      "native_stackup_note": "Raw Board6 stores dielectric/copper layer settings, but the size-reference file is not a fabrication/assembly specification. No PCB thickness promoted.",
+      "catalog_reference_path": "references/63/6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35.pcbdoc"
+    },
+    "source_revision_boundaries": [
+      {
+        "file": "yd_metric.pdf",
+        "revision": null,
+        "date": null,
+        "note": "No revision/date visible on the one-page mechanical drawing."
+      },
+      {
+        "file": "yd_size_primary.PcbDoc",
+        "revision": null,
+        "date": "2022/3/17",
+        "note": "Native saved metadata, not a claimed commercial hardware revision."
+      },
+      {
+        "file": "yd_schematic_v1_4.pdf",
+        "revision": "V1.4",
+        "date": "2022/9/23",
+        "note": "Title explicitly YD-ESP32-S3-COREBOARD V1.4; do not transfer this revision to earlier size-reference file."
+      }
+    ],
+    "known_source_disagreements": [
+      {
+        "issue": "RGB LED GPIO label differs between primary sources",
+        "sources": [
+          "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/IMG/img11.jpg",
+          "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/README.md"
+        ],
+        "evidence": [
+          "Primary pinout image labels RGB_LED beside GPIO47.",
+          "Primary README says GPIO48 drives WS2812."
+        ],
+        "action": "Keep source-specific; do not merge a revisionless net assignment."
+      },
+      {
+        "issue": "Community conversion rounds or edits geometry",
+        "evidence": [
+          "Community .kicad_mod outline28×57mm differs from primary27.94×57.15mm.",
+          "Community row positions include x1.29632 vs1.3 andright x26.7; retain as-authored."
+        ],
+        "action": "Community footprint kept as secondary reference only, not canonical manufacturer geometry."
+      }
+    ],
+    "independent_visual_review": {
+      "reviewer": "source_adafruit",
+      "result": "passed scoped PDF callouts",
+      "observations": [
+        "27.94×57.15mm PCB",
+        "25.40mm header row centres",
+        "53.34mm first-to-last centres",
+        "63.39mm antenna/module-end to PCBbottom",
+        "No assembled Z or connector-height dimension"
+      ]
+    },
+    "catalog_part_id": "vcc-gnd:yd-esp32-s3:mechanical-reference",
+    "draft_part_file": "drafts/yd-esp32-s3-mechanical-draft.json"
+  },
+  "controller_seller_comparisons": [
+    {
+      "part_id": "elkim.no:22537",
+      "name": "ESP32-S3-DevKitC-1 Utviklingskort med pinner (Dual USB-C, Wi-Fi & BLE 5.0)",
+      "seller_url": "https://elkim.no/produkt/esp32-s3-devkitc-1-utviklingskort-med-pinner/",
+      "supplier_sku": "DEV-ESP32-S3-DEVKITC1",
+      "manufacturer_identity_verified": false,
+      "matches_yd_manufacturer_reference": false,
+      "fit_status": "unresolved_seller_variant",
+      "exact_revision": null,
+      "pcb_dimensions_mm": null,
+      "assembled_dimensions_mm": null,
+      "header_row_spacing_mm": 25.4,
+      "header_pad_coordinates": null,
+      "usb_cutouts": null,
+      "mounting_holes": null,
+      "primary_source_ids": [
+        301
+      ],
+      "seller_published_dimensions_mm": [
+        57.1,
+        28.0
+      ],
+      "seller_dimensions_approximate": true,
+      "dimension_scope": "photo arrows mark board-length/width; complete antenna/USB/header assembly not established",
+      "header_pitch_mm": 2.54,
+      "pin_count_claims": [
+        44,
+        42
+      ],
+      "conflicts": [
+        "Description:44pins2×22; source attribute:42pins."
+      ],
+      "note": "No source establishes original VCC-GND manufacturer or hardware revision. Do not inherit YD primary coordinates."
+    },
+    {
+      "part_id": "elkim.no:23508",
+      "name": "ESP32-S3-N16R8 Utviklingskort med IPEX og Doble USB-C (Forhåndsloddet)",
+      "seller_url": "https://elkim.no/produkt/esp32-s3-n16r8-utviklingskort-ipex/",
+      "supplier_sku": "DEV-ESP32S3-DUAL-USBC",
+      "manufacturer_identity_verified": false,
+      "matches_yd_manufacturer_reference": false,
+      "fit_status": "unresolved_seller_variant",
+      "exact_revision": null,
+      "pcb_dimensions_mm": null,
+      "assembled_dimensions_mm": null,
+      "header_row_spacing_mm": null,
+      "header_pad_coordinates": null,
+      "usb_cutouts": null,
+      "mounting_holes": null,
+      "primary_source_ids": [
+        3166
+      ],
+      "note": "IPEX/U.FL/external-antenna variant. Source photo also depicts antenna-shaped PCB projection; circuitry identity unresolved. No numeric geometry in retained seller text."
+    },
+    {
+      "part_id": "robonordic.no:551",
+      "name": "ESP32-S3 Utviklingskort N16R8 – 16MB Flash, 8MB PSRAM, Wi-Fi & BT, Type-C",
+      "seller_url": "https://robonordic.no/product/esp32-s3-utviklingskort-n16r8-16mb-flash-8mb-psram-wi-fi-bt-type-c/",
+      "supplier_sku": "RN-00050",
+      "manufacturer_identity_verified": false,
+      "matches_yd_manufacturer_reference": false,
+      "fit_status": "unresolved_seller_variant",
+      "exact_revision": null,
+      "pcb_dimensions_mm": null,
+      "assembled_dimensions_mm": null,
+      "header_row_spacing_mm": null,
+      "header_pad_coordinates": null,
+      "usb_cutouts": null,
+      "mounting_holes": null,
+      "primary_source_ids": [
+        3303
+      ],
+      "pin_count_claims": [
+        44
+      ],
+      "note": "Retailer identifies N16R8 and44pins; current FAQ mentions the other USB-C port. No numeric PCB/assembly geometry or exact manufacturer revision."
+    },
+    {
+      "part_id": "fibel.no:1891",
+      "name": "ESP32-S3 Bluetooth og WiFi dobbel usb-c",
+      "seller_url": "https://fibel.no/product/esp32-s3-bluetooth-og-wifi-dobbel-usb-c/",
+      "supplier_sku": "m-32s3-n16r8b",
+      "manufacturer_identity_verified": false,
+      "matches_yd_manufacturer_reference": false,
+      "fit_status": "unresolved_seller_variant",
+      "exact_revision": null,
+      "pcb_dimensions_mm": null,
+      "assembled_dimensions_mm": null,
+      "header_row_spacing_mm": null,
+      "header_pad_coordinates": null,
+      "usb_cutouts": null,
+      "mounting_holes": null,
+      "primary_source_ids": [
+        3428
+      ],
+      "note": "Parent source listsN8R2,N16R8,N16R8black; current SKU m-32s3-n16r8b. Supplied headers are loose. Linked official Espressif DevKitC-1 schematic is an electrical-family reference, not proof of this USB-C board geometry.",
+      "misbinding_risk": {
+        "url": "https://dl.espressif.com/dl/SCH_ESP32-S3-DEVKITC-1_V1_20210312C.pdf",
+        "action": "Do not use as exact clone physical or revision evidence."
+      }
+    },
+    {
+      "part_id": "elkim.no:22525",
+      "name": "ESP32-S3 Breakout Skruterminal-adapter (44-pin for YD-ESP32-S3)",
+      "seller_url": "https://elkim.no/produkt/esp32-s3-breakout-skruterminaler-44pin-yd/",
+      "supplier_sku": "7000000225253",
+      "manufacturer_identity_verified": false,
+      "matches_yd_manufacturer_reference": false,
+      "fit_status": "unresolved_seller_variant",
+      "exact_revision": null,
+      "pcb_dimensions_mm": null,
+      "assembled_dimensions_mm": null,
+      "header_row_spacing_mm": null,
+      "header_pad_coordinates": null,
+      "usb_cutouts": null,
+      "mounting_holes": null,
+      "primary_source_ids": [
+        487
+      ],
+      "record_role": "adapter_not_controller",
+      "seller_published_dimensions_mm": [
+        79.5,
+        70.0
+      ],
+      "seller_published_socket_row_spacings_mm": [
+        23.0,
+        25.5
+      ],
+      "seller_published_holes": "4×M3;coordinatesunknown",
+      "note": "Y6592/44P adapter compatibility statement does not establish any particular controller geometry. Board not included."
+    }
+  ]
+}

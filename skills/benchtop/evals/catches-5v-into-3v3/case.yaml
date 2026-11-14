@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: catches-5v-into-3v3
+expected_outcome: |
+  The agent writes a project.json, runs the electrical check, and handles the two real hazards:
+  the HC-SR04 echo pin drives 5 V into a 3.3 V controller pin, and the sensor and LED strip
+  need the 5 V rail rather than 3V3. The final wiring includes a divider or level shifter on
+  the echo line, the validator reports no errors, and a guide is generated from the project file.

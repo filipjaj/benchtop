@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: asks-pcb-or-solder
+expected_outcome: |
+  The agent asks whether the user wants a finished PCB or to solder it themselves before
+  generating build files, sources parts with live prices, generates the guide and the other
+  build files for the chosen path, looks at its output, writes showcase copy, packages the
+  project, and reports what is unverified. Input is the bundled luft example.
+context:
+  scaffold_script: place-files.sh

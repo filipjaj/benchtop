@@ -1,0 +1,412 @@
+{
+  "id": "esp32-c3-supermini",
+  "name": "ESP32-C3 SuperMini",
+  "kind": "board",
+  "blurb": "Thumb-sized Wi-Fi and Bluetooth LE controller with USB-C, 16 pins and an onboard blue LED.",
+  "body": {
+    "w": 18,
+    "d": 22.5,
+    "h": 1
+  },
+  "maxHeight": 4.3,
+  "shapes": [
+    {
+      "kind": "box",
+      "x": 4.53,
+      "y": -0.3,
+      "w": 8.94,
+      "d": 6.8,
+      "h": 3.2,
+      "tag": "usb"
+    },
+    {
+      "kind": "box",
+      "x": 12.799999999999999,
+      "y": 12.49,
+      "w": 1.6,
+      "d": 0.8,
+      "h": 0.6,
+      "tag": "led"
+    },
+    {
+      "kind": "box",
+      "x": 2.3200000000000003,
+      "y": 6.619999999999999,
+      "w": 1.6,
+      "d": 0.8,
+      "h": 0.6,
+      "tag": "led"
+    },
+    {
+      "kind": "box",
+      "x": 6.5,
+      "y": 9.2,
+      "w": 5,
+      "d": 5,
+      "h": 0.85,
+      "tag": "chip"
+    },
+    {
+      "kind": "box",
+      "x": 5.6,
+      "y": 19.6,
+      "w": 6.8,
+      "d": 1.8,
+      "h": 1.2,
+      "tag": "antenna"
+    },
+    {
+      "kind": "box",
+      "x": 3.4,
+      "y": 4.6,
+      "w": 2.6,
+      "d": 3.2,
+      "h": 1.6,
+      "tag": "button"
+    },
+    {
+      "kind": "box",
+      "x": 12.0,
+      "y": 4.6,
+      "w": 2.6,
+      "d": 3.2,
+      "h": 1.6,
+      "tag": "button"
+    }
+  ],
+  "pins": [
+    {
+      "name": "5",
+      "aliases": [
+        "GPIO5"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 3.24,
+      "volts": 3.3,
+      "gpio": 5,
+      "caps": [
+        "adc",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "ADC2 channel: analogue reads are unreliable while Wi-Fi is on. Also an SPI pin."
+    },
+    {
+      "name": "6",
+      "aliases": [
+        "GPIO6"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 5.78,
+      "volts": 3.3,
+      "gpio": 6,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI clock pin (FSPICLK)."
+    },
+    {
+      "name": "7",
+      "aliases": [
+        "GPIO7"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 8.32,
+      "volts": 3.3,
+      "gpio": 7,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI data-out pin (FSPID)."
+    },
+    {
+      "name": "8",
+      "aliases": [
+        "GPIO8",
+        "SDA"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 10.86,
+      "volts": 3.3,
+      "gpio": 8,
+      "caps": [
+        "pwm",
+        "i2c",
+        "strapping",
+        "onboard-led",
+        "spi",
+        "uart"
+      ],
+      "note": "Drives the onboard blue LED, which lights when the pin is LOW (inverted). Strapping pin: do not hold it low at reset. Default I2C SDA in the Arduino core."
+    },
+    {
+      "name": "9",
+      "aliases": [
+        "GPIO9",
+        "SCL"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 13.4,
+      "volts": 3.3,
+      "gpio": 9,
+      "caps": [
+        "pwm",
+        "i2c",
+        "strapping",
+        "boot-button",
+        "spi",
+        "uart"
+      ],
+      "note": "Wired to the BOOT button and sampled at reset: holding it low at power-up enters download mode instead of running your program. Default I2C SCL."
+    },
+    {
+      "name": "10",
+      "aliases": [
+        "GPIO10"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 15.94,
+      "volts": 3.3,
+      "gpio": 10,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI chip-select pin (FSPICS0)."
+    },
+    {
+      "name": "20",
+      "aliases": [
+        "GPIO20",
+        "RX"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 18.48,
+      "volts": 3.3,
+      "gpio": 20,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART0 RX. USB serial uses the native USB port, so this pin is free for a second serial device."
+    },
+    {
+      "name": "21",
+      "aliases": [
+        "GPIO21",
+        "TX"
+      ],
+      "role": "io",
+      "x": 1.38,
+      "y": 21.02,
+      "volts": 3.3,
+      "gpio": 21,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART0 TX. USB serial uses the native USB port, so this pin is free for a second serial device."
+    },
+    {
+      "name": "5V",
+      "role": "power-out",
+      "x": 16.62,
+      "y": 3.24,
+      "volts": 5,
+      "supplyMa": 400,
+      "backfeed": {
+        "minVolts": 4.5,
+        "maxVolts": 5.5
+      },
+      "note": "5 V straight from the USB-C port when plugged in. Also the pin to feed 5 V into when running without USB. Never power from both at once through a separate supply."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 16.62,
+      "y": 5.78,
+      "aliases": [
+        "G"
+      ]
+    },
+    {
+      "name": "3V3",
+      "role": "power-out",
+      "x": 16.62,
+      "y": 8.32,
+      "volts": 3.3,
+      "supplyMa": 150,
+      "note": "Output of the onboard 3.3 V regulator. The chip itself takes most of its capacity during Wi-Fi bursts, so keep external loads small."
+    },
+    {
+      "name": "4",
+      "aliases": [
+        "GPIO4"
+      ],
+      "role": "io",
+      "x": 16.62,
+      "y": 10.86,
+      "volts": 3.3,
+      "gpio": 4,
+      "caps": [
+        "adc",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+    },
+    {
+      "name": "3",
+      "aliases": [
+        "GPIO3"
+      ],
+      "role": "io",
+      "x": 16.62,
+      "y": 13.4,
+      "volts": 3.3,
+      "gpio": 3,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+    },
+    {
+      "name": "2",
+      "aliases": [
+        "GPIO2"
+      ],
+      "role": "io",
+      "x": 16.62,
+      "y": 15.94,
+      "volts": 3.3,
+      "gpio": 2,
+      "caps": [
+        "adc",
+        "pwm",
+        "strapping",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Strapping pin: sampled at reset, so avoid a hard pull-down on it. ADC1 channel."
+    },
+    {
+      "name": "1",
+      "aliases": [
+        "GPIO1"
+      ],
+      "role": "io",
+      "x": 16.62,
+      "y": 18.48,
+      "volts": 3.3,
+      "gpio": 1,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+    },
+    {
+      "name": "0",
+      "aliases": [
+        "GPIO0"
+      ],
+      "role": "io",
+      "x": 16.62,
+      "y": 21.02,
+      "volts": 3.3,
+      "gpio": 0,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+    }
+  ],
+  "ports": [
+    {
+      "name": "USB-C",
+      "faces": "y-",
+      "x": 9,
+      "y": 0,
+      "z": 1.6,
+      "w": 8.94,
+      "h": 3.26,
+      "shape": "rect",
+      "margin": 1.5
+    },
+    {
+      "name": "Blue LED (GPIO8)",
+      "faces": "up",
+      "x": 13.6,
+      "y": 12.89,
+      "w": 2.5,
+      "h": 2.5,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 75,
+      "peak": 350
+    },
+    "i2cPullups": false
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "ESP32-C3 SuperMini",
+      "ESP32-C3 Super Mini development board USB-C",
+      "ESP32-C3FH4 SuperMini 4MB"
+    ],
+    "priceUsd": 3
+  },
+  "verify": "Clone board with no official drawing or open board file found; batches differ. Confirmed by independent sources: outline 22.5 (22.52) x 18 mm, 0.1 in pitch, 15.24 mm between rows. NOT confirmed by any source: PCB thickness (modelled 1.0; measure it, clones are often 0.8 to 1.2), distance from the USB-C front edge to the first pad (modelled 3.24), USB-C shell width and overhang (modelled flush, 8.94 wide), all shape heights, LED and button positions. Variants: the 'Plus' and v2 boards have different outlines and pin counts; this file is the plain 16-pin board. Some listings and ESPHome pages use SDA=GPIO5/SCL=GPIO6 as software defaults; the Arduino default is GPIO8/GPIO9. Supply: sources quote the 5V pin as 3.3-6 V or 5-7 V and 3V3 output as 150 to 500 mA; the modelled 150 mA is the conservative figure. With calipers measure: PCB length and width; PCB thickness; distance from the USB-C front edge to the first pad; USB-C width and overhang. Confirm LED polarity (modelled active-low on GPIO8) and which row carries 5V/GND/3V3 with USB at the top and the component side up. Both buttons (BOOT, RST) are not modelled because their position is unverified; measure them if the case needs access. Pin y-positions come from the Wokwi board definition, which is drawn on an 18 x 24.576 mm canvas (artwork derived from the Adafruit QT Py ESP32-C3, per its own description) while the real board is 22.5 mm long, so the offset from the USB edge is an assumption: measure it. Component positions on the board face (chip, antenna, buttons) are drawn for recognition only; rely on the outline and pad positions.",
+  "sources": [
+    "https://protosupplies.com/product/esp32c3-supermini/ (seller: 22.5 x 18 mm, 15.24 mm row spacing, 0.1 in pitch, 130 mA typical)",
+    "https://mischianti.org/esp32-c3-super-mini-high-resolution-pinout-datasheet-and-specs/ (reference site: 22.5 x 18 mm, 5V pin 3.3-6 V)",
+    "https://www.makerguides.com/esp32-c3-supermini-board/ (reference site: 22.52 x 18 mm, 5V pin 3.3-6 V)",
+    "https://www.espboards.dev/esp32/esp32-c3-super-mini/ (reference site: 22.52 x 18 mm, 2.54 mm pitch, pin list)",
+    "https://www.flux.ai/therealjoe/esp32-c3-supermini (user-made Flux project: pin names and order only, no dimensions)"
+  ],
+  "confidence": "typical"
+}

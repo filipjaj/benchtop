@@ -1,0 +1,270 @@
+{
+  "note": "Retailers the shopping page can open a search at. `search` takes the URL-encoded term in place of {q}. `checked` records how the pattern was verified on 2026-11-14: \"ok\" means two different terms (BME280, INMP441) gave different, relevant results; \"blocked\" is the store's standard search URL but the store refuses automated requests, so it was not opened; \"broken\" means the pattern is known not to work and the shopping page does not offer it. `query: \"model\"` means the shop matches every word and has Norwegian or Swedish product titles, so a long English search term finds nothing: the page then searches only for the model number (BME280, INMP441) when the term has one. `note` says how the results load. Regions are ISO country codes plus EU, UK, US and ALL. Add a store by adding an entry; nothing else needs to change.",
+  "stores": [
+    {
+      "id": "aliexpress",
+      "name": "AliExpress",
+      "regions": [
+        "ALL"
+      ],
+      "search": "https://www.aliexpress.com/wholesale?SearchText={q}",
+      "good": "Cheapest for generic modules. 2 to 4 weeks. Sizes and pin order vary by seller.",
+      "kinds": [
+        "module",
+        "passive",
+        "consumable",
+        "hardware"
+      ],
+      "checked": "ok"
+    },
+    {
+      "id": "elkim",
+      "name": "Elkim",
+      "regions": [
+        "NO"
+      ],
+      "search": "https://elkim.no/?s={q}&post_type=product",
+      "good": "Norwegian shop, prices in NOK, days not weeks.",
+      "kinds": [
+        "module",
+        "passive",
+        "hardware"
+      ],
+      "checked": "ok",
+      "query": "model",
+      "note": "A single match redirects straight to the product page."
+    },
+    {
+      "id": "fibel",
+      "name": "fibel.no",
+      "regions": [
+        "NO"
+      ],
+      "search": "https://fibel.no/produkter/?q={q}",
+      "good": "Norwegian shop, prices in NOK, modules and single components.",
+      "kinds": [
+        "module",
+        "passive",
+        "hardware"
+      ],
+      "checked": "ok",
+      "query": "model",
+      "note": "Results load client side (Jetpack instant search): a plain HTTP request sees the default listing for every term, a browser sees the matches."
+    },
+    {
+      "id": "robonordic",
+      "name": "RoboNordic",
+      "regions": [
+        "NO"
+      ],
+      "search": "https://robonordic.no/?s={q}&post_type=product",
+      "good": "Norwegian shop, prices in NOK, sensors and controller boards.",
+      "kinds": [
+        "module"
+      ],
+      "checked": "ok",
+      "query": "model"
+    },
+    {
+      "id": "kjell",
+      "name": "Kjell & Company",
+      "regions": [
+        "NO"
+      ],
+      "search": "https://www.kjell.com/no/sok?q={q}&search=true",
+      "good": "Norwegian chain with shops: boards, cables, tools, solder.",
+      "kinds": [
+        "module",
+        "tool",
+        "consumable"
+      ],
+      "checked": "ok",
+      "query": "model",
+      "note": "Results load client side. The earlier ?query= pattern always answered no hits. Norwegian storefront only."
+    },
+    {
+      "id": "electrokit",
+      "name": "Electrokit",
+      "regions": [
+        "SE",
+        "NO",
+        "DK",
+        "FI"
+      ],
+      "search": "https://www.electrokit.com/search.php?keyword={q}",
+      "good": "Swedish hobby electronics, ships across the Nordics.",
+      "kinds": [
+        "module",
+        "passive"
+      ],
+      "checked": "ok",
+      "query": "model"
+    },
+    {
+      "id": "reichelt",
+      "name": "Reichelt",
+      "regions": [
+        "EU",
+        "NO",
+        "DE"
+      ],
+      "search": "https://www.reichelt.com/index.html?ACTION=446&q={q}",
+      "good": "German, broad range of components and modules.",
+      "kinds": [
+        "module",
+        "passive",
+        "hardware",
+        "consumable"
+      ],
+      "checked": "blocked"
+    },
+    {
+      "id": "berrybase",
+      "name": "Berrybase",
+      "regions": [
+        "EU",
+        "DE"
+      ],
+      "search": "https://www.berrybase.de/search?search={q}",
+      "good": "German maker shop.",
+      "kinds": [
+        "module"
+      ],
+      "checked": "ok",
+      "note": "The earlier sSearch= pattern ignored the term and listed all 16680 products."
+    },
+    {
+      "id": "kiwi",
+      "name": "Kiwi Electronics",
+      "regions": [
+        "EU",
+        "NL"
+      ],
+      "search": "https://www.kiwi-electronics.com/en/search?search={q}",
+      "good": "Dutch maker shop.",
+      "kinds": [
+        "module"
+      ],
+      "checked": "ok"
+    },
+    {
+      "id": "botland",
+      "name": "Botland",
+      "regions": [
+        "EU",
+        "PL"
+      ],
+      "search": "https://botland.store/search?s={q}",
+      "good": "Polish maker shop, ships across the EU.",
+      "kinds": [
+        "module",
+        "passive"
+      ],
+      "checked": "ok"
+    },
+    {
+      "id": "pimoroni",
+      "name": "Pimoroni",
+      "regions": [
+        "UK"
+      ],
+      "search": "https://shop.pimoroni.com/search?q={q}",
+      "good": "UK. Own and Adafruit breakouts; branded boards, not generic clones.",
+      "kinds": [
+        "module"
+      ],
+      "checked": "ok"
+    },
+    {
+      "id": "pihut",
+      "name": "The Pi Hut",
+      "regions": [
+        "UK"
+      ],
+      "search": "https://thepihut.com/search?q={q}",
+      "good": "UK maker shop.",
+      "kinds": [
+        "module"
+      ],
+      "checked": "ok"
+    },
+    {
+      "id": "adafruit",
+      "name": "Adafruit",
+      "regions": [
+        "US"
+      ],
+      "search": "https://www.adafruit.com/search?q={q}",
+      "good": "US. Well documented branded boards; outlines differ from generic clones.",
+      "kinds": [
+        "module"
+      ],
+      "checked": "ok"
+    },
+    {
+      "id": "digikey",
+      "name": "DigiKey",
+      "regions": [
+        "US",
+        "EU",
+        "UK",
+        "NO"
+      ],
+      "search": "https://www.digikey.com/en/products/result?keywords={q}",
+      "good": "Components with real datasheets: switches, resistors, connectors.",
+      "kinds": [
+        "passive",
+        "hardware"
+      ],
+      "checked": "blocked"
+    },
+    {
+      "id": "lcsc",
+      "name": "LCSC",
+      "regions": [
+        "ALL"
+      ],
+      "search": "https://www.lcsc.com/search?q={q}",
+      "good": "Components for assembled PCBs.",
+      "kinds": [
+        "passive"
+      ],
+      "checked": "ok",
+      "note": "Results load client side: a plain HTTP request sees an empty shell, a browser sees the matches."
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "regions": [
+        "US",
+        "UK",
+        "DE",
+        "EU"
+      ],
+      "search": "https://www.amazon.com/s?k={q}",
+      "good": "Fast, usually multi-packs. Check the listing photos against the drawing.",
+      "kinds": [
+        "module",
+        "tool",
+        "consumable",
+        "hardware"
+      ],
+      "checked": "blocked"
+    },
+    {
+      "id": "ebay",
+      "name": "eBay",
+      "regions": [
+        "ALL"
+      ],
+      "search": "https://www.ebay.com/sch/i.html?_nkw={q}",
+      "good": "Single pieces from local sellers.",
+      "kinds": [
+        "module",
+        "hardware",
+        "consumable"
+      ],
+      "checked": "blocked"
+    }
+  ]
+}

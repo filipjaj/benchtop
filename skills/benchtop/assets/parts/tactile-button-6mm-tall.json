@@ -1,0 +1,98 @@
+{
+  "id": "tactile-button-6mm-tall",
+  "name": "6 x 6 mm tactile switch, 9.5 mm tall (through-hole, 4 legs)",
+  "kind": "input",
+  "blurb": "Small push button with a long stem that reaches through an enclosure lid; the four legs are really two electrical connections.",
+  "body": {
+    "w": 6.5,
+    "d": 6,
+    "h": 3.4
+  },
+  "maxHeight": 9.5,
+  "shapes": [
+    {
+      "kind": "cyl",
+      "tag": "button-cap",
+      "x": 3.25,
+      "y": 3,
+      "z": 0,
+      "r": 1.75,
+      "h": 6.1
+    }
+  ],
+  "pins": [
+    {
+      "name": "1",
+      "role": "passive",
+      "x": 0,
+      "y": 0.75,
+      "z": -3.4,
+      "lead": 3.5,
+      "note": "Legs 1 and 1b are connected inside the switch. Use either one."
+    },
+    {
+      "name": "2",
+      "role": "passive",
+      "x": 0,
+      "y": 5.25,
+      "z": -3.4,
+      "lead": 3.5,
+      "note": "Legs 2 and 2b are connected inside the switch. Pressing the button joins node 1 to node 2."
+    },
+    {
+      "name": "1b",
+      "role": "passive",
+      "x": 6.5,
+      "y": 0.75,
+      "z": -3.4,
+      "lead": 3.5,
+      "note": "Duplicate of pin 1 (same electrical node)."
+    },
+    {
+      "name": "2b",
+      "role": "passive",
+      "x": 6.5,
+      "y": 5.25,
+      "z": -3.4,
+      "lead": 3.5,
+      "note": "Duplicate of pin 2 (same electrical node)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "button-cap",
+      "faces": "up",
+      "x": 3.25,
+      "y": 3,
+      "w": 3.5,
+      "h": 3.5,
+      "shape": "round",
+      "margin": 0.5,
+      "reach": true
+    }
+  ],
+  "electrical": {
+    "currentMa": {
+      "typical": 0,
+      "peak": 0
+    }
+  },
+  "footprint": {
+    "mount": "tht",
+    "pitch": 6.5,
+    "ref": "Button_Switch_THT:SW_PUSH_6mm"
+  },
+  "sourcing": {
+    "search": [
+      "6x6x9.5mm tactile push button switch 4 pin",
+      "tactile switch 6x6 9.5mm"
+    ],
+    "priceUsd": 0.1
+  },
+  "verify": "The 9.5 mm overall height is NOT confirmed by any source opened: Omron's tallest 6 x 6 part in the B3F catalogue is 7.3 mm (B3F-1050, a 2.4 mm square plunger), and sellers list 7, 8, 9.5 and 13 mm clones with a thicker stem. Measure overall height from the PCB seat to the top of the stem, and the stem diameter (modelled 3.5 mm), and edit maxHeight and the cap height (modelled 6.1 mm above a 3.4 mm body). Confirmed by the Omron B3F drawing and the KiCad footprint (two independent sources): 6 x 6 mm body, leg pitch 6.5 mm by 4.5 mm (the earlier 6.25 mm was wrong), 3.5 mm plunger, body about 3.4 mm high. Legs 6.5 mm apart (same y) are the same node in the KiCad footprint; confirm with a continuity meter. The 6.5 mm wide body here is the 6 mm housing plus the leg overhang. Peak current is the Omron 50 mA at 24 V DC contact rating for the plain switch. Drawing-only fields on the pins: z -3.4 puts each leg at the foot of the 3.4 mm body, where the legs leave it; lead 3.5 mm is a typical leg length for this switch and was not read from the drawing.",
+  "sources": [
+    "https://media.onlinecomponents.com/productfiles/mf-om/d22b3f0401.pdf (Omron B3F catalogue, opened and read: body 6 +-0.2 x 6 +-0.2, PCB holes 6.5 +-0.1 x 4.5 +-0.1 at 1 mm dia, plunger 3.5 mm dia, body 3.4, B3F-1000 total 4.3 +-0.2, B3F-1020 5 +0.05/-0.2, B3F-1050 7.3 +-0.2, 50 mA 24 V DC rating)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Button_Switch_THT.pretty/SW_PUSH_6mm.kicad_mod (KiCad library, opened: pads at 0 and 6.5 mm by 0 and 4.5 mm, 1.1 mm drill, same pad number 1 or 2 on legs 6.5 mm apart, body 6 x 6 mm)"
+  ],
+  "confidence": "typical"
+}

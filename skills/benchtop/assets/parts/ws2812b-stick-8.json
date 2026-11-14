@@ -1,0 +1,103 @@
+{
+  "id": "ws2812b-stick-8",
+  "name": "WS2812B LED stick, 8 pixels, 5 V (51 x 10 mm)",
+  "kind": "light",
+  "blurb": "A short rigid bar of eight addressable RGB LEDs, 51 mm long: one data wire sets each pixel to any colour. Eight pixels draw up to 480 mA at full white, so a USB-powered build caps the brightness in firmware.",
+  "body": {
+    "w": 50.8,
+    "d": 10.16,
+    "h": 1.6
+  },
+  "maxHeight": 3.2,
+  "shapes": [
+    { "kind": "box", "tag": "led-1", "x": 0.675, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-2", "x": 7.025, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-3", "x": 13.375, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-4", "x": 19.725, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-5", "x": 26.075, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-6", "x": 32.425, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-7", "x": 38.775, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-8", "x": 45.125, "y": 3.85, "z": 0, "w": 5, "d": 5, "h": 1.6 }
+  ],
+  "pins": [
+    {
+      "name": "5V",
+      "role": "power-in",
+      "x": 1.4,
+      "y": 6.35,
+      "z": -1.6,
+      "lead": 1.5,
+      "volts": 5,
+      "minVolts": 4,
+      "maxVolts": 5.3,
+      "note": "Pad on the back face at the input end, silkscreen 4-7VDC. Adafruit says 4 to 7 V works; the WS2812B datasheet absolute maximum is 5.3 V, so feed 5 V. Eight pixels can draw 480 mA at full white."
+    },
+    {
+      "name": "DIN",
+      "role": "io",
+      "x": 1.4,
+      "y": 3.81,
+      "z": -1.6,
+      "lead": 1.5,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "minHighVolts": 3.5,
+      "note": "Data in, back-face pad at the input end next to the 5V pad (the other end is DOUT, for chaining). The board already has a 470 ohm series resistor on this pad. The pixels want 3.5 V for a high at 5 V; a 3.3 V controller is outside the datasheet but usually works on a short wire."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 1.4,
+      "y": 8.89,
+      "z": -1.6,
+      "lead": 1.5,
+      "note": "Back-face pad at the input end. The pad at the other side of DIN and 5V (y = 1.27 mm) is also ground and joined to this one on the board. Connect GND before 5 V when hot-plugging."
+    }
+  ],
+  "holes": [
+    { "x": 12.7, "y": 2.03, "dia": 2 },
+    { "x": 38.1, "y": 2.03, "dia": 2 }
+  ],
+  "ports": [
+    {
+      "name": "light window",
+      "faces": "up",
+      "x": 25.4,
+      "y": 6.35,
+      "w": 50,
+      "h": 6,
+      "shape": "rect",
+      "margin": 0.3
+    }
+  ],
+  "electrical": {
+    "logicVolts": 5,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 160,
+      "peak": 480
+    }
+  },
+  "footprint": {
+    "mount": "wire"
+  },
+  "sourcing": {
+    "search": [
+      "NeoPixel Stick 8 RGB LED",
+      "WS2812B 8 bit LED stick 5050",
+      "8 LED WS2812 5050 RGB strip module"
+    ],
+    "priceUsd": 6,
+    "links": [
+      { "store": "Adafruit", "url": "https://www.adafruit.com/product/1426" }
+    ]
+  },
+  "verify": "Outline (50.8 x 10.16 mm), LED pitch (6.35 mm), LED positions, mounting holes (2 mm at 12.7 and 38.1 mm) and the four end pads come from Adafruit's own board file for the NeoPixel Stick (Eagle, 'Adafruit NeoPixel 8 Stick v2.brd', read 2026-11-14), not from a part in hand. Adafruit's product page lists 51.10 x 10.22 x 3.19 mm, 0.3 mm more than the board file, and a stick sold under another name may differ more: measure length, width, LED pitch and the position and order of the end pads before printing a case around it. Board thickness (1.6 mm) and LED height (1.6 mm) are assumed from the 3.19 mm total height. The pads are on the BACK face, at both ends: this file puts the 5V, DIN and GND pads of the input end (the end whose silkscreen reads GND, 4-7VDC, DIN, GND) on the left, as a lead at the foot of the board (z = -1.6). Check which end is the input (the arrows point away from it) and that the order DIN, 5V, GND from the board's top edge matches yours. The shipping LED may be WS2812B or SK6812; same protocol. 20 mA typical and 60 mA peak per pixel are the usual planning values (the stick's file gives the totals for eight).",
+  "sources": [
+    "https://github.com/adafruit/NeoPixel-Sticks (opened, file 'Adafruit NeoPixel 8 Stick v2.brd' read: board outline 50.8 x 10.16 mm, LED1 at x 3.175 and every 6.35 mm to LED8 at 47.625, y 3.81 from the bottom edge, two 2 mm plated holes at x 12.7 and 38.1, 4-pad SMD connectors CN2 (x 1.397) and CN1 (x 49.403) on the bottom layer, 2.54 mm pitch, 470 ohm series resistor on DIN)",
+    "https://www.adafruit.com/product/1426 (opened: 51.10 x 10.22 x 3.19 mm, 8 x 5050 LEDs, 5 V, '4-7V works', ships with WS2812B or SK6812 LEDs)",
+    "https://cdn-shop.adafruit.com/970x728/1426-03.jpg and 1426-06.jpg (product photos opened: pads and silkscreen on the back, LEDs and mounting holes on the front)",
+    "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf (WS2812B electrical limits: VDD abs max 5.3 V, VIH 0.7 x VDD, as cited in the library's ws2812b-strip part)"
+  ],
+  "confidence": "typical"
+}

@@ -1,0 +1,1651 @@
+{
+  "payload_schema_version": 1,
+  "reference_id": "vcc-gnd:yd-esp32-s3:mechanical-pcb-2022-03-17",
+  "part_id": null,
+  "kind": "pcb_pad_centers",
+  "format": "altium_pcb_binary_narrow_extraction",
+  "source_url": "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-size-pcb-ad.PcbDoc",
+  "source_sha256": "6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35",
+  "source_authority": "manufacturer_primary",
+  "frame": {
+    "coordinate_scope": "native_board",
+    "origin": "Altium absolute origin; native stored XY retained, user relative origin retained separately",
+    "axis_x": "right",
+    "axis_y": "up",
+    "unit": "mm",
+    "native_unit": "0.0001mil",
+    "scale_to_mm": "0.00000254",
+    "relative_origin_as_source": {
+      "x": "4845.5mil",
+      "y": "1904.2mil"
+    },
+    "transform": "scale only; no translation, rotation or mirror"
+  },
+  "applicability": {
+    "board_design": "YD-ESP32-S3 size/mechanical reference",
+    "native_saved_date": "2022/3/17",
+    "native_saved_time": "10:10:48",
+    "hardware_revision": null,
+    "not_equated_to_schematic": "V1.4 dated2022/9/23",
+    "matching_seller_part_ids": []
+  },
+  "fit_status": "incomplete_reference_only; exact target seller hardware and assembled Z unknown",
+  "header_pad_count": 44,
+  "total_pad_count": 121,
+  "validation": {
+    "stream_exhausted": true,
+    "header_count_matches_native_header": true,
+    "two_headers_22_each": true,
+    "header_pitch_mm": 2.54,
+    "header_row_spacing_mm": 25.4,
+    "header_first_last_span_mm": 53.34,
+    "numerical_crosscheck": "25.40 and53.34 agree with primary metric drawing callouts",
+    "native_net_table_empty": true
+  },
+  "limitations": [
+    "Not a complete Altium import: copper shape, holes with offsets, 3D bodies and stackup are not validated.",
+    "The native file is a mechanical layout reference with five components and no nets. No signal assignment is inferred from newer schematic or community footprint.",
+    "Numeric HEIGHT property is library metadata, not physical assembled clearance; body height/maxHeight/connector cutouts remain unknown.",
+    "Do not apply to similarly named sellers, IPEX variants or all dualUSB-C boards."
+  ],
+  "parser_format_sources": [
+    "https://dev-docs.kicad.org/en/import-formats/altium/index.html",
+    "https://raw.githubusercontent.com/KiCad/kicad-source-mirror/master/pcbnew/pcb_io/altium/altium_parser_pcb.cpp"
+  ],
+  "outline": {
+    "kind": "pcb_outline",
+    "scope": "native_Board6_board_vertices",
+    "ole_stream": "Board6/Data",
+    "source_sha256": "6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35",
+    "closed": true,
+    "units": "mm",
+    "frame": {
+      "coordinate_scope": "native_board",
+      "origin": "Altium absolute origin; native stored XY retained, user relative origin retained separately",
+      "axis_x": "right",
+      "axis_y": "up",
+      "unit": "mm",
+      "native_unit": "0.0001mil",
+      "scale_to_mm": "0.00000254",
+      "relative_origin_as_source": {
+        "x": "4845.5mil",
+        "y": "1904.2mil"
+      },
+      "transform": "scale only; no translation, rotation or mirror"
+    },
+    "vertices": [
+      {
+        "x_mm": 109.1057,
+        "y_mm": 48.36667746,
+        "raw_properties": {
+          "VX0": "4295.5mil",
+          "VY0": "1904.1999mil",
+          "KIND0": "0"
+        },
+        "source_locators": {
+          "VX0": {
+            "stream_byte_offset": 984,
+            "byte_length": 14,
+            "exact_text": "|VX0=4295.5mil"
+          },
+          "VY0": {
+            "stream_byte_offset": 998,
+            "byte_length": 17,
+            "exact_text": "|VY0=1904.1999mil"
+          }
+        }
+      },
+      {
+        "x_mm": 109.10568476,
+        "y_mm": 105.51668,
+        "raw_properties": {
+          "VX1": "4295.4994mil",
+          "VY1": "4154.2mil",
+          "KIND1": "0"
+        },
+        "source_locators": {
+          "VX1": {
+            "stream_byte_offset": 1105,
+            "byte_length": 17,
+            "exact_text": "|VX1=4295.4994mil"
+          },
+          "VY1": {
+            "stream_byte_offset": 1122,
+            "byte_length": 14,
+            "exact_text": "|VY1=4154.2mil"
+          }
+        }
+      },
+      {
+        "x_mm": 137.04568984,
+        "y_mm": 105.51668,
+        "raw_properties": {
+          "VX2": "5395.4996mil",
+          "VY2": "4154.2mil",
+          "KIND2": "0"
+        },
+        "source_locators": {
+          "VX2": {
+            "stream_byte_offset": 1226,
+            "byte_length": 17,
+            "exact_text": "|VX2=5395.4996mil"
+          },
+          "VY2": {
+            "stream_byte_offset": 1243,
+            "byte_length": 14,
+            "exact_text": "|VY2=4154.2mil"
+          }
+        }
+      },
+      {
+        "x_mm": 137.0457,
+        "y_mm": 48.36668,
+        "raw_properties": {
+          "VX3": "5395.5mil",
+          "VY3": "1904.2mil",
+          "KIND3": "0"
+        },
+        "source_locators": {
+          "VX3": {
+            "stream_byte_offset": 1347,
+            "byte_length": 14,
+            "exact_text": "|VX3=5395.5mil"
+          },
+          "VY3": {
+            "stream_byte_offset": 1361,
+            "byte_length": 14,
+            "exact_text": "|VY3=1904.2mil"
+          }
+        }
+      },
+      {
+        "x_mm": 109.1057,
+        "y_mm": 48.36667746,
+        "raw_properties": {
+          "VX4": "4295.5mil",
+          "VY4": "1904.1999mil",
+          "KIND4": "0"
+        },
+        "source_locators": {
+          "VX4": {
+            "stream_byte_offset": 1465,
+            "byte_length": 14,
+            "exact_text": "|VX4=4295.5mil"
+          },
+          "VY4": {
+            "stream_byte_offset": 1479,
+            "byte_length": 17,
+            "exact_text": "|VY4=1904.1999mil"
+          }
+        }
+      }
+    ],
+    "bounds_mm": {
+      "min_x": 109.10568476,
+      "max_x": 137.0457,
+      "min_y": 48.36667746,
+      "max_y": 105.51668
+    },
+    "extents_mm": [
+      27.94001524,
+      57.15000254
+    ],
+    "bounds_method": "extrema of explicit native straight polygon vertices; no raster measurement",
+    "numerical_note": "Native vertices retain tiny stored coordinate differences; printed drawing gives27.94×57.15mm. No snapping to rounded printed values.",
+    "format_evidence": "KiCad altium_parser_pcb.cpp:ABOARD6 calls altium_parse_polygons(props,board_vertices); VX/VY keys are preserved."
+  },
+  "pads": [
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "1",
+      "x_mm": 135.7757,
+      "y_mm": 103.61168,
+      "x_native": 53455000,
+      "y_native": 40792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 77,
+        "record_byte_offset": 22151,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 22181,
+        "position_x_byte_offset": 22194,
+        "position_y_byte_offset": 22198,
+        "raw_position_bytes_hex": "98a82f03c06f6e02"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "2",
+      "x_mm": 135.7757,
+      "y_mm": 101.07168,
+      "x_native": 53455000,
+      "y_native": 39792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 78,
+        "record_byte_offset": 22370,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 22400,
+        "position_x_byte_offset": 22413,
+        "position_y_byte_offset": 22417,
+        "raw_position_bytes_hex": "98a82f03802d5f02"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "3",
+      "x_mm": 135.7757,
+      "y_mm": 98.53168,
+      "x_native": 53455000,
+      "y_native": 38792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 79,
+        "record_byte_offset": 22589,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 22619,
+        "position_x_byte_offset": 22632,
+        "position_y_byte_offset": 22636,
+        "raw_position_bytes_hex": "98a82f0340eb4f02"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "4",
+      "x_mm": 135.7757,
+      "y_mm": 95.99168,
+      "x_native": 53455000,
+      "y_native": 37792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 80,
+        "record_byte_offset": 22808,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 22838,
+        "position_x_byte_offset": 22851,
+        "position_y_byte_offset": 22855,
+        "raw_position_bytes_hex": "98a82f0300a94002"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "5",
+      "x_mm": 135.7757,
+      "y_mm": 93.45168,
+      "x_native": 53455000,
+      "y_native": 36792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 81,
+        "record_byte_offset": 23027,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 23057,
+        "position_x_byte_offset": 23070,
+        "position_y_byte_offset": 23074,
+        "raw_position_bytes_hex": "98a82f03c0663102"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "6",
+      "x_mm": 135.7757,
+      "y_mm": 90.91168,
+      "x_native": 53455000,
+      "y_native": 35792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 82,
+        "record_byte_offset": 23246,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 23276,
+        "position_x_byte_offset": 23289,
+        "position_y_byte_offset": 23293,
+        "raw_position_bytes_hex": "98a82f0380242202"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "7",
+      "x_mm": 135.7757,
+      "y_mm": 88.37168,
+      "x_native": 53455000,
+      "y_native": 34792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 83,
+        "record_byte_offset": 23465,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 23495,
+        "position_x_byte_offset": 23508,
+        "position_y_byte_offset": 23512,
+        "raw_position_bytes_hex": "98a82f0340e21202"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "8",
+      "x_mm": 135.7757,
+      "y_mm": 85.83168,
+      "x_native": 53455000,
+      "y_native": 33792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 84,
+        "record_byte_offset": 23684,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 23714,
+        "position_x_byte_offset": 23727,
+        "position_y_byte_offset": 23731,
+        "raw_position_bytes_hex": "98a82f0300a00302"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "9",
+      "x_mm": 135.7757,
+      "y_mm": 83.29168,
+      "x_native": 53455000,
+      "y_native": 32792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 85,
+        "record_byte_offset": 23903,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 23933,
+        "position_x_byte_offset": 23946,
+        "position_y_byte_offset": 23950,
+        "raw_position_bytes_hex": "98a82f03c05df401"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "10",
+      "x_mm": 135.7757,
+      "y_mm": 80.75168,
+      "x_native": 53455000,
+      "y_native": 31792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 86,
+        "record_byte_offset": 24122,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 24153,
+        "position_x_byte_offset": 24166,
+        "position_y_byte_offset": 24170,
+        "raw_position_bytes_hex": "98a82f03801be501"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "11",
+      "x_mm": 135.7757,
+      "y_mm": 78.21168,
+      "x_native": 53455000,
+      "y_native": 30792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 87,
+        "record_byte_offset": 24342,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 24373,
+        "position_x_byte_offset": 24386,
+        "position_y_byte_offset": 24390,
+        "raw_position_bytes_hex": "98a82f0340d9d501"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "12",
+      "x_mm": 135.7757,
+      "y_mm": 75.67168,
+      "x_native": 53455000,
+      "y_native": 29792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 88,
+        "record_byte_offset": 24562,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 24593,
+        "position_x_byte_offset": 24606,
+        "position_y_byte_offset": 24610,
+        "raw_position_bytes_hex": "98a82f030097c601"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "13",
+      "x_mm": 135.7757,
+      "y_mm": 73.13168,
+      "x_native": 53455000,
+      "y_native": 28792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 89,
+        "record_byte_offset": 24782,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 24813,
+        "position_x_byte_offset": 24826,
+        "position_y_byte_offset": 24830,
+        "raw_position_bytes_hex": "98a82f03c054b701"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "14",
+      "x_mm": 135.7757,
+      "y_mm": 70.59168,
+      "x_native": 53455000,
+      "y_native": 27792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 90,
+        "record_byte_offset": 25002,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 25033,
+        "position_x_byte_offset": 25046,
+        "position_y_byte_offset": 25050,
+        "raw_position_bytes_hex": "98a82f038012a801"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "15",
+      "x_mm": 135.7757,
+      "y_mm": 68.05168,
+      "x_native": 53455000,
+      "y_native": 26792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 91,
+        "record_byte_offset": 25222,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 25253,
+        "position_x_byte_offset": 25266,
+        "position_y_byte_offset": 25270,
+        "raw_position_bytes_hex": "98a82f0340d09801"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "16",
+      "x_mm": 135.7757,
+      "y_mm": 65.51168,
+      "x_native": 53455000,
+      "y_native": 25792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 92,
+        "record_byte_offset": 25442,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 25473,
+        "position_x_byte_offset": 25486,
+        "position_y_byte_offset": 25490,
+        "raw_position_bytes_hex": "98a82f03008e8901"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "17",
+      "x_mm": 135.7757,
+      "y_mm": 62.97168,
+      "x_native": 53455000,
+      "y_native": 24792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 93,
+        "record_byte_offset": 25662,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 25693,
+        "position_x_byte_offset": 25706,
+        "position_y_byte_offset": 25710,
+        "raw_position_bytes_hex": "98a82f03c04b7a01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "18",
+      "x_mm": 135.7757,
+      "y_mm": 60.43168,
+      "x_native": 53455000,
+      "y_native": 23792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 94,
+        "record_byte_offset": 25882,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 25913,
+        "position_x_byte_offset": 25926,
+        "position_y_byte_offset": 25930,
+        "raw_position_bytes_hex": "98a82f0380096b01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "19",
+      "x_mm": 135.7757,
+      "y_mm": 57.89168,
+      "x_native": 53455000,
+      "y_native": 22792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 95,
+        "record_byte_offset": 26102,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 26133,
+        "position_x_byte_offset": 26146,
+        "position_y_byte_offset": 26150,
+        "raw_position_bytes_hex": "98a82f0340c75b01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "20",
+      "x_mm": 135.7757,
+      "y_mm": 55.35168,
+      "x_native": 53455000,
+      "y_native": 21792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 96,
+        "record_byte_offset": 26322,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 26353,
+        "position_x_byte_offset": 26366,
+        "position_y_byte_offset": 26370,
+        "raw_position_bytes_hex": "98a82f0300854c01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "21",
+      "x_mm": 135.7757,
+      "y_mm": 52.81168,
+      "x_native": 53455000,
+      "y_native": 20792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 97,
+        "record_byte_offset": 26542,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 26573,
+        "position_x_byte_offset": 26586,
+        "position_y_byte_offset": 26590,
+        "raw_position_bytes_hex": "98a82f03c0423d01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J2",
+      "component_index": 2,
+      "pad_number": "22",
+      "x_mm": 135.7757,
+      "y_mm": 50.27168,
+      "x_native": 53455000,
+      "y_native": 19792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 98,
+        "record_byte_offset": 26762,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 26793,
+        "position_x_byte_offset": 26806,
+        "position_y_byte_offset": 26810,
+        "raw_position_bytes_hex": "98a82f0380002e01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1202
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "1",
+      "x_mm": 110.3757,
+      "y_mm": 103.61168,
+      "x_native": 43455000,
+      "y_native": 40792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 99,
+        "record_byte_offset": 26982,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 27012,
+        "position_x_byte_offset": 27025,
+        "position_y_byte_offset": 27029,
+        "raw_position_bytes_hex": "18129702c06f6e02"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "2",
+      "x_mm": 110.3757,
+      "y_mm": 101.07168,
+      "x_native": 43455000,
+      "y_native": 39792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 100,
+        "record_byte_offset": 27201,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 27231,
+        "position_x_byte_offset": 27244,
+        "position_y_byte_offset": 27248,
+        "raw_position_bytes_hex": "18129702802d5f02"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "3",
+      "x_mm": 110.3757,
+      "y_mm": 98.53168,
+      "x_native": 43455000,
+      "y_native": 38792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 101,
+        "record_byte_offset": 27420,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 27450,
+        "position_x_byte_offset": 27463,
+        "position_y_byte_offset": 27467,
+        "raw_position_bytes_hex": "1812970240eb4f02"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "4",
+      "x_mm": 110.3757,
+      "y_mm": 95.99168,
+      "x_native": 43455000,
+      "y_native": 37792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 102,
+        "record_byte_offset": 27639,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 27669,
+        "position_x_byte_offset": 27682,
+        "position_y_byte_offset": 27686,
+        "raw_position_bytes_hex": "1812970200a94002"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "5",
+      "x_mm": 110.3757,
+      "y_mm": 93.45168,
+      "x_native": 43455000,
+      "y_native": 36792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 103,
+        "record_byte_offset": 27858,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 27888,
+        "position_x_byte_offset": 27901,
+        "position_y_byte_offset": 27905,
+        "raw_position_bytes_hex": "18129702c0663102"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "6",
+      "x_mm": 110.3757,
+      "y_mm": 90.91168,
+      "x_native": 43455000,
+      "y_native": 35792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 104,
+        "record_byte_offset": 28077,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 28107,
+        "position_x_byte_offset": 28120,
+        "position_y_byte_offset": 28124,
+        "raw_position_bytes_hex": "1812970280242202"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "7",
+      "x_mm": 110.3757,
+      "y_mm": 88.37168,
+      "x_native": 43455000,
+      "y_native": 34792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 105,
+        "record_byte_offset": 28296,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 28326,
+        "position_x_byte_offset": 28339,
+        "position_y_byte_offset": 28343,
+        "raw_position_bytes_hex": "1812970240e21202"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "8",
+      "x_mm": 110.3757,
+      "y_mm": 85.83168,
+      "x_native": 43455000,
+      "y_native": 33792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 106,
+        "record_byte_offset": 28515,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 28545,
+        "position_x_byte_offset": 28558,
+        "position_y_byte_offset": 28562,
+        "raw_position_bytes_hex": "1812970200a00302"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "9",
+      "x_mm": 110.3757,
+      "y_mm": 83.29168,
+      "x_native": 43455000,
+      "y_native": 32792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 107,
+        "record_byte_offset": 28734,
+        "record_byte_length": 219,
+        "main_subrecord_byte_offset": 28764,
+        "position_x_byte_offset": 28777,
+        "position_y_byte_offset": 28781,
+        "raw_position_bytes_hex": "18129702c05df401"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "10",
+      "x_mm": 110.3757,
+      "y_mm": 80.75168,
+      "x_native": 43455000,
+      "y_native": 31792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 108,
+        "record_byte_offset": 28953,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 28984,
+        "position_x_byte_offset": 28997,
+        "position_y_byte_offset": 29001,
+        "raw_position_bytes_hex": "18129702801be501"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "11",
+      "x_mm": 110.3757,
+      "y_mm": 78.21168,
+      "x_native": 43455000,
+      "y_native": 30792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 109,
+        "record_byte_offset": 29173,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 29204,
+        "position_x_byte_offset": 29217,
+        "position_y_byte_offset": 29221,
+        "raw_position_bytes_hex": "1812970240d9d501"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "12",
+      "x_mm": 110.3757,
+      "y_mm": 75.67168,
+      "x_native": 43455000,
+      "y_native": 29792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 110,
+        "record_byte_offset": 29393,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 29424,
+        "position_x_byte_offset": 29437,
+        "position_y_byte_offset": 29441,
+        "raw_position_bytes_hex": "181297020097c601"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "13",
+      "x_mm": 110.3757,
+      "y_mm": 73.13168,
+      "x_native": 43455000,
+      "y_native": 28792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 111,
+        "record_byte_offset": 29613,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 29644,
+        "position_x_byte_offset": 29657,
+        "position_y_byte_offset": 29661,
+        "raw_position_bytes_hex": "18129702c054b701"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "14",
+      "x_mm": 110.3757,
+      "y_mm": 70.59168,
+      "x_native": 43455000,
+      "y_native": 27792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 112,
+        "record_byte_offset": 29833,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 29864,
+        "position_x_byte_offset": 29877,
+        "position_y_byte_offset": 29881,
+        "raw_position_bytes_hex": "181297028012a801"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "15",
+      "x_mm": 110.3757,
+      "y_mm": 68.05168,
+      "x_native": 43455000,
+      "y_native": 26792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 113,
+        "record_byte_offset": 30053,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 30084,
+        "position_x_byte_offset": 30097,
+        "position_y_byte_offset": 30101,
+        "raw_position_bytes_hex": "1812970240d09801"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "16",
+      "x_mm": 110.3757,
+      "y_mm": 65.51168,
+      "x_native": 43455000,
+      "y_native": 25792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 114,
+        "record_byte_offset": 30273,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 30304,
+        "position_x_byte_offset": 30317,
+        "position_y_byte_offset": 30321,
+        "raw_position_bytes_hex": "18129702008e8901"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "17",
+      "x_mm": 110.3757,
+      "y_mm": 62.97168,
+      "x_native": 43455000,
+      "y_native": 24792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 115,
+        "record_byte_offset": 30493,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 30524,
+        "position_x_byte_offset": 30537,
+        "position_y_byte_offset": 30541,
+        "raw_position_bytes_hex": "18129702c04b7a01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "18",
+      "x_mm": 110.3757,
+      "y_mm": 60.43168,
+      "x_native": 43455000,
+      "y_native": 23792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 116,
+        "record_byte_offset": 30713,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 30744,
+        "position_x_byte_offset": 30757,
+        "position_y_byte_offset": 30761,
+        "raw_position_bytes_hex": "1812970280096b01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "19",
+      "x_mm": 110.3757,
+      "y_mm": 57.89168,
+      "x_native": 43455000,
+      "y_native": 22792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 117,
+        "record_byte_offset": 30933,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 30964,
+        "position_x_byte_offset": 30977,
+        "position_y_byte_offset": 30981,
+        "raw_position_bytes_hex": "1812970240c75b01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "20",
+      "x_mm": 110.3757,
+      "y_mm": 55.35168,
+      "x_native": 43455000,
+      "y_native": 21792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 118,
+        "record_byte_offset": 31153,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 31184,
+        "position_x_byte_offset": 31197,
+        "position_y_byte_offset": 31201,
+        "raw_position_bytes_hex": "1812970200854c01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "21",
+      "x_mm": 110.3757,
+      "y_mm": 52.81168,
+      "x_native": 43455000,
+      "y_native": 20792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 119,
+        "record_byte_offset": 31373,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 31404,
+        "position_x_byte_offset": 31417,
+        "position_y_byte_offset": 31421,
+        "raw_position_bytes_hex": "18129702c0423d01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    },
+    {
+      "reference": "J1",
+      "component_index": 3,
+      "pad_number": "22",
+      "x_mm": 110.3757,
+      "y_mm": 50.27168,
+      "x_native": 43455000,
+      "y_native": 19792000,
+      "native_unit": "0.0001mil",
+      "footprint_side_as_source": "TOP",
+      "layer_id_as_source": 74,
+      "pad_rotation_deg": 270.0,
+      "top_pad_size_mm": [
+        1.49999954,
+        1.49999954
+      ],
+      "hole_size_mm": 0.90000074,
+      "plated": true,
+      "net_index_as_source": 65535,
+      "net_name": null,
+      "source_locator": {
+        "ole_stream": "Pads6/Data",
+        "record_index": 120,
+        "record_byte_offset": 31593,
+        "record_byte_length": 220,
+        "main_subrecord_byte_offset": 31624,
+        "position_x_byte_offset": 31637,
+        "position_y_byte_offset": 31641,
+        "raw_position_bytes_hex": "1812970280002e01"
+      },
+      "coordinate_semantics": "native_placed_pad_anchor; hole offset and custom copper geometry not decoded",
+      "component_properties_source_offset": 1915
+    }
+  ]
+}

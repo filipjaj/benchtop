@@ -1,0 +1,67 @@
+{
+  "id": "soil-probe-capacitive-v12",
+  "name": "Capacitive soil moisture probe v1.2",
+  "kind": "sensor",
+  "blurb": "A flat blade you push into the soil; it reports how wet the soil is as a voltage and, unlike the two-pronged kind, has no bare metal to corrode.",
+  "body": { "w": 23, "d": 98, "h": 1.6 },
+  "maxHeight": 7.6,
+  "shapes": [
+    { "kind": "box", "tag": "connector", "x": 7.5, "y": 0.5, "z": 0, "w": 8, "d": 5, "h": 6 },
+    { "kind": "box", "tag": "chip", "x": 9, "y": 12, "z": 0, "w": 5, "d": 4, "h": 1.5 }
+  ],
+  "decals": [
+    { "kind": "rect", "face": "top", "x": 1.5, "y": 30, "w": 20, "h": 0.6, "fill": "black" },
+    { "kind": "text", "face": "top", "x": 3, "y": 26, "text": "KEEP ABOVE SOIL", "size": 2 }
+  ],
+  "pins": [
+    {
+      "name": "GND",
+      "aliases": ["-"],
+      "role": "gnd",
+      "x": 9.5,
+      "y": 3,
+      "note": "Black wire on the supplied lead."
+    },
+    {
+      "name": "VCC",
+      "aliases": ["+"],
+      "role": "power-in",
+      "x": 11.5,
+      "y": 3,
+      "volts": 3.3,
+      "minVolts": 3.3,
+      "maxVolts": 5.5,
+      "note": "Red wire. Power it from the controller's 3V3 pin, not 5V: the output then cannot rise above what a 3.3 V input pin survives, even on clone boards that leave out the regulator."
+    },
+    {
+      "name": "AOUT",
+      "aliases": ["AO", "A", "OUT"],
+      "role": "io",
+      "x": 13.5,
+      "y": 3,
+      "volts": 3.0,
+      "dir": "out",
+      "needs": ["adc"],
+      "note": "Yellow wire. Analogue voltage that drops as the soil gets wetter; the firmware has to be calibrated with one reading in air and one in a glass of water."
+    }
+  ],
+  "electrical": {
+    "currentMa": { "typical": 5, "peak": 5 }
+  },
+  "footprint": { "mount": "wire", "pitch": 2 },
+  "sourcing": {
+    "search": [
+      "capacitive soil moisture sensor v1.2 with cable",
+      "capacitive soil moisture sensor v2.0 analog 3.3V",
+      "DFRobot SEN0193"
+    ],
+    "priceUsd": 2
+  },
+  "verify": "Outline 98 x 23 mm is DFRobot's figure for the original SEN0193; clones are sold as the same size but come from many factories. Nothing in the case is cut to this part (it lives in the pot on its lead), so the outline matters only for the drawing. Not read from any source and drawn for recognition only: PCB thickness (modelled 1.6), connector height (modelled 6), the pad positions under the connector (modelled 2 mm pitch, 3 mm from the top edge) and where the keep-above-soil line sits (modelled 30 mm from the connector end). Check on the real part: the pin order printed next to the connector (modelled GND, VCC, AOUT) and the wire colours of the lead; that the lead ends in three push-on sockets; that the timer chip is marked TLC555 or 7555 (clones with NE555 misbehave at 3.3 V). The electronics end and the cut board edges are not sealed: keep everything above the printed line out of the soil and away from the watering can.",
+  "sources": [
+    "https://wiki.dfrobot.com/Capacitive_Soil_Moisture_Sensor_SKU_SEN0193 (opened: 3.3 to 5.5 V supply, 0 to 3.0 V output, 5 mA, PH2.0-3P connector, 3.86 x 0.905 in)",
+    "https://tinkered.ai/components/capacitive-soil-moisture-v12 (opened: pins GND, VCC, AOUT; lead colours black, red, yellow; insert only up to the printed line; board is not waterproof)",
+    "https://www.atomic14.com/esp32/sensors/capacitive-soil/ (opened: clone faults NE555 instead of TLC555 and a missing 1 Mohm resistor; use an ADC1 pin; electronics and board edge unsealed)"
+  ],
+  "confidence": "typical"
+}

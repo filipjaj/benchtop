@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: idea-to-concept
+expected_outcome: |
+  The agent does not jump to a parts list or a wiring diagram. It asks at most a short batch
+  of questions with defaults, offers two or three directions that differ in kind, recommends
+  the simplest one for a first build, and after a direction is chosen writes a project.json
+  and shows a concept sheet.

@@ -1,0 +1,26 @@
+{
+  "id": "lipo-1s-cell",
+  "name": "1S LiPo pouch cell, about 1000 mAh, with protection board",
+  "kind": "power",
+  "blurb": "A rechargeable single-cell 3.7 V lithium-polymer battery with a small protection board; size is per project, this definition uses a typical 503450 cell (5.0 x 34 x 50 mm).",
+  "body": { "w": 50, "d": 34, "h": 5 },
+  "maxHeight": 5,
+  "decals": [
+    { "kind": "text", "face": "top", "x": 6, "y": 17, "text": "3.7V 1000mAh", "size": 3 }
+  ],
+  "pins": [
+    { "name": "+", "role": "power-out", "x": 50, "y": 15, "volts": 3.7, "maxVolts": 4.2, "supplyMa": 1000, "note": "Red lead. 3.0 to 4.2 V depending on charge, not a regulated rail. Never short it; the protection board is a last resort, not a fuse you can rely on. Check the JST plug polarity against your charger: it is not standardised." },
+    { "name": "-", "role": "gnd", "x": 50, "y": 19, "note": "Black lead." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["503450 lipo battery 3.7V 1000mAh with protection board", "3.7V 1000mAh lithium polymer battery JST 2.0", "1S LiPo 1000mAh PCM"],
+    "priceUsd": 5
+  },
+  "verify": "Cell size is per project: the code 503450 means about 5.0 mm thick, 34 mm wide, 50 mm long, but real cells are up to 0.5 to 1 mm larger and swell with age. Measure the actual cell thickness, width and length, leave 1 mm or more clearance for swelling, and check capacity, discharge rating (the 1000 mA supply limit is a conservative assumption, not a datasheet value), connector type and polarity. The lead exit position and spacing are schematic. Confirm a protection board is actually fitted.",
+  "sources": [
+    "No datasheet opened. 503450 is the industry size code for a pouch cell 5.0 mm thick, 34 mm wide and 50 mm long; this is a typical size, not a specific product."
+  ],
+  "confidence": "typical"
+}

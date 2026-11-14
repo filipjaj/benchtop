@@ -1,0 +1,120 @@
+{
+  "id": "tp4056-usbc-module",
+  "name": "TP4056 USB-C charger with protection",
+  "kind": "power",
+  "blurb": "Charges a single Li-ion/LiPo cell from a USB-C cable at up to 1 A, and the DW01 protection chip cuts the cell off on over-discharge, overcharge and short circuit.",
+  "body": {
+    "w": 26,
+    "d": 17,
+    "h": 1
+  },
+  "maxHeight": 4.3,
+  "shapes": [
+    {
+      "kind": "box",
+      "x": -1,
+      "y": 4.03,
+      "z": 0,
+      "w": 7.35,
+      "d": 8.94,
+      "h": 3.3,
+      "tag": "usb-c-socket"
+    },
+    {
+      "kind": "box",
+      "x": 11,
+      "y": 5.5,
+      "z": 0,
+      "w": 4.9,
+      "d": 3.9,
+      "h": 1.5,
+      "tag": "tp4056-chip"
+    }
+  ],
+  "pins": [
+    {
+      "name": "IN+",
+      "role": "power-in",
+      "x": 1.8,
+      "y": 2,
+      "volts": 5,
+      "minVolts": 4,
+      "maxVolts": 8,
+      "note": "5 V from the USB-C socket. Only needed if you power the board from wires instead of the socket."
+    },
+    {
+      "name": "IN-",
+      "role": "gnd",
+      "x": 1.8,
+      "y": 15,
+      "note": "Input ground."
+    },
+    {
+      "name": "OUT+",
+      "role": "power-out",
+      "x": 24.2,
+      "y": 2,
+      "volts": 3.7,
+      "supplyMa": 1000,
+      "note": "Follows the battery: 3.0 to 4.2 V, not a regulated rail. Add a boost or buck converter for 3.3 V or 5 V loads. Load current while charging reduces charge current."
+    },
+    {
+      "name": "B+",
+      "role": "passive",
+      "x": 24.2,
+      "y": 6,
+      "note": "Battery positive. Connect only a single 3.7 V Li-ion/LiPo cell; never a pack of several cells."
+    },
+    {
+      "name": "B-",
+      "role": "passive",
+      "x": 24.2,
+      "y": 11,
+      "note": "Battery negative."
+    },
+    {
+      "name": "OUT-",
+      "role": "gnd",
+      "x": 24.2,
+      "y": 15,
+      "note": "Load ground, after the protection switch. Use this for the load, not B-."
+    }
+  ],
+  "ports": [
+    {
+      "name": "usb-c",
+      "faces": "x-",
+      "x": 0,
+      "y": 8.5,
+      "z": 1.63,
+      "w": 8.94,
+      "h": 3.26,
+      "shape": "rect",
+      "margin": 1.7
+    }
+  ],
+  "electrical": {
+    "currentMa": {
+      "typical": 1000,
+      "peak": 1100
+    }
+  },
+  "footprint": {
+    "mount": "wire"
+  },
+  "sourcing": {
+    "search": [
+      "TP4056 USB-C 1A lithium charger module with protection",
+      "TP4056 type-c DW01 8205A module",
+      "18650 charger module type c protection"
+    ],
+    "priceUsd": 1
+  },
+  "verify": "Highest risk of the ten parts. Confirmed: 26 x 17 mm outline is the HW-373 style module (Botland and other sellers list it; other clones are listed at 25 x 19 and 28 x 17 mm); six pads IN+ IN- B+ B- OUT+ OUT-; OUT+/OUT- are behind the DW01A/8205 protection and B+/B- are straight to the cell; 1 A maximum charge current; protection at about 4.3 V overcharge, 2.4 V over-discharge, about 3 A overcurrent. NOT confirmed by any source opened: every pad centre (the 2 / 6 / 11 / 15 mm positions and which pad sits at which end are assumptions; read the silkscreen), PCB thickness (modelled 1.0), USB-C socket overhang, width and height, chip position. With calipers and the board in hand measure: PCB length, width and thickness, USB-C overhang and centre height, and each pad centre. Programming resistor: 1.2 kOhm = 1 A (TP4056 datasheet); a 2 kOhm part gives about 580 mA for a small cell. Do not assume 1.2 kOhm is fitted: read its marking (122). Confirm a DW01 plus 8205 protection pair is fitted; the 4-pad boards without it have no protection, and neither does a module sold with only IN and B pads. IN+ minVolts 4 is the TP4056 chip minimum; the recommended USB range is 4.5 to 5.5 V.",
+  "sources": [
+    "https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf (TP4056 datasheet, opened in an earlier pass: VCC 4.0 to 8.0 V, float 4.2 V, 1.2 kOhm programs 1000 mA)",
+    "https://mischianti.org/tp4056-lipo-battery-charger-high-resolution-pinout-datasheet-and-specs/ (opened: pad pairs IN B OUT, protection table DW01A/8205 4.3 V / 2.4 V / 3 A, recommended 4.5 to 5.5 V; no dimensions)",
+    "https://botland.store/li-ion-battery-chargers/16979-li-ion-charger-hw-373-v121-tp4056-1s-37v-usb-type-c-with-protection-5904422326708.html (opened, seller: HW-373 module 26 x 17 mm, 1 A, protection below 2.5 V and above 3 A, no pad positions)"
+  ],
+  "confidence": "typical"
+}

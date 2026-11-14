@@ -1,0 +1,30 @@
+{
+  "id": "slide-switch-ss12d00",
+  "name": "SS12D00 slide switch (SPDT)",
+  "kind": "input",
+  "blurb": "A small two-position slide switch; use it as the power switch between a battery and the rest of the build.",
+  "body": { "w": 8.6, "d": 3.6, "h": 3.5 },
+  "maxHeight": 7.5,
+  "shapes": [
+    { "kind": "box", "x": 2.3, "y": 1.2, "z": 0, "w": 2, "d": 1.2, "h": 4, "tag": "lever" }
+  ],
+  "pins": [
+    { "name": "A", "aliases": ["1"], "role": "passive", "x": 2.3, "y": 1.8, "z": -3.5, "lead": 3.5, "note": "One throw contact. Connected to COM when the lever is toward this side." },
+    { "name": "COM", "aliases": ["2"], "role": "passive", "x": 4.3, "y": 1.8, "z": -3.5, "lead": 3.5, "note": "Middle pin: the common contact. For a power switch, put the battery + here and take the output from A (or B)." },
+    { "name": "B", "aliases": ["3"], "role": "passive", "x": 6.3, "y": 1.8, "z": -3.5, "lead": 3.5, "note": "Other throw contact. Leave unconnected for a simple on/off switch." }
+  ],
+  "ports": [
+    { "name": "lever-slot", "faces": "up", "x": 4.3, "y": 1.8, "w": 4, "h": 1.8, "shape": "rect", "margin": 0.5, "reach": true }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2 },
+  "sourcing": {
+    "search": ["SS12D00 slide switch SPDT 3 pin", "SS12D00G4 slide switch", "mini slide switch 2 position 3 pin 2mm pitch"],
+    "priceUsd": 0.5
+  },
+  "verify": "Many versions exist (G3, G4, G5 differ in lever height). Measure body length, width and height, lever height, width and travel, pin pitch (2.0 mm assumed) and whether the case has side mounting posts. Check the contact rating on the listing; these switches are small-current parts and are not suited to motors or a high-current battery path. Drawing-only fields on the pins: z -3.5 puts each leg at the underside of the 3.5 mm body; lead 3.5 mm is a typical leg length, not read from a drawing.",
+  "sources": [
+    "No datasheet opened. Commonly reported dimensions of the SS12D00G4 (body about 8.5 x 3.6 x 3.5 mm, lever 4 mm)."
+  ],
+  "confidence": "typical"
+}

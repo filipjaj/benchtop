@@ -1,0 +1,52 @@
+{
+  "id": "hc-sr501-pir",
+  "name": "HC-SR501 PIR motion sensor",
+  "kind": "sensor",
+  "blurb": "Detects people and animals moving in front of it and raises its output pin for a few seconds; has dials for sensitivity and hold time.",
+  "body": { "w": 32, "d": 24, "h": 1.6 },
+  "maxHeight": 15.6,
+  "shapes": [
+    { "kind": "cyl", "tag": "pir-dome", "x": 14, "y": 12, "z": 0, "r": 11.5, "h": 14 }
+  ],
+  "pins": [
+    {
+      "name": "VCC",
+      "role": "power-in",
+      "x": 29.5,
+      "y": 9.46,
+      "volts": 5,
+      "minVolts": 4.5,
+      "maxVolts": 20,
+      "note": "Feed it 5 V. The board has its own 3.3 V regulator, which is why it accepts up to 20 V."
+    },
+    {
+      "name": "OUT",
+      "role": "io",
+      "x": 29.5,
+      "y": 12,
+      "dir": "out",
+      "volts": 3.3,
+      "note": "Goes high (about 3.3 V) when motion is seen and stays high for the hold time. Safe for 3.3 V controllers."
+    },
+    { "name": "GND", "role": "gnd", "x": 29.5, "y": 14.54 }
+  ],
+  "ports": [
+    { "name": "pir-dome", "faces": "up", "x": 14, "y": 12, "w": 23, "h": 23, "shape": "round", "margin": 1 }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": { "typical": 0.05, "peak": 65 }
+  },
+  "footprint": { "mount": "header", "pitch": 2.54 },
+  "sourcing": {
+    "search": ["HC-SR501 PIR motion sensor module", "HC-SR501 adjustable IR pyroelectric infrared PIR module"],
+    "priceUsd": 2
+  },
+  "verify": "No drawing was opened. Measure with calipers: board 32 x 24 mm, dome diameter (23 mm assumed) and dome height above the PCB (14 mm assumed), dome centre, header position. Read the silkscreen for pin order: most boards print VCC OUT GND, some print GND OUT VCC. The 4.5 to 20 V supply range, about 50 uA idle and 65 mA peak figures come from typical listings and the BISS0001 reference design, not a datasheet opened here. The warm-up time after power-on is about a minute. OUT is about 3.3 V on genuine boards (Adafruit reports about 3 V); check yours with a meter if you wire it to a 1.8 V controller.",
+  "sources": [
+    "https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor/overview (opened: 5 to 12 V typical, regulator on board, output about 3 V high, no dimensions)",
+    "Dimensions: commonly reported HC-SR501 size; no drawing opened"
+  ],
+  "confidence": "typical"
+}

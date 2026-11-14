@@ -1,0 +1,29 @@
+{
+  "id": "speaker-40mm",
+  "name": "40 mm 4 ohm 3 W speaker",
+  "kind": "audio",
+  "blurb": "A small round loudspeaker for voice and beeps; wire it to an amplifier's speaker terminals, never straight to a microcontroller pin.",
+  "body": { "w": 40, "d": 40, "h": 1 },
+  "maxHeight": 5.5,
+  "shapes": [
+    { "kind": "cyl", "x": 20, "y": 20, "z": 0, "r": 20, "h": 4.5, "tag": "speaker-frame" }
+  ],
+  "pins": [
+    { "name": "+", "role": "passive", "x": 14, "y": 37.5, "note": "Marked + on the frame tab if present. Polarity only matters for phase when you use two speakers." },
+    { "name": "-", "role": "passive", "x": 26, "y": 37.5, "note": "Connect to the amplifier's speaker output, not to ground." }
+  ],
+  "ports": [
+    { "name": "grille", "faces": "up", "x": 20, "y": 20, "w": 34, "h": 34, "shape": "round", "margin": 1 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["40mm 4 ohm 3W speaker", "40mm round speaker 4R 3W", "mini speaker 40mm 4 ohm 3 watt"],
+    "priceUsd": 2
+  },
+  "verify": "Depth varies by model (5 to 10 mm). Measure the frame diameter, total depth, terminal positions, cone diameter (34 mm assumed for the grille), and whether the frame has mounting ears. The body is a 1 mm placeholder plate; the real part is the cylinder shape. The 3 W rating at 4 ohm is about 3.5 V RMS or 0.87 A RMS; check it against the amplifier.",
+  "sources": [
+    "No datasheet opened. Generic 40 mm round 4 ohm 3 W speaker; 40 mm is the nominal frame diameter."
+  ],
+  "confidence": "typical"
+}

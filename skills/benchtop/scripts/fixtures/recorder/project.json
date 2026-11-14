@@ -1,0 +1,314 @@
+{
+  "schema": 1,
+  "slug": "kladd",
+  "name": "Kladd",
+  "tagline": "Records and transcribes meetings. Shows when it is listening.",
+  "summary": "Kladd sits on the meeting table and transcribes what is said. A light bar shows at a glance whether it is recording, armed or stuck, and a buzzer warns when a meeting starts without it. It runs from USB and sends audio to a transcription service you configure.",
+  "build": {
+    "path": "wire",
+    "joint": "solder",
+    "difficulty": 2,
+    "minutes": 90
+  },
+  "power": {
+    "source": "usb",
+    "volts": 5,
+    "budgetMa": 1000,
+    "entry": "mcu.5V"
+  },
+  "parts": [
+    {
+      "ref": "mcu",
+      "part": "esp32-s3-devkitc-1",
+      "label": "Controller"
+    },
+    {
+      "ref": "mic",
+      "part": "inmp441-mic",
+      "label": "Microphone",
+      "bench": {
+        "x": 40,
+        "y": 0,
+        "rot": 180
+      }
+    },
+    {
+      "ref": "buzz",
+      "part": "active-buzzer-module",
+      "label": "Buzzer",
+      "bench": {
+        "x": 40,
+        "y": 30,
+        "rot": 180
+      }
+    },
+    {
+      "ref": "btn",
+      "part": "tactile-button-6mm-tall",
+      "label": "Button"
+    },
+    {
+      "ref": "bar",
+      "part": "ws2812b-bar-5",
+      "label": "Light bar",
+      "units": 5,
+      "peakMa": 60,
+      "peakMaWhy": "Firmware caps brightness at 40 of 255 (KLADD_BRIGHTNESS = 40): 5 pixels x 60 mA x 40/255 = 47 mA, rounded up to 60 mA"
+    }
+  ],
+  "connections": [
+    {
+      "from": "mcu.3V3",
+      "to": "mic.VDD",
+      "color": "red",
+      "why": "Power for the microphone"
+    },
+    {
+      "from": "mcu.G",
+      "to": "mic.GND",
+      "color": "black",
+      "why": "Ground for the microphone"
+    },
+    {
+      "from": "mcu.G",
+      "to": "mic.L/R",
+      "color": "black",
+      "why": "Left channel: tie channel select to ground"
+    },
+    {
+      "from": "mcu.4",
+      "to": "mic.SCK",
+      "net": "I2S_BCLK",
+      "color": "yellow",
+      "why": "Bit clock from the controller"
+    },
+    {
+      "from": "mcu.5",
+      "to": "mic.WS",
+      "net": "I2S_WS",
+      "color": "orange",
+      "why": "Word select from the controller"
+    },
+    {
+      "from": "mcu.6",
+      "to": "mic.SD",
+      "net": "I2S_SD",
+      "color": "blue",
+      "why": "Audio data from the microphone"
+    },
+    {
+      "from": "mcu.5V",
+      "to": "bar.5V",
+      "color": "red",
+      "why": "Power for the light bar"
+    },
+    {
+      "from": "mcu.G.2",
+      "to": "bar.GND",
+      "color": "black",
+      "why": "Ground for the light bar"
+    },
+    {
+      "from": "mcu.10",
+      "to": "bar.DIN",
+      "net": "LED_DATA",
+      "color": "green",
+      "why": "Colour data for the light bar"
+    },
+    {
+      "from": "mcu.5V",
+      "to": "buzz.VCC",
+      "color": "red",
+      "why": "Power for the buzzer"
+    },
+    {
+      "from": "mcu.G.3",
+      "to": "buzz.GND",
+      "color": "black",
+      "why": "Ground for the buzzer"
+    },
+    {
+      "from": "mcu.11",
+      "to": "buzz.I/O",
+      "net": "BUZZER",
+      "color": "purple",
+      "why": "Buzzer on and off"
+    },
+    {
+      "from": "btn.1",
+      "to": "mcu.12",
+      "net": "BUTTON",
+      "color": "white",
+      "why": "Button input"
+    },
+    {
+      "from": "btn.2",
+      "to": "mcu.G.4",
+      "color": "black",
+      "why": "Pressing the button pulls the input to ground"
+    }
+  ],
+  "enclosure": {
+    "wall": 2,
+    "fit": 0.3,
+    "radius": 4,
+    "lid": "screw",
+    "mounts": [
+      {
+        "ref": "mcu",
+        "on": "floor",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "mic",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "buzz",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "btn",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "bar",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      }
+    ],
+    "openings": [
+      {
+        "ref": "mcu",
+        "port": "USB (native, USB OTG)"
+      },
+      {
+        "ref": "mic",
+        "port": "sound-hole"
+      },
+      {
+        "ref": "buzz",
+        "port": "sound-hole"
+      },
+      {
+        "ref": "btn",
+        "port": "button-cap"
+      },
+      {
+        "ref": "bar",
+        "port": "light-bar"
+      }
+    ],
+    "material": "PLA",
+    "color": "#f2efe8"
+  },
+  "firmware": {
+    "framework": "arduino",
+    "board": "esp32-s3-devkitc-1",
+    "libs": [],
+    "behaviour": "Idle: the light bar breathes dim blue and the device listens to the microphone level only. Button press starts recording: the bar turns solid green while audio is accepted by the transcription endpoint, and blinks red if the endpoint is not reachable. A second press stops recording. When not recording, sustained sound above the speech threshold for 20 seconds is a meeting: the bar blinks amber and the buzzer beeps three times every 30 seconds until the button starts recording or the sound stops for 60 seconds. Brightness is capped at 40 of 255 in firmware (KLADD_BRIGHTNESS)."
+  },
+  "showcase": {
+    "headline": "Know when it is listening. Every time.",
+    "subhead": "A desk recorder for meetings that transcribes what is said and shows its state on a light bar you can read from across the room. Five standard parts, one evening, no account on the device.",
+    "howItWorks": [
+      {
+        "title": "Put it on the table",
+        "body": "Plug it into any USB charger. It starts listening for a meeting as soon as it has power."
+      },
+      {
+        "title": "Press to record",
+        "body": "The bar turns green and stays green while the transcript is being written. Press again to stop."
+      },
+      {
+        "title": "Trust the light",
+        "body": "Red means it is not working. Amber and a beep mean a meeting has started and nobody has pressed record."
+      }
+    ],
+    "features": [
+      {
+        "title": "State you can read across a room",
+        "body": "One light bar, four colours and two patterns. No app to open to check it."
+      },
+      {
+        "title": "Warns before the meeting is lost",
+        "body": "Sustained speech without a recording starts a beep, so the first minutes are not missed."
+      },
+      {
+        "title": "Transcript, not a recording on a card",
+        "body": "Audio goes to the transcription service you set up. The device keeps nothing it does not need to send."
+      },
+      {
+        "title": "A case cut to the parts",
+        "body": "The printed enclosure is generated from the same part sizes as the guide."
+      },
+      {
+        "title": "Drawn to scale",
+        "body": "Every step of the guide shows the real pads in their real positions."
+      },
+      {
+        "title": "One project file",
+        "body": "The wiring, the case, the firmware pin map and this page all come from one project file."
+      }
+    ],
+    "stats": [
+      {
+        "value": "5",
+        "label": "parts to buy"
+      },
+      {
+        "value": "90",
+        "unit": "min",
+        "label": "from bag of parts to working"
+      },
+      {
+        "value": "4",
+        "unit": "states",
+        "label": "shown on the light bar"
+      },
+      {
+        "value": "1",
+        "unit": "button",
+        "label": "and no app"
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is this legal to use in meetings?",
+        "a": "Recording people needs their consent in most places, Norway included. Tell the room before you press record, and check your employer's rules. The light makes the recording state visible to everyone."
+      },
+      {
+        "q": "Does it transcribe on the device?",
+        "a": "No. An ESP32 cannot run a speech model well enough. The device streams audio to a transcription service you configure in the firmware. Nothing in this package includes that service."
+      },
+      {
+        "q": "Do I need to have soldered before?",
+        "a": "It is a wire build with about 25 joints. The guide starts with what a good joint looks like and shows every pad in close-up."
+      },
+      {
+        "q": "How does it know a meeting has started?",
+        "a": "It measures sound level, not words. Sustained loud speech for 20 seconds counts as a meeting. A TV or a loud fan can trigger it too."
+      },
+      {
+        "q": "Has anyone built this one?",
+        "a": "Not yet. The wiring is checked by software and the case is generated from typical part sizes, but nobody has assembled this kit. Measure your parts before printing, and treat the first build as the test."
+      }
+    ],
+    "theme": {
+      "mood": "minimal-light",
+      "accent": "#1f9d55",
+      "display": "Inter Tight",
+      "text": "Inter"
+    },
+    "license": "CERN-OHL-P and MIT",
+    "featuresHeading": "One light. One button. Nothing to log into."
+  }
+}

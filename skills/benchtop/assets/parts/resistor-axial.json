@@ -1,0 +1,28 @@
+{
+  "id": "resistor-axial",
+  "name": "Axial resistor, 1/4 W (through-hole)",
+  "kind": "passive",
+  "blurb": "Quarter-watt resistor with a lead on each end, bent to fit holes 10.16 mm (0.4 inch) apart; the value is set per project.",
+  "body": { "w": 10.16, "d": 2.3, "h": 2.3 },
+  "maxHeight": 2.5,
+  "shapes": [
+    { "kind": "box", "tag": "band-1", "x": 2.9, "y": 0, "z": 0, "w": 0.7, "d": 2.3, "h": 0.2 },
+    { "kind": "box", "tag": "band-2", "x": 4.3, "y": 0, "z": 0, "w": 0.7, "d": 2.3, "h": 0.2 },
+    { "kind": "box", "tag": "band-3", "x": 5.7, "y": 0, "z": 0, "w": 0.7, "d": 2.3, "h": 0.2 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0, "y": 1.15, "z": -1.15, "lead": 20, "note": "Resistors have no polarity: either lead goes either way." },
+    { "name": "2", "role": "passive", "x": 10.16, "y": 1.15, "z": -1.15, "lead": 20 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 10.16, "ref": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" },
+  "sourcing": {
+    "search": ["1/4 W metal film resistor assortment", "axial resistor 1/4W 1% through hole"],
+    "priceUsd": 0.02
+  },
+  "verify": "The drawn body is the envelope of the lead span (10.16 mm) with a 2.3 mm diameter body assumed; a typical 1/4 W body is about 6.3 mm long and 2.3 mm across, but varies by maker (carbon film is slightly larger). Not read from a drawing. Lead pitch is the fitting pitch, not the part: leads can be bent to 7.62 mm or 5.08 mm. Measure your resistors if the enclosure sits close. Drawing-only fields on the pins: z -1.15 puts each lead on the axis of the 2.3 mm body; lead 20 mm is a typical length left on a taped resistor, not read from a drawing.",
+  "sources": [
+    "Typical 1/4 W axial (DIN 0207) body size and 0.4 inch fitting pitch; no manufacturer drawing opened"
+  ],
+  "confidence": "typical"
+}

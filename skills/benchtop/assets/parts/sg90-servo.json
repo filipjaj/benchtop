@@ -1,0 +1,132 @@
+{
+  "id": "sg90-servo",
+  "name": "SG90 9 g micro servo",
+  "kind": "actuator",
+  "blurb": "A small hobby servo that turns its arm to an angle (about 0 to 180 degrees) you set with a pulse-width signal; use it for flaps, latches and pointers.",
+  "body": {
+    "w": 32.5,
+    "d": 12.2,
+    "h": 18.4
+  },
+  "maxHeight": 27,
+  "shapes": [
+    {
+      "kind": "cyl",
+      "x": 11,
+      "y": 6.1,
+      "z": 0,
+      "r": 5.6,
+      "h": 4.3,
+      "tag": "gear-boss"
+    },
+    {
+      "kind": "cyl",
+      "x": 11,
+      "y": 6.1,
+      "z": 4.3,
+      "r": 2.4,
+      "h": 1.7,
+      "tag": "output-spline"
+    },
+    {
+      "kind": "box",
+      "x": 7.5,
+      "y": 3.6,
+      "z": 6,
+      "w": 21.5,
+      "d": 5,
+      "h": 2.6,
+      "tag": "horn"
+    }
+  ],
+  "decals": [
+    {
+      "kind": "text",
+      "face": "top",
+      "x": 16,
+      "y": 8,
+      "text": "SG90",
+      "size": 3
+    }
+  ],
+  "pins": [
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 32.5,
+      "y": 3.56,
+      "note": "Brown lead. Ground, connect to the supply ground and to the controller ground."
+    },
+    {
+      "name": "5V",
+      "role": "power-in",
+      "x": 32.5,
+      "y": 6.1,
+      "volts": 5,
+      "minVolts": 4.8,
+      "maxVolts": 6,
+      "note": "Red lead. Power it from a 5 V rail that can deliver an amp, not from the microcontroller's 3.3 V pin or a weak USB regulator; a stalled servo browns the board out."
+    },
+    {
+      "name": "SIG",
+      "role": "io",
+      "x": 32.5,
+      "y": 8.64,
+      "dir": "in",
+      "needs": [
+        "pwm"
+      ],
+      "maxVolts": 5,
+      "note": "Orange lead. 50 Hz pulse, 1 to 2 ms wide (about 0.5 to 2.4 ms on clones). A 3.3 V pin is normally enough to drive it."
+    }
+  ],
+  "holes": [
+    {
+      "x": 2.5,
+      "y": 6.1,
+      "dia": 2
+    },
+    {
+      "x": 30,
+      "y": 6.1,
+      "dia": 2
+    }
+  ],
+  "ports": [
+    {
+      "name": "horn-slot",
+      "faces": "up",
+      "x": 16.25,
+      "y": 6.1,
+      "w": 22.5,
+      "h": 12.2,
+      "shape": "rect",
+      "margin": 0.3
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": true,
+    "currentMa": {
+      "typical": 150,
+      "peak": 650
+    }
+  },
+  "footprint": {
+    "mount": "wire"
+  },
+  "sourcing": {
+    "search": [
+      "SG90 9g micro servo",
+      "TowerPro SG90 servo 3 horns",
+      "SG90 servo 180 degree"
+    ],
+    "priceUsd": 3
+  },
+  "verify": "Sources disagree, so none of the case numbers are confirmed. The one drawing opened (a reseller copy of the TowerPro sheet, EC.in.th watermark) shows case 22.2 x 11.8 mm, ear span 32.2 mm, 16 mm from the base to the ear flange and 31 mm to the top of the horn. Other sellers list 23 x 12.2 x 29 mm and 22.8 x 12.6 x 34.5 mm. This file models 32.5 mm ear span (0.3 mm from the drawing), 18.4 mm to the ear top (the drawing says 16: unconfirmed, measure it) and 27 mm to the top of the horn (the drawing says 31). Do not trust maxHeight 27 for a lid clearance: measure base to horn top with your horn fitted. Ear hole spacing and diameter (modelled 27.5 mm, 2 mm) appear in no source opened. Measure with calipers: case length and width, ear span, ear hole spacing and diameter, base to ear top, base to gear boss top, shaft offset from the case end, horn length. Lead pin positions are schematic: the cable is 150 to 250 mm long and leaves the case end, not the ear edge; lead colours brown GND, red V+, orange signal are confirmed by the circuit.rocks page. Electrical: 4.8 to 6 V (circuit.rocks; the reseller sheet says 4.8 V nominal), stall about 550 mA (circuit.rocks), the modelled 650 mA peak is a conservative figure. Pulse width 1 to 2 ms in a 20 ms frame (about 0.5 to 2.4 ms on clones). Clone servos (SG90, MG90S, no-name) differ by up to 1 mm. The 32.5 mm in this file spans the mounting ears; a seller figure of 29 x 23 x 12 mm (robonordic.no item 533) is plausibly the body without ears and horn. Check which your case design needs.",
+  "sources": [
+    "https://www.friendlywire.com/projects/ne555-servo-safe/SG90-datasheet.pdf (opened and read: reseller copy of the TowerPro SG90 sheet, drawing 22.2 x 11.8, ear span 32.2, 16 to ears, 31 overall; 4.8 V; 1 to 2 ms; this replaces the earlier note which gave 22.0 x 11.5 x 27)",
+    "https://docs.circuit.rocks/motors/sg90-servo/ (opened: 4.8 to 6 V, stall about 550 mA, brown GND red V+ orange signal, 1 to 2 ms)"
+  ],
+  "confidence": "typical"
+}

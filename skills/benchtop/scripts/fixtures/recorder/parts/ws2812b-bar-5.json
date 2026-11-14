@@ -1,0 +1,68 @@
+{
+  "id": "ws2812b-bar-5",
+  "name": "WS2812B light bar, 5 pixels at 60 LEDs/m (83 mm cut)",
+  "kind": "light",
+  "blurb": "Five addressable RGB pixels cut from one strip, in a row, driven by a single data line. Shows the device state through the lid.",
+  "body": { "w": 83.3, "d": 10, "h": 1 },
+  "maxHeight": 2.6,
+  "shapes": [
+    { "kind": "box", "tag": "led-1", "x": 8.5, "y": 2.5, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-2", "x": 25.17, "y": 2.5, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-3", "x": 41.83, "y": 2.5, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-4", "x": 58.5, "y": 2.5, "z": 0, "w": 5, "d": 5, "h": 1.6 },
+    { "kind": "box", "tag": "led-5", "x": 75.17, "y": 2.5, "z": 0, "w": 5, "d": 5, "h": 1.6 }
+  ],
+  "ports": [
+    { "name": "light-bar", "faces": "up", "x": 41.67, "y": 5, "w": 80, "h": 3, "shape": "rect", "margin": 0.5 }
+  ],
+  "pins": [
+    {
+      "name": "5V",
+      "role": "power-in",
+      "x": 2.5,
+      "y": 2.46,
+      "volts": 5,
+      "minVolts": 4.5,
+      "maxVolts": 5.3,
+      "note": "Needs 5 V. Five pixels draw up to about 300 mA at full white; this build caps brightness in firmware (see peakMa on the part)."
+    },
+    {
+      "name": "DIN",
+      "role": "io",
+      "x": 2.5,
+      "y": 5,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Data in, the pad marked DIN at the input end. Needs 3.5 V to read a high on a 5 V strip; the 3.3 V controller pin is outside the datasheet and is accepted here for a short run (see the hand-over).",
+      "minHighVolts": 3.5
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 2.5,
+      "y": 7.54,
+      "note": "Connect GND before 5 V when hot-plugging."
+    }
+  ],
+  "electrical": {
+    "logicVolts": 5,
+    "fiveVoltTolerant": false,
+    "currentMa": { "typical": 20, "peak": 60 },
+    "perUnit": { "name": "pixel" }
+  },
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": [
+      "WS2812B LED strip 5V 60 LEDs/m IP30",
+      "WS2812B addressable RGB strip 10mm 5V",
+      "WS2812B 5V strip cut to 5 pixels"
+    ],
+    "priceUsd": 4
+  },
+  "verify": "Built as a 5-pixel cut of the library strip ws2812b-strip (same pad layout at the input end). Buy a strip at 60 LEDs/m, cut 5 pixels (about 83 mm, pixel pitch 16.7 mm), and check the pad order printed on the strip (5V DIN GND is typical; some print GND DIN 5V). Measure the strip width (10 mm) and the pixel pitch before printing the lid: the light-bar window is 80 mm long and must sit over the pixels.",
+  "sources": [
+    "Pad layout, supply range and current: assets/parts/ws2812b-strip.json (WS2812B datasheet via Adafruit mirror, opened in the library file)",
+    "Pixel pitch 16.7 mm: 60 LEDs/m, common strip. Light-bar length is this project's own choice."
+  ],
+  "confidence": "typical"
+}

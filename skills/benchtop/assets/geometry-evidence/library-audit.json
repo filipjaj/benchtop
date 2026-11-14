@@ -1,0 +1,563 @@
+{
+  "format_version": 1,
+  "updated_at": "2026-11-14T09:22:34.983801+00:00",
+  "scope": "Inventory of model declarations, not validation of every coordinate. All files require exact hardware/variant matching.",
+  "counts": {
+    "parts": 30,
+    "typical": 28,
+    "datasheet": 2,
+    "physically_verified": 0
+  },
+  "parts": [
+    {
+      "id": "74ahct125-dip14",
+      "file": "../parts/74ahct125-dip14.json",
+      "sha256": "5b15eaace15b97da9c1aacbb692bbf4229fad9cd56ecb12d84f718670ef3556e",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 7.62,
+        "d": 19.3,
+        "h": 5.08
+      },
+      "modelled_maxHeight_mm": 5.08,
+      "pin_count": 14,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Pinout, the 4.5 to 5.5 V supply range, the 2 V input high level, 5.5 V input maximum and active-low output enables are from the TI datasheet (SCLS264R); pin pitch (2.54), row spacing between lead centres (7.62) and package length (18.92 to 19.69 mm, 19.3 modelled) are from its N (PDIP-14) drawing, as is the 5.08 mm maximum body height above the seating plane. The datasheet text that gave the plastic body width did not come through, so the body is drawn as wide as the lead rows (7.62); the real plastic is narrower (about 6.35 mm, from memory of the MS-001 outline, not read). The lead position z -3 and body height are drawing-only values, not from the drawing. Buy the exact family: the T matters. 74AHCT125 reads 2 V and up as a high on a 5 V supply (datasheet); a plain 74AHC125 or 74HC125 needs about 3.5 V at 5 V and a 74LVC125 runs from 3.3 V (both from general knowledge, not opened), so a listing that drops the T is the wrong chip. This file models the bare chip (a breadboard-style DIP-14 with 7.62 mm row spacing); a breakout board carrying the same chip has its own, wider outline: measure it and copy this file into the project's parts/ folder with that size and pad positions. The part is modelled with the output at 5 V; that holds only while VCC is wired to 5 V. Current is the datasheet's extra supply draw for an input held at 3.4 V (1.35 mA typical, 1.5 mA maximum), excluding the load, which is microamps for one LED data line.",
+      "source_count": 2
+    },
+    {
+      "id": "active-buzzer-module",
+      "file": "../parts/active-buzzer-module.json",
+      "sha256": "d31a1c0df916cabf1deecf01d23c4a106b541991626f6b6e59521c714c363dfe",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 32,
+        "d": 13,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 11.1,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Highly variable layout. With calipers measure: board length and width, buzzer diameter and height (12 x 9.5 mm assumed), header position and pin order as printed, and mounting hole presence (none assumed). Confirm trigger polarity (low-level or high-level) with a multimeter. Sound hole size is a design value for the enclosure, not a measured one.",
+      "source_count": 1
+    },
+    {
+      "id": "battery-holder-18650",
+      "file": "../parts/battery-holder-18650.json",
+      "sha256": "df27468acf492a5bd13ff249fc58e9cfcccab7a551fde40b889a67e87040d95e",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 77,
+        "d": 21,
+        "h": 10
+      },
+      "modelled_maxHeight_mm": 19.6,
+      "pin_count": 2,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Holder dimensions vary widely by maker. Measure the actual holder length, width, wall height and depth with a cell fitted (an 18650 cell is 18 mm diameter and 65 mm long, 18.6 and 65.2 mm max); the holder body height of 10 mm is an assumed wall height and the cell drawn on top is an installed cell. Check lead length and where the leads exit. The 2000 mA supply limit is a placeholder: it depends on the cell, and the holder contacts are usually good for about 2 A only.",
+      "source_count": 1
+    },
+    {
+      "id": "bme280-breakout",
+      "file": "../parts/bme280-breakout.json",
+      "sha256": "043dc7c7fef020a3d8ac84b7e1f8a78fd3a59f1a25a61d06f593065340853364",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 15,
+        "d": 11.5,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 2.53,
+      "pin_count": 4,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "The board outline is NOT confirmed. Sellers of the GY-BME280 give 15.4 x 11.6 mm, 15.5 x 12 mm and 9 x 11 mm, and no source gives 15 x 11.5, so the modelled body, header position and sensor-can position are a guess within about 1 mm: measure length, width, header-to-edge distances, can position and PCB thickness (modelled 1.6) with calipers. Two 3.5 mm mounting holes are reported by several sellers on the 15 mm boards, not modelled here. Variants: this file is the 4-pin VCC GND SCL SDA board (the pin label may read VIN). 6-pin boards add CSB and SDO and some have an on-board regulator for 3.3 to 5 V; Adafruit's board is 25.2 x 18 mm with different pins and STEMMA QT; none of those fit this file. Chip facts from the Bosch datasheet: VDD 1.71 to 3.6 V, VDDIO 1.2 to 3.6 V, absolute maximum 4.25 V, interface pins at most VDDIO + 0.3 V, 3.6 uA at 1 Hz humidity + pressure + temperature, 0.1 uA sleep, SDO low = 0x76 and SDO high = 0x77, SDI/SCK need external pull-ups to VDDIO (so whether the module has them depends on the clone: check with a meter, i2cPullups is unconfirmed). Confirm the address with a scanner. A BMP280 sold as BME280 has no humidity: the BME280 can is square (2.5 x 2.5 mm) and the BMP280 can rectangular (2.0 x 2.5 mm), which is hard to judge by eye; the reliable test is chip ID register 0xD0, which reads 0x60 for BME280 and 0x58 for BMP280. Variant warning for sourcing: boards sold as \"3.3V/5V\" or \"5 V version\" carry a regulator and level shifting, are larger, and take up to 5 V on VIN; this file is the small 3.3 V-only GY-BME280. The only Norwegian listing found in the local parts catalog (robonordic.no item 499) is the 5 V version. If that is what arrives, override this part in the project with its real size and supply range.",
+      "source_count": 4
+    },
+    {
+      "id": "dht22-module",
+      "file": "../parts/dht22-module.json",
+      "sha256": "1f734b4af2827177ab3db8fa02ce13c0bf9b78b3d7e76e09091bf10fced8aaf6",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 15.1,
+        "d": 25.1,
+        "h": 7.7
+      },
+      "modelled_maxHeight_mm": 8.1,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Confirmed by the Aosong AM2302 datasheet (opened and read): sensor housing 15.1 x 25.1 x 7.7 mm, 3 mm hole near the top, bare-sensor pins 8.5 mm long at 2.54 mm pitch and 0.5 mm thick, supply 3.3 to 5.5 V (table says 3.3 to 6 V absolute), 1 to 1.5 mA while measuring, 40 to 50 uA standby, one reading per 2 seconds, wait 1 s after power-up, 100 nF between VDD and GND recommended. The bare sensor has FOUR pins in this order from the left with the grille facing you: 1 VDD, 2 DATA, 3 NC, 4 GND (the datasheet table lists pin 3 as GND but the wiring diagram uses pins 1, 2 and 4; leave pin 3 open). Module boards break this out to three pins and the order differs between them (VCC DATA GND vs DATA VCC GND): read the silkscreen. NOT confirmed: this file puts the pad row 1.5 mm inside the housing end (y 23.5) as on a module PCB; on the bare sensor the pins run 8.5 mm beyond the housing instead, and module PCB size varies, so measure the whole module (PCB length and width, pad row position and pitch, how far the PCB extends past the housing) and the grille position. The 2.5 mA peak is the Adafruit figure; the Aosong table gives 1 to 1.5 mA. Pull-up: the datasheet wiring diagram shows an external pull-up from VDD to DATA (labelled 1K there); Adafruit says the wired AM2302 has 5.1 kohm inside. 3-pin modules usually have 4.7 to 10 kohm fitted, bare 4-pin sensors do not: check with a meter. A larger case (26.7 x 58.8 x 13.8 mm with 4.1 mm hole) also exists as the wired AM2302.",
+      "source_count": 3
+    },
+    {
+      "id": "esp32-c3-supermini",
+      "file": "../parts/esp32-c3-supermini.json",
+      "sha256": "fb57d9daa0d2627ae98d7bae534f3b17b67a71c5a04d18fc547fd2b90afc3d3f",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 18,
+        "d": 22.5,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 4.3,
+      "pin_count": 16,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Clone board with no official drawing or open board file found; batches differ. Confirmed by independent sources: outline 22.5 (22.52) x 18 mm, 0.1 in pitch, 15.24 mm between rows. NOT confirmed by any source: PCB thickness (modelled 1.0; measure it, clones are often 0.8 to 1.2), distance from the USB-C front edge to the first pad (modelled 3.24), USB-C shell width and overhang (modelled flush, 8.94 wide), all shape heights, LED and button positions. Variants: the 'Plus' and v2 boards have different outlines and pin counts; this file is the plain 16-pin board. Some listings and ESPHome pages use SDA=GPIO5/SCL=GPIO6 as software defaults; the Arduino default is GPIO8/GPIO9. Supply: sources quote the 5V pin as 3.3-6 V or 5-7 V and 3V3 output as 150 to 500 mA; the modelled 150 mA is the conservative figure. With calipers measure: PCB length and width; PCB thickness; distance from the USB-C front edge to the first pad; USB-C width and overhang. Confirm LED polarity (modelled active-low on GPIO8) and which row carries 5V/GND/3V3 with USB at the top and the component side up. Both buttons (BOOT, RST) are not modelled because their position is unverified; measure them if the case needs access. Pin y-positions come from the Wokwi board definition, which is drawn on an 18 x 24.576 mm canvas (artwork derived from the Adafruit QT Py ESP32-C3, per its own description) while the real board is 22.5 mm long, so the offset from the USB edge is an assumption: measure it. Component positions on the board face (chip, antenna, buttons) are drawn for recognition only; rely on the outline and pad positions.",
+      "source_count": 5
+    },
+    {
+      "id": "esp32-devkit-v1",
+      "file": "../parts/esp32-devkit-v1.json",
+      "sha256": "e4c5550462510d5e023669c0dae6bf300ceadffe866382a2bc6aa0af4f0cc57a",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 28.33,
+        "d": 51.45,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 4.75,
+      "pin_count": 30,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Clone board, no manufacturer drawing or open board file found; layouts vary between factories (USB-C vs micro-USB, 30 vs 38 pins, label spelling). Evidence for the outline is weak: espboards.dev gives 51.45 x 28.33 mm (the figures used here, and likely taken from the same Wokwi data, so not independent), a Mischianti reader comment gives 28.2 x 51.8 mm, and Tinkered gives 51.4 x 28.5 mm; the sources agree on the width within 0.3 mm but not on the length. Not confirmed by any source: row-to-row distance (modelled 25.4), distance from the USB edge to the first pin (modelled 10.09), PCB thickness (modelled 1.6), module and antenna overhang, USB connector size, button positions, the shape heights. With calipers measure: PCB length and width; PCB thickness; centre-to-centre distance of the two header rows; distance from the USB edge to the first pin; how far the module antenna overhangs the PCB; USB connector width. Pin y-positions come from the Wokwi board definition, assumed to start at the antenna end of the PCB. Pin header height is excluded from maxHeight. Supply: 5 V on USB or VIN through an AMS1117-3.3 regulator (espboards.dev); no source gives a current rating, the modelled 110 mA typical and 350 mA peak are estimates (not from a datasheet read here).",
+      "source_count": 3
+    },
+    {
+      "id": "esp32-s3-devkitc-1",
+      "file": "../parts/esp32-s3-devkitc-1.json",
+      "sha256": "1cb78eb384df909d9d0020a1bb6a23141f542f8a01b3440f4ec6862e79e820e3",
+      "declared_confidence": "datasheet",
+      "body_as_modelled_mm": {
+        "w": 25.4,
+        "d": 62.74,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 4.75,
+      "pin_count": 44,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "OFFICIAL ESPRESSIF MICRO-USB BOARD ONLY. Its 25.4×62.74 mm PCB and 22.86 mm header-row spacing do not describe dual USB-C clones. The separate VCC-GND YD-ESP32-S3 mechanical reference now has a published 27.94×57.15 mm PCB drawing and native Altium pad coordinates; see assets/geometry-evidence/variant-records.json and the full catalog record vcc-gnd:yd-esp32-s3:mechanical-reference. No exact match to Elkim/Fibel/RoboNordic seller hardware is established. Do not copy this file's coordinates, USB openings or heights to another board. This file's official drawing supports some planar geometry, but PCB thickness, component heights and LED size remain model assumptions. The antenna shape was previously clipped to 3.9 mm to satisfy a drawing validator; that is not source-backed. Independent review of the official V1.1 DXF PDF found no numerical antenna-overhang or overall assembled-length callout. The former claim of approximately 6.2 mm is therefore also unverified. This model must not be treated as a complete case-fit envelope. Measure the exact assembled board, antenna extent, fitted-header orientation and USB plug clearance before fabrication.",
+      "source_count": 6
+    },
+    {
+      "id": "hc-sr04",
+      "file": "../parts/hc-sr04.json",
+      "sha256": "9784b2777221269e3c090540bc18a83a5a235c66c26fae6f21115259e57716ed",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 45,
+        "d": 20,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 15,
+      "pin_count": 4,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Confirmed by the Elecfreaks datasheet: 45 x 20 x 15 mm overall, 5 V, 15 mA, pin order VCC Trig Echo GND, 2.54 mm header. Everything else is unconfirmed and modelled from memory: transducer diameter (16 mm; an independent RCWL-1601 measurement also gives 16 mm cans but that is a different board), transducer centre spacing (modelled 24 mm; the Handson sheet drawing implies about 20 mm and the RCWL-1601 uses 22 mm, but that drawing is schematic and shows a 43 mm board with 40 mm hole spacing that contradicts the 45 mm datasheet, so it was not used), PCB thickness, header position, the four corner mounting holes (present on the Handson drawing, not modelled because no usable position exists). Measure with calipers: board length and width, transducer diameter and centre-to-centre spacing, can height above the PCB (modelled so the top lands at 15 mm), header-to-edge distances, hole positions. Variants: HC-SR04P, HY-SRF05 style and RCWL-1601 modules run on 3.3 V to 5 V with a 3.3 V echo, and the RCWL-1601 has different cans (22 mm spacing); the Handson sheet describes a 3.3 to 5 V version at 2.8 mA working. Check the board marking before wiring; this file is the classic 5 V HC-SR04.",
+      "source_count": 4
+    },
+    {
+      "id": "hc-sr501-pir",
+      "file": "../parts/hc-sr501-pir.json",
+      "sha256": "341f0b899bba648fcf2457743d6165316f5bf7b9d2e7e5d4f5a02c49ff2dc8b2",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 32,
+        "d": 24,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 15.6,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "No drawing was opened. Measure with calipers: board 32 x 24 mm, dome diameter (23 mm assumed) and dome height above the PCB (14 mm assumed), dome centre, header position. Read the silkscreen for pin order: most boards print VCC OUT GND, some print GND OUT VCC. The 4.5 to 20 V supply range, about 50 uA idle and 65 mA peak figures come from typical listings and the BISS0001 reference design, not a datasheet opened here. The warm-up time after power-on is about a minute. OUT is about 3.3 V on genuine boards (Adafruit reports about 3 V); check yours with a meter if you wire it to a 1.8 V controller.",
+      "source_count": 2
+    },
+    {
+      "id": "inmp441-mic",
+      "file": "../parts/inmp441-mic.json",
+      "sha256": "df94b347b740ed264e6520c889203431b8a2a1b619b5589085c28f436cfcc214",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 14,
+        "d": 14,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 4.1,
+      "pin_count": 6,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": {
+        "status": "unresolved",
+        "reason": "Legacy single-row pad layout is not supported by a manufacturer drawing and conflicts with the two rows of three terminals shown by the reviewed Norwegian listings. This file is retained for logical pin-name compatibility only; its numeric geometry is not physical evidence.",
+        "unknown": [
+          "exact maker and board revision",
+          "PCB outline and thickness for the supplied variant",
+          "six pad coordinates and physical label order",
+          "assembled height including fitted headers",
+          "acoustic port side, location and diameter"
+        ]
+      },
+      "declared_limitations": "PHYSICAL GEOMETRY UNRESOLVED. The retained 14×14 mm, single-row pad coordinates, PCB thickness, header height and acoustic opening are legacy model assumptions, not measured or source-supported geometry. Reviewed Elkim, Fibel and HusHageHobby photographs show two rows of three terminals; Fibel/HusHageHobby are round/notched boards, not this square single-row model. Elkim states approximately 10×10 mm PCB; HusHageHobby has a general 14×14×3 mm Dimensions field with unresolved physical scope. These are separate seller claims, not two proven standardized variants. No numeric module pad positions were found. See assets/geometry-evidence/variant-records.json. Electrical values now cite the opened TDK/InvenSense DS-INMP441-00 Rev1.1: at3.3V normal-mode chip current is2.2mA typical,2.5mA maximum; the former1.4/1.6mA figures apply at1.8V. Table6 recommends1.8–3.3V, Table1 gives1.62–3.63V electrical limits. Chip-level bottom-port/package drawings do not establish the board sound-hole side or coordinates. Exact chip authenticity and any additional module circuitry remain unverified.",
+      "source_count": 4
+    },
+    {
+      "id": "led-5mm",
+      "file": "../parts/led-5mm.json",
+      "sha256": "0b38ee7a99fab00fb899d84c15ebe0465fdb067c0065befbd14c0e854b939762",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 5.8,
+        "d": 5.8,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 8.6,
+      "pin_count": 2,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Standard T-1 3/4 outline: 5 mm lens, 5.8 mm flange, about 8.6 mm total height, 2.54 mm lead pitch. Not read from a manufacturer drawing. Measure your LEDs: lens height varies (flat-top and oval types are shorter). Forward voltage and the 20 mA ceiling depend on colour (about 2 V red/yellow/green, 3 V blue/white); check the seller's listing before choosing the resistor. Drawing-only fields on the pins: z -1 puts each leg at the underside of the 1 mm flange; lead 17 mm is a typical trimmed leg length, not read from a drawing.",
+      "source_count": 1
+    },
+    {
+      "id": "lipo-1s-cell",
+      "file": "../parts/lipo-1s-cell.json",
+      "sha256": "9f478d9296679d326e81e40100582c21beb471dd8031e22fe79d07eaa5d38d77",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 50,
+        "d": 34,
+        "h": 5
+      },
+      "modelled_maxHeight_mm": 5,
+      "pin_count": 2,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Cell size is per project: the code 503450 means about 5.0 mm thick, 34 mm wide, 50 mm long, but real cells are up to 0.5 to 1 mm larger and swell with age. Measure the actual cell thickness, width and length, leave 1 mm or more clearance for swelling, and check capacity, discharge rating (the 1000 mA supply limit is a conservative assumption, not a datasheet value), connector type and polarity. The lead exit position and spacing are schematic. Confirm a protection board is actually fitted.",
+      "source_count": 1
+    },
+    {
+      "id": "max98357a-breakout",
+      "file": "../parts/max98357a-breakout.json",
+      "sha256": "acba374aab36836ffaafc3bb4b777a5fc030103dcd2d01a0ae921776573332f0",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 17.8,
+        "d": 19.3,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 7.6,
+      "pin_count": 9,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Board outline (17.8 x 19.3 mm assumed, matching the Adafruit style board) and layout vary between clone makers. Measure board length and width, header position, screw terminal pitch (3.5 mm assumed) and height, and mounting holes (none assumed). Confirm the silkscreen order of the 7 header pins and the terminal polarity. Current figures are assumptions: the Adafruit page recommends a 650 to 800 mA supply, idle current is unverified.",
+      "source_count": 1
+    },
+    {
+      "id": "mpu6050-gy521",
+      "file": "../parts/mpu6050-gy521.json",
+      "sha256": "60540afb78930b707fbc12f8438dfc29729f1dae1f1647c0f06864390cea8e31",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 20.3,
+        "d": 15.5,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 2.5,
+      "pin_count": 8,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Not from a drawing. Measure with calipers: board outline (20.3 x 15.5 mm assumed), header position and pitch, chip position, and the mounting holes, which are left out of this file because their positions were not confirmed: measure and add them if the enclosure needs standoffs. Read the silkscreen for the pin order (VCC GND SCL SDA XDA XCL AD0 INT is the usual one). The 3.3 to 5 V supply claim assumes the usual onboard regulator; the chip itself tolerates only about 3.46 V. Typical current of about 3.9 mA with gyro and accelerometer active, the 0x68/0x69 addresses and the 3.3 V pull-ups come from memory of the InvenSense datasheet and common GY-521 schematics: not opened here. Many listings sold as MPU-6050 carry fake chips that answer WHO_AM_I differently (0x70 for MPU-6500, 0x72): scan the bus.",
+      "source_count": 2
+    },
+    {
+      "id": "pi-pico-w",
+      "file": "../parts/pi-pico-w.json",
+      "sha256": "add65d38ebf1b6853cb16571700f657e9ece6ab7610799b358b9ad77e21554d3",
+      "declared_confidence": "datasheet",
+      "body_as_modelled_mm": {
+        "w": 21,
+        "d": 51,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 3.85,
+      "pin_count": 40,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Outline (21 x 51), hole positions (4.8/16.2 x 2/49, 2.1 mm), pad pitch, first-pad offset (1.3) and USB overhang come from the official physical-specification drawing. Not from a primary source and worth a caliper check: PCB thickness (modelled 1.0), component heights (USB 2.8, button 1.7, chip 0.9, shield can 1.3), the shield-can footprint, and the 3V3 spare current. The Pico W antenna at the bottom end is not modelled. Header height is excluded from maxHeight.",
+      "source_count": 3
+    },
+    {
+      "id": "relay-module-1ch",
+      "file": "../parts/relay-module-1ch.json",
+      "sha256": "447e840aeec7cd15f8a56bb6cacacfa2c1b5b3f1c6ceab1ce0970552cadc9925",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 50.5,
+        "d": 26,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 16.9,
+      "pin_count": 6,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Measure with calipers: PCB length and width, relay body size and height, screw terminal pitch and height, the exact position and spacing of the mounting holes, and the silkscreen order on both connectors (NO/COM/NC order and VCC/GND/IN order vary between batches). Check whether IN is active-low or active-high and whether a trigger-level jumper is present. Mains wiring is out of scope: this part definition is for low-voltage loads only.",
+      "source_count": 1
+    },
+    {
+      "id": "resistor-axial",
+      "file": "../parts/resistor-axial.json",
+      "sha256": "a5b04b49a1e4e6af5c85727a3bae72386b73ad82449fa54c28ee1db4060ef500",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 10.16,
+        "d": 2.3,
+        "h": 2.3
+      },
+      "modelled_maxHeight_mm": 2.5,
+      "pin_count": 2,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "The drawn body is the envelope of the lead span (10.16 mm) with a 2.3 mm diameter body assumed; a typical 1/4 W body is about 6.3 mm long and 2.3 mm across, but varies by maker (carbon film is slightly larger). Not read from a drawing. Lead pitch is the fitting pitch, not the part: leads can be bent to 7.62 mm or 5.08 mm. Measure your resistors if the enclosure sits close. Drawing-only fields on the pins: z -1.15 puts each lead on the axis of the 2.3 mm body; lead 20 mm is a typical length left on a taped resistor, not read from a drawing.",
+      "source_count": 1
+    },
+    {
+      "id": "rotary-encoder-ky040",
+      "file": "../parts/rotary-encoder-ky040.json",
+      "sha256": "77e14cf37a31d2d2d360b426908d682f9d3b6eb7c23f74e1d528dcc37d173e38",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 30,
+        "d": 19.5,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 22.1,
+      "pin_count": 5,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "No manufacturer drawing exists for the KY-040 module, and no source opened gives its outline, so the 30 x 19.5 mm board, the encoder body position, the 14 mm shaft length and the header position are clone-typical guesses. Sellers report 30 x 19 x 30 mm, 30 x 18 x 30 mm and 19 x 15 x 29 mm, and Parallax sells a different 15 x 16.5 mm module: measure yours. Confirmed by the Keyes user manual: header order CLK DT SW + GND (from top to bottom as drawn beside the knob), CLK and DT are encoder A and B, GND is the common pin C, pull-ups R2 and R3 are 10 kohm, the manual speaks of a 5 V supply and 30 detents per turn (other sellers say 20). Measure with calipers: board outline, encoder body (12 x 12 mm and 6.5 mm tall assumed; the Alps EC11 family it is based on is 11 mm class with 15 to 30 mm shafts), shaft diameter (6 mm assumed, flatted or knurled), shaft length above the body, body position on the board, header position and pitch. Some boards print the pins on the opposite edge. Current figures are an estimate from 10 kohm pull-ups (0.33 mA per closed contact at 3.3 V), not measured.",
+      "source_count": 2
+    },
+    {
+      "id": "sg90-servo",
+      "file": "../parts/sg90-servo.json",
+      "sha256": "74303079dbd8baf61daa271f21dab13087af05a98ef46c2360624e5ee4261d17",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 32.5,
+        "d": 12.2,
+        "h": 18.4
+      },
+      "modelled_maxHeight_mm": 27,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Sources disagree, so none of the case numbers are confirmed. The one drawing opened (a reseller copy of the TowerPro sheet, EC.in.th watermark) shows case 22.2 x 11.8 mm, ear span 32.2 mm, 16 mm from the base to the ear flange and 31 mm to the top of the horn. Other sellers list 23 x 12.2 x 29 mm and 22.8 x 12.6 x 34.5 mm. This file models 32.5 mm ear span (0.3 mm from the drawing), 18.4 mm to the ear top (the drawing says 16: unconfirmed, measure it) and 27 mm to the top of the horn (the drawing says 31). Do not trust maxHeight 27 for a lid clearance: measure base to horn top with your horn fitted. Ear hole spacing and diameter (modelled 27.5 mm, 2 mm) appear in no source opened. Measure with calipers: case length and width, ear span, ear hole spacing and diameter, base to ear top, base to gear boss top, shaft offset from the case end, horn length. Lead pin positions are schematic: the cable is 150 to 250 mm long and leaves the case end, not the ear edge; lead colours brown GND, red V+, orange signal are confirmed by the circuit.rocks page. Electrical: 4.8 to 6 V (circuit.rocks; the reseller sheet says 4.8 V nominal), stall about 550 mA (circuit.rocks), the modelled 650 mA peak is a conservative figure. Pulse width 1 to 2 ms in a 20 ms frame (about 0.5 to 2.4 ms on clones). Clone servos (SG90, MG90S, no-name) differ by up to 1 mm. The 32.5 mm in this file spans the mounting ears; a seller figure of 29 x 23 x 12 mm (robonordic.no item 533) is plausibly the body without ears and horn. Check which your case design needs.",
+      "source_count": 2
+    },
+    {
+      "id": "slide-switch-ss12d00",
+      "file": "../parts/slide-switch-ss12d00.json",
+      "sha256": "5769b4221a22f334b24f0344eb01431415711117c946eb8be2349b818cdad602",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 8.6,
+        "d": 3.6,
+        "h": 3.5
+      },
+      "modelled_maxHeight_mm": 7.5,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Many versions exist (G3, G4, G5 differ in lever height). Measure body length, width and height, lever height, width and travel, pin pitch (2.0 mm assumed) and whether the case has side mounting posts. Check the contact rating on the listing; these switches are small-current parts and are not suited to motors or a high-current battery path. Drawing-only fields on the pins: z -3.5 puts each leg at the underside of the 3.5 mm body; lead 3.5 mm is a typical leg length, not read from a drawing.",
+      "source_count": 1
+    },
+    {
+      "id": "soil-probe-capacitive-v12",
+      "file": "../parts/soil-probe-capacitive-v12.json",
+      "sha256": "c7d8d6120fdcb64d8748f96115853401678f4c90594822d629b9e37cd2b7a480",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 23,
+        "d": 98,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 7.6,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Outline 98 x 23 mm is DFRobot's figure for the original SEN0193; clones are sold as the same size but come from many factories. Nothing in the case is cut to this part (it lives in the pot on its lead), so the outline matters only for the drawing. Not read from any source and drawn for recognition only: PCB thickness (modelled 1.6), connector height (modelled 6), the pad positions under the connector (modelled 2 mm pitch, 3 mm from the top edge) and where the keep-above-soil line sits (modelled 30 mm from the connector end). Check on the real part: the pin order printed next to the connector (modelled GND, VCC, AOUT) and the wire colours of the lead; that the lead ends in three push-on sockets; that the timer chip is marked TLC555 or 7555 (clones with NE555 misbehave at 3.3 V). The electronics end and the cut board edges are not sealed: keep everything above the printed line out of the soil and away from the watering can.",
+      "source_count": 3
+    },
+    {
+      "id": "speaker-40mm",
+      "file": "../parts/speaker-40mm.json",
+      "sha256": "f1c1b7408d7b4cf0f1613353ec30cb0f6128c7d49f5b08f1952fb6c62020b9f9",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 40,
+        "d": 40,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 5.5,
+      "pin_count": 2,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Depth varies by model (5 to 10 mm). Measure the frame diameter, total depth, terminal positions, cone diameter (34 mm assumed for the grille), and whether the frame has mounting ears. The body is a 1 mm placeholder plate; the real part is the cylinder shape. The 3 W rating at 4 ohm is about 3.5 V RMS or 0.87 A RMS; check it against the amplifier.",
+      "source_count": 1
+    },
+    {
+      "id": "ssd1306-oled-096-i2c",
+      "file": "../parts/ssd1306-oled-096-i2c.json",
+      "sha256": "65b65e732161976b53a0059f888773ce5599658c6b8d2251bf866606dec02cd9",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 27.3,
+        "d": 27.8,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 3.1,
+      "pin_count": 4,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Variants: this file is the most common 4-pin 27.3 x 27.8 mm module (PCB, panel 26.7 x 19.27, active area 21.74 x 10.86, header pads 9.84 mm from the left edge at 2.54 pitch, four 2 mm holes with 3.5 mm pads, all from the module maker's drawing). Pin order differs between factories: this file is GND VCC SCL SDA (Adafruit-style and the lcdwiki text), but the maker's own drawing for the same outline is silkscreened VCC GND SCL SDA. Read the silkscreen on the board and wire by label; a board wired backwards dies. Other 0.96 inch modules exist with 26 x 26, 30 x 30 or 41 x 26 mm outlines (Waveshare, Soldered, DFRobot Gravity); use a part file of their own for those. Not dimensioned in the drawing, so still estimates: pad row distance from the top edge (modelled 2.3, drawing suggests about 1.9), hole centres (modelled 2.0 from each edge), PCB thickness (modelled 1.6, drawing shows 1.2 and 1.5 mm callouts that cannot be matched to PCB versus glass), glass height above the PCB. Measure those with calipers. Panel position from the drawing: glass top edge 4.27 mm below the PCB top edge, active area starts 2.10 mm below that. Address is 0x3C by default (0x78 write address in the maker's text); a resistor jumper on some boards selects 0x3D (0x7A). Whether VCC takes 5 V depends on a regulator on the board: the maker lists 3 to 5 V, but a few clones have none and die at 5 V. On-board I2C pull-ups are not confirmed by any source opened: check with a meter before relying on i2cPullups.",
+      "source_count": 5
+    },
+    {
+      "id": "tactile-button-6mm-tall",
+      "file": "../parts/tactile-button-6mm-tall.json",
+      "sha256": "ce5eb908093ecf6a716dc348d822e06d65a80e458caaa58eb5e9db598cc9b430",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 6.5,
+        "d": 6,
+        "h": 3.4
+      },
+      "modelled_maxHeight_mm": 9.5,
+      "pin_count": 4,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "The 9.5 mm overall height is NOT confirmed by any source opened: Omron's tallest 6 x 6 part in the B3F catalogue is 7.3 mm (B3F-1050, a 2.4 mm square plunger), and sellers list 7, 8, 9.5 and 13 mm clones with a thicker stem. Measure overall height from the PCB seat to the top of the stem, and the stem diameter (modelled 3.5 mm), and edit maxHeight and the cap height (modelled 6.1 mm above a 3.4 mm body). Confirmed by the Omron B3F drawing and the KiCad footprint (two independent sources): 6 x 6 mm body, leg pitch 6.5 mm by 4.5 mm (the earlier 6.25 mm was wrong), 3.5 mm plunger, body about 3.4 mm high. Legs 6.5 mm apart (same y) are the same node in the KiCad footprint; confirm with a continuity meter. The 6.5 mm wide body here is the 6 mm housing plus the leg overhang. Peak current is the Omron 50 mA at 24 V DC contact rating for the plain switch. Drawing-only fields on the pins: z -3.4 puts each leg at the foot of the 3.4 mm body, where the legs leave it; lead 3.5 mm is a typical leg length for this switch and was not read from the drawing.",
+      "source_count": 2
+    },
+    {
+      "id": "tactile-button-6mm",
+      "file": "../parts/tactile-button-6mm.json",
+      "sha256": "0d018f57d6d83c92940238c10e5fecb4899f9d1807fe67b5016a984817cd6033",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 6.5,
+        "d": 6,
+        "h": 3.4
+      },
+      "modelled_maxHeight_mm": 5,
+      "pin_count": 4,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Overall height 5.0 mm matches the Omron B3F-1020 style; the very common 4.3 mm (B3F-1000), 7.3 mm (B3F-1050) and other heights exist, so measure the overall height of the switch you have with calipers and edit maxHeight and the cap height. Confirmed by the Omron B3F drawing and the KiCad footprint (two independent sources): 6 x 6 mm body, leg pitch 6.5 mm by 4.5 mm (the earlier 6.25 mm was wrong), 3.5 mm plunger, body about 3.4 mm high. Legs 6.5 mm apart (same y) are the same node in the KiCad footprint; confirm with a continuity meter. The 6.5 mm wide body here is the 6 mm housing plus the leg overhang. Clone switches are not held to Omron tolerances (+-0.2 on the body, +-0.1 on the hole pitch): test fit before printing a tight lid opening. Peak current is the Omron 50 mA at 24 V DC contact rating, not a measurement. Drawing-only fields on the pins: z -3.4 puts each leg at the foot of the 3.4 mm body, where the legs leave it; lead 3.5 mm is a typical leg length for this switch and was not read from the drawing.",
+      "source_count": 2
+    },
+    {
+      "id": "tp4056-usbc-module",
+      "file": "../parts/tp4056-usbc-module.json",
+      "sha256": "8f4350ef70fbfcf0e4a47aa1f1f5744312d663054d7d198e4b6a07560e880f7d",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 26,
+        "d": 17,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 4.3,
+      "pin_count": 6,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Highest risk of the ten parts. Confirmed: 26 x 17 mm outline is the HW-373 style module (Botland and other sellers list it; other clones are listed at 25 x 19 and 28 x 17 mm); six pads IN+ IN- B+ B- OUT+ OUT-; OUT+/OUT- are behind the DW01A/8205 protection and B+/B- are straight to the cell; 1 A maximum charge current; protection at about 4.3 V overcharge, 2.4 V over-discharge, about 3 A overcurrent. NOT confirmed by any source opened: every pad centre (the 2 / 6 / 11 / 15 mm positions and which pad sits at which end are assumptions; read the silkscreen), PCB thickness (modelled 1.0), USB-C socket overhang, width and height, chip position. With calipers and the board in hand measure: PCB length, width and thickness, USB-C overhang and centre height, and each pad centre. Programming resistor: 1.2 kOhm = 1 A (TP4056 datasheet); a 2 kOhm part gives about 580 mA for a small cell. Do not assume 1.2 kOhm is fitted: read its marking (122). Confirm a DW01 plus 8205 protection pair is fitted; the 4-pad boards without it have no protection, and neither does a module sold with only IN and B pads. IN+ minVolts 4 is the TP4056 chip minimum; the recommended USB range is 4.5 to 5.5 V.",
+      "source_count": 3
+    },
+    {
+      "id": "ws2812b-stick-8",
+      "file": "../parts/ws2812b-stick-8.json",
+      "sha256": "637f40054425718f19b0962d76a87d522eefb98536df43c4112489590d333d71",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 50.8,
+        "d": 10.16,
+        "h": 1.6
+      },
+      "modelled_maxHeight_mm": 3.2,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Outline (50.8 x 10.16 mm), LED pitch (6.35 mm), LED positions, mounting holes (2 mm at 12.7 and 38.1 mm) and the four end pads come from Adafruit's own board file for the NeoPixel Stick (Eagle, 'Adafruit NeoPixel 8 Stick v2.brd', read 2026-11-14), not from a part in hand. Adafruit's product page lists 51.10 x 10.22 x 3.19 mm, 0.3 mm more than the board file, and a stick sold under another name may differ more: measure length, width, LED pitch and the position and order of the end pads before printing a case around it. Board thickness (1.6 mm) and LED height (1.6 mm) are assumed from the 3.19 mm total height. The pads are on the BACK face, at both ends: this file puts the 5V, DIN and GND pads of the input end (the end whose silkscreen reads GND, 4-7VDC, DIN, GND) on the left, as a lead at the foot of the board (z = -1.6). Check which end is the input (the arrows point away from it) and that the order DIN, 5V, GND from the board's top edge matches yours. The shipping LED may be WS2812B or SK6812; same protocol. 20 mA typical and 60 mA peak per pixel are the usual planning values (the stick's file gives the totals for eight).",
+      "source_count": 4
+    },
+    {
+      "id": "ws2812b-strip",
+      "file": "../parts/ws2812b-strip.json",
+      "sha256": "fe772c7eb9aa4aae22d204d151b0603234614779d9377cee2426cbf0e59c6082",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 16.67,
+        "d": 10,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 2.6,
+      "pin_count": 3,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "The drawing is one 16.67 mm pixel (60 LEDs/m) repeated `units` times; the real length is units x 16.67 mm between cut lines. A 30 or 144 LEDs/m strip has another pitch: copy this file into the project's parts/ folder and change repeat.pitch, body.w and the LED x. Measure your strip: width (10 mm), pad centres and spacing at the input end (2.5 mm in from the end, 2.54 mm apart assumed), pad order (5V DIN GND is the usual one but some strips print GND DIN 5V; read the silkscreen and note the arrow direction), LED pitch and height (about 1.6 mm LED plus the strip; an IP65 strip is taller, with an epoxy layer over the pads). The 6 mm light window is a design value: an opening over every LED of the run, 0.5 mm clear of each side. The 60 mA per pixel and 120 mA peak figures are the widely used planning value; the WS2812B datasheet states only the electrical limits (see sources).",
+      "source_count": 2
+    },
+    {
+      "id": "xiao-esp32-c3",
+      "file": "../parts/xiao-esp32-c3.json",
+      "sha256": "c5c4c7cf57de880dd73951835fbf7eed44850fe0f7010e2f7f171da409cbf44f",
+      "declared_confidence": "typical",
+      "body_as_modelled_mm": {
+        "w": 17.8,
+        "d": 21,
+        "h": 1
+      },
+      "modelled_maxHeight_mm": 4.25,
+      "pin_count": 14,
+      "physical_fit_verified": false,
+      "source_accuracy_independently_verified_by_this_audit": false,
+      "geometryEvidence": null,
+      "declared_limitations": "Seeed gives only 21 x 17.8 mm; the dimensioning DXF was not opened. Measure with calipers: PCB length and width, PCB thickness (modelled 1.0), the pad-centre distance between the two rows (modelled 15.2 mm) and from the USB-C edge to the first pad (modelled 4.93), USB-C width and length (modelled 8.94 x 7.3, flush with the edge). The shield can and U.FL connector shapes are placed by estimate, not from a drawing; the BOOT and RESET buttons are not modelled. Pin y-positions assume the Wokwi artwork starts at the USB edge. Pin-header height is excluded from maxHeight (the board ships without headers).",
+      "source_count": 3
+    }
+  ]
+}

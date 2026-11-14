@@ -1,0 +1,14 @@
+{
+  "name": "benchtop",
+  "owner": {
+    "name": "Filip Johansen"
+  },
+  "description": "Benchtop: hardware projects from idea to a buildable package.",
+  "plugins": [
+    {
+      "name": "benchtop",
+      "source": "./",
+      "description": "Hardware projects from idea to a buildable package."
+    }
+  ]
+}

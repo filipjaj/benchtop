@@ -1,0 +1,118 @@
+{
+  "id": "hc-sr04",
+  "name": "HC-SR04 ultrasonic distance sensor",
+  "kind": "sensor",
+  "blurb": "Measures distance from 2 cm to 4 m by timing an ultrasonic ping; runs on 5 V and its echo output is 5 V.",
+  "body": {
+    "w": 45,
+    "d": 20,
+    "h": 1.6
+  },
+  "maxHeight": 15,
+  "shapes": [
+    {
+      "kind": "cyl",
+      "tag": "transducer-tx",
+      "x": 10.5,
+      "y": 10,
+      "z": 0,
+      "r": 8,
+      "h": 13.4
+    },
+    {
+      "kind": "cyl",
+      "tag": "transducer-rx",
+      "x": 34.5,
+      "y": 10,
+      "z": 0,
+      "r": 8,
+      "h": 13.4
+    }
+  ],
+  "pins": [
+    {
+      "name": "VCC",
+      "role": "power-in",
+      "x": 18.69,
+      "y": 18.5,
+      "volts": 5,
+      "minVolts": 4.5,
+      "maxVolts": 5.5,
+      "note": "Needs 5 V. It does not work reliably from 3.3 V."
+    },
+    {
+      "name": "Trig",
+      "role": "io",
+      "x": 21.23,
+      "y": 18.5,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Send a 10 microsecond high pulse to start a measurement. A 3.3 V pulse is normally enough."
+    },
+    {
+      "name": "Echo",
+      "role": "io",
+      "x": 23.77,
+      "y": 18.5,
+      "dir": "out",
+      "volts": 5,
+      "note": "Outputs 5 V. A 3.3 V controller pin (ESP32, RP2040, ESP8266) must go through a voltage divider (for example 1 kohm and 2 kohm) or a level shifter."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 26.31,
+      "y": 18.5
+    }
+  ],
+  "ports": [
+    {
+      "name": "transducer-tx",
+      "faces": "up",
+      "x": 10.5,
+      "y": 10,
+      "w": 16,
+      "h": 16,
+      "shape": "round",
+      "margin": 0.5
+    },
+    {
+      "name": "transducer-rx",
+      "faces": "up",
+      "x": 34.5,
+      "y": 10,
+      "w": 16,
+      "h": 16,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 5,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 15,
+      "peak": 15
+    }
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "HC-SR04 ultrasonic sensor module",
+      "HC-SR04 5V ultrasonic distance sensor",
+      "HCSR04 ranging module"
+    ],
+    "priceUsd": 2
+  },
+  "verify": "Confirmed by the Elecfreaks datasheet: 45 x 20 x 15 mm overall, 5 V, 15 mA, pin order VCC Trig Echo GND, 2.54 mm header. Everything else is unconfirmed and modelled from memory: transducer diameter (16 mm; an independent RCWL-1601 measurement also gives 16 mm cans but that is a different board), transducer centre spacing (modelled 24 mm; the Handson sheet drawing implies about 20 mm and the RCWL-1601 uses 22 mm, but that drawing is schematic and shows a 43 mm board with 40 mm hole spacing that contradicts the 45 mm datasheet, so it was not used), PCB thickness, header position, the four corner mounting holes (present on the Handson drawing, not modelled because no usable position exists). Measure with calipers: board length and width, transducer diameter and centre-to-centre spacing, can height above the PCB (modelled so the top lands at 15 mm), header-to-edge distances, hole positions. Variants: HC-SR04P, HY-SRF05 style and RCWL-1601 modules run on 3.3 V to 5 V with a 3.3 V echo, and the RCWL-1601 has different cans (22 mm spacing); the Handson sheet describes a 3.3 to 5 V version at 2.8 mA working. Check the board marking before wiring; this file is the classic 5 V HC-SR04.",
+  "sources": [
+    "https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf (Elecfreaks datasheet, opened in an earlier pass: 5 V DC, 15 mA, 2 cm to 4 m, 10 us trigger, 45 x 20 x 15 mm, pin order Vcc Trig Echo GND)",
+    "https://handsontec.com/dataspecs/sensor/SR-04-Ultrasonic.pdf (opened: HC-SR04P-style sheet, 3.3 to 5 V, 15 mA, 2.54 mm header, pin order VCC TRIG ECHO GND, schematic drawing 43 x 20 mm with 15 mm height; dimensions contradict the Elecfreaks sheet, used for pin order only)",
+    "https://orionrobots.co.uk/2025/02/12/rcwl-1601-ultrasonic-sensor-dimensions.html (opened: RCWL-1601 cans 16 mm diameter, 22 mm spacing, about 12 mm deep; author says they differ from HC-SR04)",
+    "https://docs.soldered.com/hc-sr04/hardware/ (opened: Soldered Qwiic variant is 45 x 22 mm, a different board)"
+  ],
+  "confidence": "typical"
+}

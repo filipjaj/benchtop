@@ -1,0 +1,116 @@
+{
+  "id": "inmp441-mic",
+  "name": "INMP441 I2S MEMS microphone breakout",
+  "kind": "audio",
+  "blurb": "A tiny digital microphone that sends 24-bit audio to the microcontroller over I2S; no analog circuitry or ADC is needed.",
+  "body": {
+    "w": 14,
+    "d": 14,
+    "h": 1.6
+  },
+  "maxHeight": 4.1,
+  "decals": [
+    {
+      "kind": "circle",
+      "face": "top",
+      "x": 7,
+      "y": 5,
+      "r": 0.8,
+      "fill": "black"
+    }
+  ],
+  "shapes": [],
+  "pins": [
+    {
+      "name": "SCK",
+      "role": "io",
+      "x": 0.65,
+      "y": 12.3,
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "Bit clock from the controller."
+    },
+    {
+      "name": "WS",
+      "role": "io",
+      "x": 3.19,
+      "y": 12.3,
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "Word select (left/right clock) from the controller."
+    },
+    {
+      "name": "SD",
+      "role": "io",
+      "x": 5.73,
+      "y": 12.3,
+      "dir": "out",
+      "volts": 3.3,
+      "maxVolts": 3.6,
+      "note": "Audio data out. It goes high-impedance on the channel the mic does not occupy, so two mics can share it."
+    },
+    {
+      "name": "L/R",
+      "role": "io",
+      "x": 8.27,
+      "y": 12.3,
+      "dir": "in",
+      "maxVolts": 3.6,
+      "note": "Channel select. GND = left, 3.3 V = right. Do not leave it floating."
+    },
+    {
+      "name": "VDD",
+      "role": "power-in",
+      "x": 10.81,
+      "y": 12.3,
+      "volts": 3.3,
+      "minVolts": 1.8,
+      "maxVolts": 3.3,
+      "note": "3.3 V only. Never connect to 5 V."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 13.35,
+      "y": 12.3,
+      "note": "Ground."
+    }
+  ],
+  "ports": [
+    {
+      "name": "sound-hole",
+      "faces": "up",
+      "x": 7,
+      "y": 5,
+      "w": 2.5,
+      "h": 2.5,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 1.4,
+      "peak": 1.6
+    }
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "INMP441 I2S MEMS microphone module",
+      "INMP441 omnidirectional microphone breakout",
+      "INMP441 ESP32 I2S mic"
+    ],
+    "priceUsd": 3
+  },
+  "verify": "Board outline (14 x 14 mm assumed) and pin order vary between makers; the round and square versions differ. Measure board size, header position and pin order as printed, the sound hole position and diameter, and which face the microphone and the hole are on (the part has a bottom port). The sound-hole opening size is a design value. Supply range (1.8 to 3.3 V) and current (about 1.4 mA) come from vendor pages and search results, not the opened datasheet; distributors list 1.62 to 3.63 V and 1.6 mA. A Norwegian seller lists this module as 10 x 10 mm (elkim.no item 23684, read from the local parts catalog), against the 14 x 14 mm in this file: both sizes are sold, so measure the board before printing a case around it. PROJECT COPY: the library header box was removed from shapes because it covers the pad row in the booklet at every quarter turn (guide drawing check). Pads and outline are unchanged from the library file.",
+  "sources": [
+    "https://www.digikey.cn/htmldatasheets/production/1431884/0/0/1/inmp441-datasheet.html (TDK InvenSense datasheet mirror; seen in search results only, not opened). Board dimensions are a typical clone size, not from a drawing."
+  ],
+  "confidence": "typical"
+}

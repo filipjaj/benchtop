@@ -1,0 +1,97 @@
+{
+  "id": "ws2812b-strip",
+  "name": "WS2812B LED strip, 5 V, 60 LEDs/m",
+  "kind": "light",
+  "blurb": "Addressable RGB LED strip, 10 mm wide, 5 V, cut to length. Say how many pixels the build has with \"units\" on the part: the drawings, the case and its lid window get that length (16.67 mm per pixel), and the power checks that many pixels.",
+  "body": {
+    "w": 16.67,
+    "d": 10,
+    "h": 1
+  },
+  "maxHeight": 2.6,
+  "repeat": {
+    "pitch": 16.67,
+    "shapes": [
+      {
+        "kind": "box",
+        "tag": "led",
+        "x": 5.83,
+        "y": 2.5,
+        "z": 0,
+        "w": 5,
+        "d": 5,
+        "h": 1.6
+      }
+    ],
+    "span": "light window"
+  },
+  "pins": [
+    {
+      "name": "5V",
+      "role": "power-in",
+      "x": 2.5,
+      "y": 2.46,
+      "volts": 5,
+      "minVolts": 4.5,
+      "maxVolts": 5.3,
+      "note": "Needs 5 V. Each pixel can draw about 60 mA at full white, so power longer strips from a supply, not the controller's pin. The WS2812B datasheet absolute maximum is 5.3 V."
+    },
+    {
+      "name": "DIN",
+      "role": "io",
+      "x": 2.5,
+      "y": 5,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Data in. The strip wants a high of at least 0.7 x VCC (3.5 V at 5 V); a 3.3 V controller is out of spec and often works only on short strips, so use a level shifter (for example 74AHCT125) and a 300 to 500 ohm resistor in series. Use the pad marked DIN, not DO, at the input end. Needs 3.5 V to read a high when the strip runs on 5 V; a 3.3 V controller usually works with a short wire but is outside the datasheet.",
+      "minHighVolts": 3.5
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 2.5,
+      "y": 7.54,
+      "note": "Connect GND before 5 V when hot-plugging."
+    }
+  ],
+  "ports": [
+    {
+      "name": "light window",
+      "faces": "up",
+      "x": 8.335,
+      "y": 5,
+      "w": 6,
+      "h": 6,
+      "shape": "rect",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 5,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 20,
+      "peak": 60
+    },
+    "perUnit": {
+      "name": "pixel"
+    }
+  },
+  "footprint": {
+    "mount": "wire"
+  },
+  "sourcing": {
+    "search": [
+      "WS2812B LED strip 5V 60 LEDs/m",
+      "WS2812B addressable RGB strip 10mm",
+      "WS2812B 5V strip IP30"
+    ],
+    "priceUsd": 8
+  },
+  "verify": "The drawing is one 16.67 mm pixel (60 LEDs/m) repeated `units` times; the real length is units x 16.67 mm between cut lines. A 30 or 144 LEDs/m strip has another pitch: copy this file into the project's parts/ folder and change repeat.pitch, body.w and the LED x. Measure your strip: width (10 mm), pad centres and spacing at the input end (2.5 mm in from the end, 2.54 mm apart assumed), pad order (5V DIN GND is the usual one but some strips print GND DIN 5V; read the silkscreen and note the arrow direction), LED pitch and height (about 1.6 mm LED plus the strip; an IP65 strip is taller, with an epoxy layer over the pads). The 6 mm light window is a design value: an opening over every LED of the run, 0.5 mm clear of each side. The 60 mA per pixel and 120 mA peak figures are the widely used planning value; the WS2812B datasheet states only the electrical limits (see sources).",
+  "sources": [
+    "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf (opened, WorldSemi: VDD abs max 3.5 to 5.3 V, operating 4.5 to 5.5 V, VIH 0.7 x VDD, 800 kbps, 5050 package)",
+    "Strip width and pad layout: common 10 mm 5 V strip; no drawing opened"
+  ],
+  "confidence": "typical"
+}

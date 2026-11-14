@@ -1,0 +1,301 @@
+{
+  "id": "yd-esp32-s3-mechanical-draft",
+  "name": "VCC-GND YD-ESP32-S3 mechanical reference (dual USB-C; revision unresolved)",
+  "kind": "board",
+  "blurb": "Draft from the maker's CAD pads for VCC-GND YD-ESP32-S3 mechanical reference (dual USB-C; revision unresolved): pad positions only, everything else still to fill in.",
+  "body": {
+    "w": 27.94,
+    "d": 57.15,
+    "h": null
+  },
+  "maxHeight": null,
+  "pins": [
+    {
+      "name": "J1.1",
+      "role": "io",
+      "x": 26.67,
+      "y": 55.245
+    },
+    {
+      "name": "J1.2",
+      "role": "io",
+      "x": 26.67,
+      "y": 52.705
+    },
+    {
+      "name": "J1.3",
+      "role": "io",
+      "x": 26.67,
+      "y": 50.165
+    },
+    {
+      "name": "J1.4",
+      "role": "io",
+      "x": 26.67,
+      "y": 47.625
+    },
+    {
+      "name": "J1.5",
+      "role": "io",
+      "x": 26.67,
+      "y": 45.085
+    },
+    {
+      "name": "J1.6",
+      "role": "io",
+      "x": 26.67,
+      "y": 42.545
+    },
+    {
+      "name": "J1.7",
+      "role": "io",
+      "x": 26.67,
+      "y": 40.005
+    },
+    {
+      "name": "J1.8",
+      "role": "io",
+      "x": 26.67,
+      "y": 37.465
+    },
+    {
+      "name": "J1.9",
+      "role": "io",
+      "x": 26.67,
+      "y": 34.925
+    },
+    {
+      "name": "J1.10",
+      "role": "io",
+      "x": 26.67,
+      "y": 32.385
+    },
+    {
+      "name": "J1.11",
+      "role": "io",
+      "x": 26.67,
+      "y": 29.845
+    },
+    {
+      "name": "J1.12",
+      "role": "io",
+      "x": 26.67,
+      "y": 27.305
+    },
+    {
+      "name": "J1.13",
+      "role": "io",
+      "x": 26.67,
+      "y": 24.765
+    },
+    {
+      "name": "J1.14",
+      "role": "io",
+      "x": 26.67,
+      "y": 22.225
+    },
+    {
+      "name": "J1.15",
+      "role": "io",
+      "x": 26.67,
+      "y": 19.685
+    },
+    {
+      "name": "J1.16",
+      "role": "io",
+      "x": 26.67,
+      "y": 17.145
+    },
+    {
+      "name": "J1.17",
+      "role": "io",
+      "x": 26.67,
+      "y": 14.605
+    },
+    {
+      "name": "J1.18",
+      "role": "io",
+      "x": 26.67,
+      "y": 12.065
+    },
+    {
+      "name": "J1.19",
+      "role": "io",
+      "x": 26.67,
+      "y": 9.525
+    },
+    {
+      "name": "J1.20",
+      "role": "io",
+      "x": 26.67,
+      "y": 6.985
+    },
+    {
+      "name": "J1.21",
+      "role": "io",
+      "x": 26.67,
+      "y": 4.445
+    },
+    {
+      "name": "J1.22",
+      "role": "io",
+      "x": 26.67,
+      "y": 1.905
+    },
+    {
+      "name": "J2.1",
+      "role": "io",
+      "x": 1.27,
+      "y": 55.245
+    },
+    {
+      "name": "J2.2",
+      "role": "io",
+      "x": 1.27,
+      "y": 52.705
+    },
+    {
+      "name": "J2.3",
+      "role": "io",
+      "x": 1.27,
+      "y": 50.165
+    },
+    {
+      "name": "J2.4",
+      "role": "io",
+      "x": 1.27,
+      "y": 47.625
+    },
+    {
+      "name": "J2.5",
+      "role": "io",
+      "x": 1.27,
+      "y": 45.085
+    },
+    {
+      "name": "J2.6",
+      "role": "io",
+      "x": 1.27,
+      "y": 42.545
+    },
+    {
+      "name": "J2.7",
+      "role": "io",
+      "x": 1.27,
+      "y": 40.005
+    },
+    {
+      "name": "J2.8",
+      "role": "io",
+      "x": 1.27,
+      "y": 37.465
+    },
+    {
+      "name": "J2.9",
+      "role": "io",
+      "x": 1.27,
+      "y": 34.925
+    },
+    {
+      "name": "J2.10",
+      "role": "io",
+      "x": 1.27,
+      "y": 32.385
+    },
+    {
+      "name": "J2.11",
+      "role": "io",
+      "x": 1.27,
+      "y": 29.845
+    },
+    {
+      "name": "J2.12",
+      "role": "io",
+      "x": 1.27,
+      "y": 27.305
+    },
+    {
+      "name": "J2.13",
+      "role": "io",
+      "x": 1.27,
+      "y": 24.765
+    },
+    {
+      "name": "J2.14",
+      "role": "io",
+      "x": 1.27,
+      "y": 22.225
+    },
+    {
+      "name": "J2.15",
+      "role": "io",
+      "x": 1.27,
+      "y": 19.685
+    },
+    {
+      "name": "J2.16",
+      "role": "io",
+      "x": 1.27,
+      "y": 17.145
+    },
+    {
+      "name": "J2.17",
+      "role": "io",
+      "x": 1.27,
+      "y": 14.605
+    },
+    {
+      "name": "J2.18",
+      "role": "io",
+      "x": 1.27,
+      "y": 12.065
+    },
+    {
+      "name": "J2.19",
+      "role": "io",
+      "x": 1.27,
+      "y": 9.525
+    },
+    {
+      "name": "J2.20",
+      "role": "io",
+      "x": 1.27,
+      "y": 6.985
+    },
+    {
+      "name": "J2.21",
+      "role": "io",
+      "x": 1.27,
+      "y": 4.445
+    },
+    {
+      "name": "J2.22",
+      "role": "io",
+      "x": 1.27,
+      "y": 1.905
+    }
+  ],
+  "electrical": {},
+  "sourcing": {
+    "search": [
+      "VCC-GND YD-ESP32-S3 mechanical reference (dual USB-C; revision unresolved)"
+    ],
+    "priceUsd": 0
+  },
+  "verify": "Pad positions and board outline are parsed from the maker's CAD file (https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-size-pcb-ad.PcbDoc, revision Native save date 2022-03-17; hardware revision unstated, source_sha256 6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35; catalog validation status: native_altium_pad_anchors_checked_not_physically_verified), not measured on a bought board. Board size is the bounds of the outline geometry in the same file (geometry 118, centre lines, explicit_native_board_polygon; the catalog does not guarantee it is the outer edge). Frame: CAD frame X right, Y up converted to origin at the top-left of the outline dataset seen from above, x right, y down; rotation 180 degrees clockwise. Check that the USB connector is at y = 0 and the pins match the silkscreen before relying on it. Only 44 of 121 pads were imported (J1, J2). Heights, shapes, ports and electrical values are not in the catalog. Pin roles are all \"io\", and voltages, supply limits, GPIO numbers and capabilities are NOT set: a pad number is not a GPIO number. Fill roles, voltages, gpio and caps in by hand from the pinout, and set body.h, maxHeight, electrical.logicVolts and sourcing.priceUsd (placeholders: body.h = 1.6 (PCB thickness is not in the dataset; placeholder); maxHeight = 1.6 (heights are not in the catalog; placeholder equal to body.h)).",
+  "sources": [
+    "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-size-pcb-ad.PcbDoc (maker catalog geometry 117, revision Native save date 2022-03-17; hardware revision unstated; source_sha256 6321af6036af76eb165f7acfc644aaf71ab4db7ee75831715062d98ad3066c35)"
+  ],
+  "confidence": "typical",
+  "geometryEvidence": {
+    "status": "unresolved",
+    "reason": "Manufacturer native PCB/header XY only; exact sold revision, electrical mapping and assembled envelope remain unresolved. Unknown heights are null; this draft deliberately fails PartDef structural checks.",
+    "unknown": [
+      "PCB thickness",
+      "assembled maxHeight",
+      "USB mouth centres and cutouts",
+      "electrical pin mapping for this native revision",
+      "exact seller identity"
+    ]
+  }
+}

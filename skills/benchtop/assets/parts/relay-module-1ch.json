@@ -1,0 +1,45 @@
+{
+  "id": "relay-module-1ch",
+  "name": "1-channel 5 V relay module (optocoupler)",
+  "kind": "actuator",
+  "blurb": "A 5 V relay board that lets a microcontroller switch a separate load. This library covers the low-voltage side only (VCC, GND, IN and the COM/NO/NC contacts for low-voltage loads); wiring mains voltage is out of scope for benchtop and must not be built from these guides.",
+  "body": { "w": 50.5, "d": 26, "h": 1.6 },
+  "maxHeight": 16.9,
+  "shapes": [
+    { "kind": "box", "x": 17, "y": 5.2, "z": 0, "w": 19, "d": 15.5, "h": 15.3, "tag": "relay" },
+    { "kind": "box", "x": 39.5, "y": 5.4, "z": 0, "w": 10.5, "d": 15.2, "h": 10, "tag": "screw-terminal" },
+    { "kind": "box", "x": 0.7, "y": 9.19, "z": 0, "w": 2.54, "d": 7.62, "h": 2.5, "tag": "header" }
+  ],
+  "decals": [
+    { "kind": "text", "face": "top", "x": 6, "y": 5, "text": "RELAY", "size": 2.5 }
+  ],
+  "pins": [
+    { "name": "VCC", "role": "power-in", "x": 2, "y": 10.46, "volts": 5, "minVolts": 4.5, "maxVolts": 5.5, "note": "5 V only. It powers the coil and the optocoupler LED; a 3.3 V pin will not pull the relay in." },
+    { "name": "GND", "role": "gnd", "x": 2, "y": 13, "note": "Ground. Share it with the microcontroller." },
+    { "name": "IN", "role": "io", "x": 2, "y": 15.54, "dir": "in", "maxVolts": 5, "idle": "high", "note": "Most boards are active-low: the relay clicks on when IN is pulled LOW. On a 3.3 V controller with VCC at 5 V, a HIGH output may not switch it fully off; use the board's jumper or a 3.3 V-trigger module if it chatters." },
+    { "name": "NO", "role": "passive", "x": 47.5, "y": 7.92, "note": "Normally open: connected to COM only while the relay is on. Low-voltage loads only." },
+    { "name": "COM", "role": "passive", "x": 47.5, "y": 13, "note": "Common contact. The load's supply wire goes here. Low-voltage loads only; do not connect mains." },
+    { "name": "NC", "role": "passive", "x": 47.5, "y": 18.08, "note": "Normally closed: connected to COM while the relay is off." }
+  ],
+  "holes": [
+    { "x": 3, "y": 3, "dia": 3.1 },
+    { "x": 47.5, "y": 3, "dia": 3.1 },
+    { "x": 3, "y": 23, "dia": 3.1 },
+    { "x": 47.5, "y": 23, "dia": 3.1 }
+  ],
+  "electrical": {
+    "logicVolts": 5,
+    "fiveVoltTolerant": true,
+    "currentMa": { "typical": 75, "peak": 100 }
+  },
+  "footprint": { "mount": "header", "pitch": 2.54 },
+  "sourcing": {
+    "search": ["1 channel relay module 5V optocoupler", "SRD-05VDC-SL-C relay module 1 channel", "5V relay module low level trigger"],
+    "priceUsd": 3
+  },
+  "verify": "Measure with calipers: PCB length and width, relay body size and height, screw terminal pitch and height, the exact position and spacing of the mounting holes, and the silkscreen order on both connectors (NO/COM/NC order and VCC/GND/IN order vary between batches). Check whether IN is active-low or active-high and whether a trigger-level jumper is present. Mains wiring is out of scope: this part definition is for low-voltage loads only.",
+  "sources": [
+    "No manufacturer drawing opened. Dimensions are the commonly reported clone size of a Songle SRD-05VDC-SL-C module (relay body about 19.0 x 15.5 x 15.3 mm); positions are estimates."
+  ],
+  "confidence": "typical"
+}

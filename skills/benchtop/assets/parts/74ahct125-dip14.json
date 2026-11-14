@@ -1,0 +1,237 @@
+{
+  "id": "74ahct125-dip14",
+  "name": "74AHCT125 quad level shifter, DIP-14 (3.3 V to 5 V)",
+  "kind": "connector",
+  "blurb": "A 14-pin chip that lifts a 3.3 V data signal to a full 5 V one, so a 5 V LED strip reads it reliably. One of its four channels is used; the other three are tied to ground. It is powered from 5 V.",
+  "body": {
+    "w": 7.62,
+    "d": 19.3,
+    "h": 5.08
+  },
+  "maxHeight": 5.08,
+  "decals": [
+    {
+      "kind": "circle",
+      "face": "top",
+      "x": 1.6,
+      "y": 1.2,
+      "r": 0.5,
+      "fill": "black"
+    },
+    {
+      "kind": "text",
+      "face": "top",
+      "x": 2.2,
+      "y": 6,
+      "text": "74AHCT125",
+      "size": 1.5,
+      "along": "y"
+    }
+  ],
+  "pins": [
+    {
+      "name": "1OE",
+      "aliases": ["1"],
+      "role": "io",
+      "x": 0,
+      "y": 2.03,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 1. Output enable of channel 1, active low: tie to GND to switch the channel on. Left floating the output is switched off."
+    },
+    {
+      "name": "1A",
+      "aliases": ["2"],
+      "role": "io",
+      "x": 0,
+      "y": 4.57,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 2. Input of channel 1: the 3.3 V signal from the controller goes here. Reads a high from 2 V, so 3.3 V is fine."
+    },
+    {
+      "name": "1Y",
+      "aliases": ["3"],
+      "role": "io",
+      "x": 0,
+      "y": 7.11,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "out",
+      "volts": 5,
+      "maxVolts": 5.5,
+      "note": "Pin 3. Output of channel 1: a 5 V signal (it swings to the chip's own supply). Add 300 to 500 ohm in series to the strip's data pin."
+    },
+    {
+      "name": "2OE",
+      "aliases": ["4"],
+      "role": "io",
+      "x": 0,
+      "y": 9.65,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 4. Output enable of channel 2, active low. Unused channel: tie to GND."
+    },
+    {
+      "name": "2A",
+      "aliases": ["5"],
+      "role": "io",
+      "x": 0,
+      "y": 12.19,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 5. Input of channel 2. Unused channel: tie to GND, a floating input can oscillate and draw current."
+    },
+    {
+      "name": "2Y",
+      "aliases": ["6"],
+      "role": "io",
+      "x": 0,
+      "y": 14.73,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "out",
+      "volts": 5,
+      "maxVolts": 5.5,
+      "note": "Pin 6. Output of channel 2. Leave unconnected when unused."
+    },
+    {
+      "name": "GND",
+      "aliases": ["7"],
+      "role": "gnd",
+      "x": 0,
+      "y": 17.27,
+      "z": -3,
+      "lead": 3.18,
+      "note": "Pin 7. Ground. Must share ground with the controller and the strip."
+    },
+    {
+      "name": "3Y",
+      "aliases": ["8"],
+      "role": "io",
+      "x": 7.62,
+      "y": 17.27,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "out",
+      "volts": 5,
+      "maxVolts": 5.5,
+      "note": "Pin 8. Output of channel 3. Leave unconnected when unused."
+    },
+    {
+      "name": "3A",
+      "aliases": ["9"],
+      "role": "io",
+      "x": 7.62,
+      "y": 14.73,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 9. Input of channel 3. Unused channel: tie to GND."
+    },
+    {
+      "name": "3OE",
+      "aliases": ["10"],
+      "role": "io",
+      "x": 7.62,
+      "y": 12.19,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 10. Output enable of channel 3, active low. Unused channel: tie to GND."
+    },
+    {
+      "name": "4Y",
+      "aliases": ["11"],
+      "role": "io",
+      "x": 7.62,
+      "y": 9.65,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "out",
+      "volts": 5,
+      "maxVolts": 5.5,
+      "note": "Pin 11. Output of channel 4. Leave unconnected when unused."
+    },
+    {
+      "name": "4A",
+      "aliases": ["12"],
+      "role": "io",
+      "x": 7.62,
+      "y": 7.11,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 12. Input of channel 4. Unused channel: tie to GND."
+    },
+    {
+      "name": "4OE",
+      "aliases": ["13"],
+      "role": "io",
+      "x": 7.62,
+      "y": 4.57,
+      "z": -3,
+      "lead": 3.18,
+      "dir": "in",
+      "maxVolts": 5.5,
+      "note": "Pin 13. Output enable of channel 4, active low. Unused channel: tie to GND."
+    },
+    {
+      "name": "VCC",
+      "aliases": ["14"],
+      "role": "power-in",
+      "x": 7.62,
+      "y": 2.03,
+      "z": -3,
+      "lead": 3.18,
+      "volts": 5,
+      "minVolts": 4.5,
+      "maxVolts": 5.5,
+      "note": "Pin 14. Supply, 4.5 to 5.5 V: wire it to the same 5 V as the LED strip. At 3.3 V the chip is out of spec and its output would be no better than the controller's."
+    }
+  ],
+  "electrical": {
+    "logicVolts": 5,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 1.4,
+      "peak": 1.5
+    }
+  },
+  "footprint": {
+    "mount": "tht",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "74AHCT125N DIP-14",
+      "SN74AHCT125N",
+      "74AHCT125 level shifter DIP14",
+      "74AHCT125 logic level converter 3.3V to 5V"
+    ],
+    "priceUsd": 1,
+    "links": [
+      {
+        "store": "HusHageHobby (Norway, 10 NOK, listing read 2026-11-14)",
+        "url": "https://butikk.hushagehobby.no/produkt/level-shifter-74ahct125n-14-dip/"
+      }
+    ]
+  },
+  "verify": "Pinout, the 4.5 to 5.5 V supply range, the 2 V input high level, 5.5 V input maximum and active-low output enables are from the TI datasheet (SCLS264R); pin pitch (2.54), row spacing between lead centres (7.62) and package length (18.92 to 19.69 mm, 19.3 modelled) are from its N (PDIP-14) drawing, as is the 5.08 mm maximum body height above the seating plane. The datasheet text that gave the plastic body width did not come through, so the body is drawn as wide as the lead rows (7.62); the real plastic is narrower (about 6.35 mm, from memory of the MS-001 outline, not read). The lead position z -3 and body height are drawing-only values, not from the drawing. Buy the exact family: the T matters. 74AHCT125 reads 2 V and up as a high on a 5 V supply (datasheet); a plain 74AHC125 or 74HC125 needs about 3.5 V at 5 V and a 74LVC125 runs from 3.3 V (both from general knowledge, not opened), so a listing that drops the T is the wrong chip. This file models the bare chip (a breadboard-style DIP-14 with 7.62 mm row spacing); a breakout board carrying the same chip has its own, wider outline: measure it and copy this file into the project's parts/ folder with that size and pad positions. The part is modelled with the output at 5 V; that holds only while VCC is wired to 5 V. Current is the datasheet's extra supply draw for an input held at 3.4 V (1.35 mA typical, 1.5 mA maximum), excluding the load, which is microamps for one LED data line.",
+  "sources": [
+    "https://www.ti.com/lit/ds/symlink/sn74ahct125.pdf (opened and read: pin table, recommended operating conditions, ICC and delta ICC, N package drawing)",
+    "https://butikk.hushagehobby.no/produkt/level-shifter-74ahct125n-14-dip/ (opened and read: a Norwegian shop sells the 74AHCT125N in DIP-14 for 10 NOK; the page gives no dimensions)"
+  ],
+  "confidence": "typical"
+}

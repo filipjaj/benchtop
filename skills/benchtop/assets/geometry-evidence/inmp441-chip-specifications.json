@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-11-14T09:17:05.534087+00:00",
+  "manufacturer": "TDK InvenSense",
+  "model": "INMP441",
+  "document_number": "DS-INMP441-00",
+  "document_revision": "1.1",
+  "document_date": "2014-05-21",
+  "source": {
+    "url": "https://product.tdk.cn/system/files/dam/doc/product/sw_piezo/mic/mems-mic/data_sheet/inmp441.pdf",
+    "retrieved_at": "2026-11-14T07:59:23.498527+00:00",
+    "local_path": "sources/ddcc8ac55f9ff15e93760b5d01814bccbef0cebbb3857e0fb3954b2b4973d150.pdf",
+    "sha256": "ddcc8ac55f9ff15e93760b5d01814bccbef0cebbb3857e0fb3954b2b4973d150",
+    "mime": "application/pdf",
+    "catalog_reference_path": "references/dd/ddcc8ac55f9ff15e93760b5d01814bccbef0cebbb3857e0fb3954b2b4973d150.pdf"
+  },
+  "scope": "bare_microphone_chip",
+  "applicability": "Applicable to genuine INMP441 silicon; not independent confirmation of chip identity or electrical additions on a seller module.",
+  "transcription_method": "Retained PDF text plus visual verification of complete rendered pages 4,5,6,8,17,19.",
+  "facts": [
+    {
+      "key": "supply_voltage_electrical_characteristics",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": 1.62,
+      "typical": null,
+      "maximum": 3.63,
+      "unit": "V",
+      "conditions": "Table header: TA −40 to85°C, VDD1.8–3.3V, CLK2.4MHz, CLOAD30pF unless noted.",
+      "evidence_text": "Supply Voltage (VDD) | MIN 1.62 | MAX 3.63 | V"
+    },
+    {
+      "key": "nominal_supply_from_pin_description",
+      "page": 8,
+      "table": "Table 6",
+      "minimum": 1.8,
+      "typical": null,
+      "maximum": 3.3,
+      "unit": "V",
+      "conditions": "Bare chip pin7 VDD",
+      "evidence_text": "Power, 1.8 V to 3.3 V. This pin should be decoupled to Pin 6 with a 0.1 μF capacitor."
+    },
+    {
+      "key": "supply_current_normal",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": null,
+      "typical": 1.4,
+      "maximum": 1.6,
+      "unit": "mA",
+      "conditions": "VDD = 1.8 V; normal mode",
+      "evidence_text": "VDD = 1.8 V | Normal Mode | TYP 1.4 | MAX 1.6 | mA"
+    },
+    {
+      "key": "supply_current_standby",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": null,
+      "typical": null,
+      "maximum": 0.8,
+      "unit": "mA",
+      "conditions": "VDD = 1.8 V; standby",
+      "evidence_text": "VDD = 1.8 V | Standby | MAX 0.8 | mA"
+    },
+    {
+      "key": "supply_current_power_down",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": null,
+      "typical": null,
+      "maximum": 2,
+      "unit": "uA",
+      "conditions": "VDD = 1.8 V; power down",
+      "evidence_text": "VDD = 1.8 V | Power Down | MAX 2 | µA"
+    },
+    {
+      "key": "supply_current_normal",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": null,
+      "typical": 2.2,
+      "maximum": 2.5,
+      "unit": "mA",
+      "conditions": "VDD = 3.3 V; normal mode",
+      "evidence_text": "VDD = 3.3 V | Normal Mode | TYP 2.2 | MAX 2.5 | mA"
+    },
+    {
+      "key": "supply_current_standby",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": null,
+      "typical": null,
+      "maximum": 0.8,
+      "unit": "mA",
+      "conditions": "VDD = 3.3 V; standby",
+      "evidence_text": "VDD = 3.3 V | Standby | MAX 0.8 | mA"
+    },
+    {
+      "key": "supply_current_power_down",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": null,
+      "typical": null,
+      "maximum": 4.5,
+      "unit": "uA",
+      "conditions": "VDD = 3.3 V; power down",
+      "evidence_text": "VDD = 3.3 V | Power Down | MAX 4.5 | µA"
+    },
+    {
+      "key": "supply_voltage_absolute_maximum",
+      "page": 6,
+      "table": "Table 4",
+      "minimum": -0.3,
+      "typical": null,
+      "maximum": 3.63,
+      "unit": "V",
+      "conditions": "Stress limits; functional operation not implied",
+      "evidence_text": "Supply Voltage (VDD) −0.3 V to +3.63 V",
+      "rating_type": "absolute_maximum"
+    },
+    {
+      "key": "digital_input_voltage_absolute_maximum",
+      "page": 6,
+      "table": "Table 4",
+      "minimum": -0.3,
+      "typical": null,
+      "maximum": null,
+      "unit": "V",
+      "conditions": "Stress limits; functional operation not implied",
+      "evidence_text": "Digital Pin Input Voltage −0.3 V to VDD + 0.3 V or 3.63 V, whichever is less",
+      "maximum_expression": "min(VDD + 0.3 V, 3.63 V)",
+      "rating_type": "absolute_maximum"
+    },
+    {
+      "key": "input_high_voltage",
+      "page": 5,
+      "table": "Table 2",
+      "minimum": null,
+      "typical": null,
+      "maximum": null,
+      "unit": "V",
+      "conditions": "L/R, WS, SCK; characterization limits, not production tested",
+      "evidence_text": "Input Voltage High (VIH) | L/R, WS, SCK | MIN 0.7 × VDD | MAX VDD",
+      "minimum_expression": "0.7 * VDD",
+      "maximum_expression": "VDD"
+    },
+    {
+      "key": "input_low_voltage",
+      "page": 5,
+      "table": "Table 2",
+      "minimum": 0,
+      "typical": null,
+      "maximum": null,
+      "unit": "V",
+      "conditions": "L/R, WS, SCK; characterization limits, not production tested",
+      "evidence_text": "Input Voltage Low (VIL) | L/R, WS, SCK | MIN 0 | MAX 0.25 × VDD",
+      "maximum_expression": "0.25 * VDD"
+    },
+    {
+      "key": "sck_frequency",
+      "page": 5,
+      "table": "Table 3",
+      "minimum": 0.5,
+      "typical": null,
+      "maximum": 3.2,
+      "unit": "MHz",
+      "conditions": null,
+      "evidence_text": "fSCK | SCK frequency | MIN 0.5 | MAX 3.2 | MHz"
+    },
+    {
+      "key": "ws_frequency",
+      "page": 5,
+      "table": "Table 3",
+      "minimum": 7.8,
+      "typical": null,
+      "maximum": 50,
+      "unit": "kHz",
+      "conditions": null,
+      "evidence_text": "fWS | WS frequency | MIN 7.8 | MAX 50 | kHz"
+    },
+    {
+      "key": "sensitivity",
+      "page": 4,
+      "table": "Table 1",
+      "minimum": -29,
+      "typical": -26,
+      "maximum": -23,
+      "unit": "dBFS",
+      "conditions": "1kHz,94dB SPL",
+      "evidence_text": "Sensitivity | 1 kHz, 94 dB SPL | MIN −29 | TYP −26 | MAX −23 | dBFS"
+    }
+  ],
+  "acoustic_port": {
+    "type": "bottom_port",
+    "source_pages": [
+      1,
+      17,
+      18,
+      19
+    ],
+    "chip_port_nominal_diameter_mm": 0.25,
+    "pcb_hole_recommendation_mm": [
+      0.5,
+      1.0
+    ],
+    "scope": "Bare chip port and recommended PCB design only; not a measured or manufacturer-declared hole on any listed seller module.",
+    "module_sound_hole_xy_mm": null,
+    "module_sound_hole_diameter_mm": null,
+    "module_orientation": null
+  },
+  "package": {
+    "terminal_count": 9,
+    "source_page": 19,
+    "figure": "Figure 16",
+    "scope": "bare_chip",
+    "note": "Package drawing and PCB land pattern are not six-terminal breakout geometry. No package positions transferred to module headers."
+  },
+  "quality_notes": [
+    "Nominal VDD1.8–3.3V is directly stated in Table6. Table1 supplies separate min/max1.62–3.63V. Absolute maximum ratings are recorded separately.",
+    "Current needs mode and supply-voltage conditions. A single1.4mA figure is not the3.3V normal-mode specification.",
+    "No module sound-hole x/y, PCB thickness, header pitch or maximum assembled height can be recovered from this chip datasheet."
+  ]
+}

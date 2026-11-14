@@ -1,0 +1,51 @@
+{
+  "id": "led-5mm",
+  "name": "5 mm LED (through-hole)",
+  "kind": "light",
+  "blurb": "Plain 5 mm indicator light; always needs a series resistor and only works one way round.",
+  "body": { "w": 5.8, "d": 5.8, "h": 1 },
+  "maxHeight": 8.6,
+  "shapes": [
+    { "kind": "cyl", "tag": "led-lens", "x": 2.9, "y": 2.9, "z": 0, "r": 2.5, "h": 7.6 }
+  ],
+  "pins": [
+    {
+      "name": "A",
+      "aliases": ["anode", "+"],
+      "role": "passive",
+      "x": 4.17,
+      "y": 2.9,
+      "z": -1,
+      "lead": 17,
+      "note": "Anode: the longer leg, on the round side of the base. Goes toward the positive side, through a resistor."
+    },
+    {
+      "name": "K",
+      "aliases": ["cathode", "-"],
+      "role": "passive",
+      "x": 1.63,
+      "y": 2.9,
+      "z": -1,
+      "lead": 17,
+      "note": "Cathode: the shorter leg, next to the flat edge on the base. Goes toward GND."
+    }
+  ],
+  "ports": [
+    { "name": "lens", "faces": "up", "x": 2.9, "y": 2.9, "w": 5, "h": 5, "shape": "round", "margin": 0.3 }
+  ],
+  "electrical": {
+    "currentMa": { "typical": 10, "peak": 20 },
+    "needsSeriesResistor": true,
+    "bringUp": "pulse"
+  },
+  "footprint": { "mount": "tht", "pitch": 2.54, "ref": "LED_THT:LED_D5.0mm" },
+  "sourcing": {
+    "search": ["5mm LED assorted colors diffused", "5mm LED red through hole 20mA", "T-1 3/4 LED 5mm"],
+    "priceUsd": 0.1
+  },
+  "verify": "Standard T-1 3/4 outline: 5 mm lens, 5.8 mm flange, about 8.6 mm total height, 2.54 mm lead pitch. Not read from a manufacturer drawing. Measure your LEDs: lens height varies (flat-top and oval types are shorter). Forward voltage and the 20 mA ceiling depend on colour (about 2 V red/yellow/green, 3 V blue/white); check the seller's listing before choosing the resistor. Drawing-only fields on the pins: z -1 puts each leg at the underside of the 1 mm flange; lead 17 mm is a typical trimmed leg length, not read from a drawing.",
+  "sources": [
+    "Standard 5 mm (T-1 3/4) LED package dimensions; no manufacturer drawing opened"
+  ],
+  "confidence": "typical"
+}

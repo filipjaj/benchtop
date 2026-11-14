@@ -1,0 +1,707 @@
+{
+  "id": "pi-pico-w",
+  "name": "Raspberry Pi Pico W",
+  "kind": "board",
+  "blurb": "RP2040 dual-core microcontroller board with Wi-Fi and Bluetooth, 26 GPIO, micro-USB and castellated 0.1 inch pads.",
+  "body": {
+    "w": 21,
+    "d": 51,
+    "h": 1
+  },
+  "maxHeight": 3.85,
+  "shapes": [
+    {
+      "kind": "box",
+      "x": 6.5,
+      "y": -1.2,
+      "w": 8,
+      "d": 5.5,
+      "h": 2.8,
+      "tag": "usb"
+    },
+    {
+      "kind": "box",
+      "x": 4.9,
+      "y": 10.4,
+      "w": 4.2,
+      "d": 3.6,
+      "h": 1.7,
+      "tag": "button"
+    },
+    {
+      "kind": "box",
+      "x": 7.1,
+      "y": 20.7,
+      "w": 7,
+      "d": 7,
+      "h": 0.9,
+      "tag": "chip"
+    },
+    {
+      "kind": "box",
+      "x": 4.9,
+      "y": 32.9,
+      "w": 11.3,
+      "d": 9.4,
+      "h": 1.3,
+      "tag": "module"
+    },
+    {
+      "kind": "box",
+      "x": 3.9000000000000004,
+      "y": 4.6,
+      "w": 1.6,
+      "d": 0.8,
+      "h": 0.6,
+      "tag": "led"
+    }
+  ],
+  "pins": [
+    {
+      "name": "GP0",
+      "aliases": [
+        "GPIO0"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 1.3,
+      "volts": 3.3,
+      "gpio": 0,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP1",
+      "aliases": [
+        "GPIO1"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 3.84,
+      "volts": 3.3,
+      "gpio": 1,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GND.1",
+      "role": "gnd",
+      "x": 1.61,
+      "y": 6.38,
+      "aliases": [
+        "GND"
+      ]
+    },
+    {
+      "name": "GP2",
+      "aliases": [
+        "GPIO2"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 8.92,
+      "volts": 3.3,
+      "gpio": 2,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP3",
+      "aliases": [
+        "GPIO3"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 11.46,
+      "volts": 3.3,
+      "gpio": 3,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP4",
+      "aliases": [
+        "GPIO4",
+        "SDA"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 14,
+      "volts": 3.3,
+      "gpio": 4,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SDA in the Arduino-Pico core and most examples."
+    },
+    {
+      "name": "GP5",
+      "aliases": [
+        "GPIO5",
+        "SCL"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 16.54,
+      "volts": 3.3,
+      "gpio": 5,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SCL in the Arduino-Pico core and most examples."
+    },
+    {
+      "name": "GND.2",
+      "role": "gnd",
+      "x": 1.61,
+      "y": 19.08
+    },
+    {
+      "name": "GP6",
+      "aliases": [
+        "GPIO6"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 21.62,
+      "volts": 3.3,
+      "gpio": 6,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP7",
+      "aliases": [
+        "GPIO7"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 24.16,
+      "volts": 3.3,
+      "gpio": 7,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP8",
+      "aliases": [
+        "GPIO8"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 26.7,
+      "volts": 3.3,
+      "gpio": 8,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP9",
+      "aliases": [
+        "GPIO9"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 29.24,
+      "volts": 3.3,
+      "gpio": 9,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GND.3",
+      "role": "gnd",
+      "x": 1.61,
+      "y": 31.78
+    },
+    {
+      "name": "GP10",
+      "aliases": [
+        "GPIO10"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 34.32,
+      "volts": 3.3,
+      "gpio": 10,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP11",
+      "aliases": [
+        "GPIO11"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 36.86,
+      "volts": 3.3,
+      "gpio": 11,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP12",
+      "aliases": [
+        "GPIO12"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 39.4,
+      "volts": 3.3,
+      "gpio": 12,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP13",
+      "aliases": [
+        "GPIO13"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 41.94,
+      "volts": 3.3,
+      "gpio": 13,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GND.4",
+      "role": "gnd",
+      "x": 1.61,
+      "y": 44.48
+    },
+    {
+      "name": "GP14",
+      "aliases": [
+        "GPIO14"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 47.02,
+      "volts": 3.3,
+      "gpio": 14,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP15",
+      "aliases": [
+        "GPIO15"
+      ],
+      "role": "io",
+      "x": 1.61,
+      "y": 49.56,
+      "volts": 3.3,
+      "gpio": 15,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "VBUS",
+      "role": "power-out",
+      "x": 19.39,
+      "y": 1.3,
+      "volts": 5,
+      "supplyMa": 400,
+      "note": "5 V taken straight from the USB port; empty when the board runs from a battery. Do not feed power in here."
+    },
+    {
+      "name": "VSYS",
+      "role": "power-out",
+      "x": 19.39,
+      "y": 3.84,
+      "volts": 5,
+      "supplyMa": 400,
+      "backfeed": {
+        "minVolts": 1.8,
+        "maxVolts": 5.5
+      },
+      "note": "Main system supply, a little below 5 V when USB is plugged in. Feeds the onboard regulator, so a battery pack or 5 V supply of 1.8 to 5.5 V goes here."
+    },
+    {
+      "name": "GND.5",
+      "role": "gnd",
+      "x": 19.39,
+      "y": 6.38
+    },
+    {
+      "name": "3V3_EN",
+      "role": "passive",
+      "x": 19.39,
+      "y": 8.92,
+      "dir": "in",
+      "note": "Pull to GND to switch the 3.3 V regulator, and so the whole board, off. Leave unconnected for normal use."
+    },
+    {
+      "name": "3V3",
+      "role": "power-out",
+      "x": 19.39,
+      "y": 11.46,
+      "volts": 3.3,
+      "supplyMa": 300,
+      "note": "3.3 V output of the onboard regulator, shared with the chip and the Wi-Fi radio."
+    },
+    {
+      "name": "ADC_VREF",
+      "role": "passive",
+      "x": 19.39,
+      "y": 14,
+      "note": "Reference voltage for the analogue inputs. Leave unconnected unless you need a precise reference."
+    },
+    {
+      "name": "GP28",
+      "aliases": [
+        "GPIO28"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 16.54,
+      "volts": 3.3,
+      "gpio": 28,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC2 analogue input, 12-bit, 0 to 3.3 V."
+    },
+    {
+      "name": "GND.6",
+      "role": "gnd",
+      "x": 19.39,
+      "y": 19.08
+    },
+    {
+      "name": "GP27",
+      "aliases": [
+        "GPIO27"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 21.62,
+      "volts": 3.3,
+      "gpio": 27,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 analogue input, 12-bit, 0 to 3.3 V."
+    },
+    {
+      "name": "GP26",
+      "aliases": [
+        "GPIO26"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 24.16,
+      "volts": 3.3,
+      "gpio": 26,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC0 analogue input, 12-bit, 0 to 3.3 V."
+    },
+    {
+      "name": "RUN",
+      "role": "passive",
+      "x": 19.39,
+      "y": 26.7,
+      "dir": "in",
+      "note": "Reset: briefly pull to GND to restart the board. Not a GPIO."
+    },
+    {
+      "name": "GP22",
+      "aliases": [
+        "GPIO22"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 29.24,
+      "volts": 3.3,
+      "gpio": 22,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GND.7",
+      "role": "gnd",
+      "x": 19.39,
+      "y": 31.78
+    },
+    {
+      "name": "GP21",
+      "aliases": [
+        "GPIO21"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 34.32,
+      "volts": 3.3,
+      "gpio": 21,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP20",
+      "aliases": [
+        "GPIO20"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 36.86,
+      "volts": 3.3,
+      "gpio": 20,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP19",
+      "aliases": [
+        "GPIO19"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 39.4,
+      "volts": 3.3,
+      "gpio": 19,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP18",
+      "aliases": [
+        "GPIO18"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 41.94,
+      "volts": 3.3,
+      "gpio": 18,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GND.8",
+      "role": "gnd",
+      "x": 19.39,
+      "y": 44.48
+    },
+    {
+      "name": "GP17",
+      "aliases": [
+        "GPIO17"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 47.02,
+      "volts": 3.3,
+      "gpio": 17,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "GP16",
+      "aliases": [
+        "GPIO16"
+      ],
+      "role": "io",
+      "x": 19.39,
+      "y": 49.56,
+      "volts": 3.3,
+      "gpio": 16,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    }
+  ],
+  "holes": [
+    {
+      "x": 4.8,
+      "y": 2,
+      "dia": 2.1
+    },
+    {
+      "x": 16.2,
+      "y": 2,
+      "dia": 2.1
+    },
+    {
+      "x": 4.8,
+      "y": 49,
+      "dia": 2.1
+    },
+    {
+      "x": 16.2,
+      "y": 49,
+      "dia": 2.1
+    }
+  ],
+  "ports": [
+    {
+      "name": "Micro-USB",
+      "faces": "y-",
+      "x": 10.5,
+      "y": 0,
+      "z": 1.4,
+      "w": 8,
+      "h": 3,
+      "shape": "rect",
+      "margin": 2
+    },
+    {
+      "name": "BOOTSEL button",
+      "faces": "up",
+      "x": 7,
+      "y": 12.2,
+      "w": 3,
+      "h": 3,
+      "shape": "round",
+      "margin": 0.5
+    },
+    {
+      "name": "LED (wireless chip GPIO0)",
+      "faces": "up",
+      "x": 4.7,
+      "y": 5,
+      "w": 2.5,
+      "h": 2.5,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 50,
+      "peak": 150
+    },
+    "i2cPullups": false
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "Raspberry Pi Pico W",
+      "Raspberry Pi Pico WH headers",
+      "RP2040 Pico W SC0918"
+    ],
+    "priceUsd": 6,
+    "links": [
+      {
+        "store": "Raspberry Pi documentation",
+        "url": "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html"
+      }
+    ]
+  },
+  "verify": "Outline (21 x 51), hole positions (4.8/16.2 x 2/49, 2.1 mm), pad pitch, first-pad offset (1.3) and USB overhang come from the official physical-specification drawing. Not from a primary source and worth a caliper check: PCB thickness (modelled 1.0), component heights (USB 2.8, button 1.7, chip 0.9, shield can 1.3), the shield-can footprint, and the 3V3 spare current. The Pico W antenna at the bottom end is not modelled. Header height is excluded from maxHeight.",
+  "sources": [
+    "https://pip-assets.raspberrypi.com/categories/686-raspberry-pi-pico-w/documents/RP-008313-DS-1-pico-w-product-brief.pdf (physical specification drawing, 21 x 51 mm)",
+    "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html (pinout, VSYS 1.8-5.5 V per coordinator, LED on wireless chip WL_GPIO0, SWD pads)",
+    "Pin order cross-check: Wokwi boards project data for Raspberry Pi Pico W (provided locally)"
+  ],
+  "confidence": "datasheet"
+}

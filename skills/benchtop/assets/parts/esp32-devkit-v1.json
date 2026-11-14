@@ -1,0 +1,661 @@
+{
+  "id": "esp32-devkit-v1",
+  "name": "ESP32 DevKit V1 (30-pin)",
+  "kind": "board",
+  "blurb": "The common 30-pin ESP32 board with Wi-Fi, classic Bluetooth, a micro-USB port and breadboard-friendly headers.",
+  "body": {
+    "w": 28.33,
+    "d": 51.45,
+    "h": 1.6
+  },
+  "maxHeight": 4.75,
+  "shapes": [
+    {
+      "kind": "box",
+      "x": 10.165,
+      "y": -1.5,
+      "w": 8,
+      "d": 6,
+      "h": 2.8,
+      "tag": "usb"
+    },
+    {
+      "kind": "box",
+      "x": 5.164999999999999,
+      "y": 25.950000000000003,
+      "w": 18,
+      "d": 19.3,
+      "h": 3.1,
+      "tag": "module",
+      "decals": [
+        {
+          "kind": "text",
+          "face": "top",
+          "x": 1.5,
+          "y": 9,
+          "text": "ESP-WROOM-32",
+          "size": 1.5
+        }
+      ]
+    },
+    {
+      "kind": "box",
+      "x": 5.164999999999999,
+      "y": 45.25,
+      "w": 18,
+      "d": 6.2,
+      "h": 0.8,
+      "tag": "antenna"
+    },
+    {
+      "kind": "box",
+      "x": 8.629999999999999,
+      "y": 21.25,
+      "w": 1.6,
+      "d": 0.8,
+      "h": 0.6,
+      "tag": "led"
+    },
+    {
+      "kind": "box",
+      "x": 17.759999999999998,
+      "y": 21.25,
+      "w": 1.6,
+      "d": 0.8,
+      "h": 0.6,
+      "tag": "led"
+    },
+    {
+      "kind": "box",
+      "x": 20.8,
+      "y": 2,
+      "w": 4,
+      "d": 3,
+      "h": 2,
+      "tag": "button"
+    },
+    {
+      "kind": "box",
+      "x": 3.5,
+      "y": 2,
+      "w": 4,
+      "d": 3,
+      "h": 2,
+      "tag": "button"
+    }
+  ],
+  "pins": [
+    {
+      "name": "EN",
+      "role": "passive",
+      "x": 26.87,
+      "y": 45.65,
+      "dir": "in",
+      "note": "Chip enable, the reset line. Pull to GND to restart; not a GPIO."
+    },
+    {
+      "name": "VP",
+      "aliases": [
+        "GPIO36",
+        "SVP"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 43.11,
+      "volts": 3.3,
+      "gpio": 36,
+      "caps": [
+        "adc",
+        "input-only"
+      ],
+      "note": "Input only, no internal pull-up. Labelled SENSOR_VP on the module. ADC1 channel."
+    },
+    {
+      "name": "VN",
+      "aliases": [
+        "GPIO39",
+        "SVN"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 40.57,
+      "volts": 3.3,
+      "gpio": 39,
+      "caps": [
+        "adc",
+        "input-only"
+      ],
+      "note": "Input only, no internal pull-up. Labelled SENSOR_VN on the module. ADC1 channel."
+    },
+    {
+      "name": "D34",
+      "aliases": [
+        "GPIO34"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 38.03,
+      "volts": 3.3,
+      "gpio": 34,
+      "caps": [
+        "adc",
+        "input-only"
+      ],
+      "note": "Input only, no internal pull-up. ADC1 channel, fine for sensors with Wi-Fi on."
+    },
+    {
+      "name": "D35",
+      "aliases": [
+        "GPIO35"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 35.49,
+      "volts": 3.3,
+      "gpio": 35,
+      "caps": [
+        "adc",
+        "input-only"
+      ],
+      "note": "Input only, no internal pull-up. ADC1 channel, fine for sensors with Wi-Fi on."
+    },
+    {
+      "name": "D32",
+      "aliases": [
+        "GPIO32"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 32.95,
+      "volts": 3.3,
+      "gpio": 32,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 channel, fine for sensors with Wi-Fi on. Touch sensor 9."
+    },
+    {
+      "name": "D33",
+      "aliases": [
+        "GPIO33"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 30.41,
+      "volts": 3.3,
+      "gpio": 33,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 channel, fine for sensors with Wi-Fi on. Touch sensor 8."
+    },
+    {
+      "name": "D25",
+      "aliases": [
+        "GPIO25"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 27.87,
+      "volts": 3.3,
+      "gpio": 25,
+      "caps": [
+        "adc",
+        "dac",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "DAC output 1. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D26",
+      "aliases": [
+        "GPIO26"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 25.33,
+      "volts": 3.3,
+      "gpio": 26,
+      "caps": [
+        "adc",
+        "dac",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "DAC output 2. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D27",
+      "aliases": [
+        "GPIO27"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 22.79,
+      "volts": 3.3,
+      "gpio": 27,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Touch sensor 7. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D14",
+      "aliases": [
+        "GPIO14"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 20.25,
+      "volts": 3.3,
+      "gpio": 14,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "HSPI clock. Touch sensor 6. Outputs a short pulse at boot. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D12",
+      "aliases": [
+        "GPIO12"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 17.71,
+      "volts": 3.3,
+      "gpio": 12,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "spi",
+        "strapping",
+        "i2c",
+        "uart"
+      ],
+      "note": "Strapping pin (flash voltage): if something holds it HIGH at power-up the board will not boot. Keep it low or floating at reset. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D13",
+      "aliases": [
+        "GPIO13"
+      ],
+      "role": "io",
+      "x": 26.87,
+      "y": 15.17,
+      "volts": 3.3,
+      "gpio": 13,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "HSPI MOSI. Touch sensor 4. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 26.87,
+      "y": 12.63,
+      "aliases": [
+        "G"
+      ]
+    },
+    {
+      "name": "VIN",
+      "role": "power-out",
+      "x": 26.87,
+      "y": 10.09,
+      "volts": 5,
+      "supplyMa": 400,
+      "backfeed": {
+        "minVolts": 4.5,
+        "maxVolts": 12
+      },
+      "note": "5 V from USB when plugged in (via a diode on most boards). Also where an external 5 V to 12 V supply goes when running without USB; the board regulator drops it to 3.3 V.",
+      "aliases": [
+        "5V"
+      ]
+    },
+    {
+      "name": "D23",
+      "aliases": [
+        "GPIO23"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 45.65,
+      "volts": 3.3,
+      "gpio": 23,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI MOSI (VSPI)."
+    },
+    {
+      "name": "D22",
+      "aliases": [
+        "GPIO22",
+        "SCL"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 43.11,
+      "volts": 3.3,
+      "gpio": 22,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SCL."
+    },
+    {
+      "name": "TX0",
+      "aliases": [
+        "GPIO1"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 40.57,
+      "volts": 3.3,
+      "gpio": 1,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART0 TX, shared with the USB-to-serial chip. It chatters during upload and boot; leave free unless you know you need it."
+    },
+    {
+      "name": "RX0",
+      "aliases": [
+        "GPIO3"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 38.03,
+      "volts": 3.3,
+      "gpio": 3,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART0 RX, shared with the USB-to-serial chip. Leave free unless you know you need it."
+    },
+    {
+      "name": "D21",
+      "aliases": [
+        "GPIO21",
+        "SDA"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 35.49,
+      "volts": 3.3,
+      "gpio": 21,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SDA."
+    },
+    {
+      "name": "D19",
+      "aliases": [
+        "GPIO19"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 32.95,
+      "volts": 3.3,
+      "gpio": 19,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI MISO (VSPI)."
+    },
+    {
+      "name": "D18",
+      "aliases": [
+        "GPIO18"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 30.41,
+      "volts": 3.3,
+      "gpio": 18,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI clock (VSPI)."
+    },
+    {
+      "name": "D5",
+      "aliases": [
+        "GPIO5"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 27.87,
+      "volts": 3.3,
+      "gpio": 5,
+      "caps": [
+        "pwm",
+        "spi",
+        "strapping",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI chip-select. Strapping pin: it outputs a PWM signal at boot and should not be pulled hard at reset."
+    },
+    {
+      "name": "TX2",
+      "aliases": [
+        "GPIO17"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 25.33,
+      "volts": 3.3,
+      "gpio": 17,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART2 TX."
+    },
+    {
+      "name": "RX2",
+      "aliases": [
+        "GPIO16"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 22.79,
+      "volts": 3.3,
+      "gpio": 16,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART2 RX."
+    },
+    {
+      "name": "D4",
+      "aliases": [
+        "GPIO4"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 20.25,
+      "volts": 3.3,
+      "gpio": 4,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Touch sensor 0. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D2",
+      "aliases": [
+        "GPIO2"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 17.71,
+      "volts": 3.3,
+      "gpio": 2,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "strapping",
+        "onboard-led",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Drives the onboard blue LED. Strapping pin: an external load that holds it high can block firmware upload. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "D15",
+      "aliases": [
+        "GPIO15"
+      ],
+      "role": "io",
+      "x": 1.47,
+      "y": 15.17,
+      "volts": 3.3,
+      "gpio": 15,
+      "caps": [
+        "adc",
+        "pwm",
+        "touch",
+        "spi",
+        "strapping",
+        "i2c",
+        "uart"
+      ],
+      "note": "Strapping pin: pulling it low silences the boot log. HSPI chip-select. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "GND.2",
+      "role": "gnd",
+      "x": 1.47,
+      "y": 12.63
+    },
+    {
+      "name": "3V3",
+      "role": "power-out",
+      "x": 1.47,
+      "y": 10.09,
+      "volts": 3.3,
+      "supplyMa": 400,
+      "note": "Output of the onboard AMS1117 3.3 V regulator. Roughly 400 mA is left after the module's Wi-Fi bursts."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Micro-USB",
+      "faces": "y-",
+      "x": 14.165,
+      "y": 0,
+      "z": 1.4,
+      "w": 8,
+      "h": 3,
+      "shape": "rect",
+      "margin": 2
+    },
+    {
+      "name": "Blue LED (GPIO2)",
+      "faces": "up",
+      "x": 9.43,
+      "y": 21.65,
+      "w": 2.5,
+      "h": 2.5,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 110,
+      "peak": 350
+    },
+    "i2cPullups": false
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "ESP32 DevKit V1 30 pin",
+      "ESP32-DevKitC DOIT 30 pin ESP-WROOM-32",
+      "ESP32 development board 30P micro USB"
+    ],
+    "priceUsd": 6
+  },
+  "verify": "Clone board, no manufacturer drawing or open board file found; layouts vary between factories (USB-C vs micro-USB, 30 vs 38 pins, label spelling). Evidence for the outline is weak: espboards.dev gives 51.45 x 28.33 mm (the figures used here, and likely taken from the same Wokwi data, so not independent), a Mischianti reader comment gives 28.2 x 51.8 mm, and Tinkered gives 51.4 x 28.5 mm; the sources agree on the width within 0.3 mm but not on the length. Not confirmed by any source: row-to-row distance (modelled 25.4), distance from the USB edge to the first pin (modelled 10.09), PCB thickness (modelled 1.6), module and antenna overhang, USB connector size, button positions, the shape heights. With calipers measure: PCB length and width; PCB thickness; centre-to-centre distance of the two header rows; distance from the USB edge to the first pin; how far the module antenna overhangs the PCB; USB connector width. Pin y-positions come from the Wokwi board definition, assumed to start at the antenna end of the PCB. Pin header height is excluded from maxHeight. Supply: 5 V on USB or VIN through an AMS1117-3.3 regulator (espboards.dev); no source gives a current rating, the modelled 110 mA typical and 350 mA peak are estimates (not from a datasheet read here).",
+  "sources": [
+    "https://www.espboards.dev/esp32/esp32doit-devkit-v1/ (opened, reference site: 51.45 x 28.33 mm, 30 pins in two rows of 15, 5 V via USB or VIN, AMS1117-3.3)",
+    "https://mischianti.org/doit-esp32-devkit-v1-high-resolution-pinout-and-specs/ (opened: reader comment 28.2 x 51.8 mm, a 30-pin board; schematic reported to be inaccurate)",
+    "https://tinkered.ai/components/esp32-devkit-v1 (search snippet only, not opened: 51.4 x 28.5 mm)"
+  ],
+  "confidence": "typical"
+}

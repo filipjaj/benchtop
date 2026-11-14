@@ -1,0 +1,115 @@
+{
+  "id": "rotary-encoder-ky040",
+  "name": "KY-040 rotary encoder module",
+  "kind": "input",
+  "blurb": "Knob that sends a pulse pair as you turn it (clockwise or counter-clockwise) and a click when you push it; pull-up resistors included.",
+  "body": {
+    "w": 30,
+    "d": 19.5,
+    "h": 1.6
+  },
+  "maxHeight": 22.1,
+  "shapes": [
+    {
+      "kind": "box",
+      "tag": "encoder-body",
+      "x": 13,
+      "y": 3.75,
+      "z": 0,
+      "w": 12,
+      "d": 12,
+      "h": 6.5
+    },
+    {
+      "kind": "cyl",
+      "tag": "encoder-shaft",
+      "x": 19,
+      "y": 9.75,
+      "z": 6.5,
+      "r": 3,
+      "h": 14
+    }
+  ],
+  "pins": [
+    {
+      "name": "CLK",
+      "role": "io",
+      "x": 1.8,
+      "y": 4.67,
+      "dir": "out",
+      "note": "Output A of the encoder. Pulled up to +, so it reads high at rest."
+    },
+    {
+      "name": "DT",
+      "role": "io",
+      "x": 1.8,
+      "y": 7.21,
+      "dir": "out",
+      "note": "Output B. Compare against CLK to find the turn direction."
+    },
+    {
+      "name": "SW",
+      "role": "io",
+      "x": 1.8,
+      "y": 9.75,
+      "dir": "out",
+      "note": "Push button, normally open, closes to GND when the shaft is pressed. The schematic opened shows pull-ups (10 kohm) on CLK and DT only and does not clearly show one on SW: enable the controller's internal pull-up on this pin to be safe."
+    },
+    {
+      "name": "+",
+      "aliases": [
+        "VCC"
+      ],
+      "role": "power-in",
+      "x": 1.8,
+      "y": 12.29,
+      "volts": 3.3,
+      "minVolts": 3.3,
+      "maxVolts": 5.5,
+      "note": "Powers the pull-ups. CLK, DT and SW swing to this voltage, so use the controller's logic voltage (3.3 V for ESP32)."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 1.8,
+      "y": 14.83
+    }
+  ],
+  "ports": [
+    {
+      "name": "shaft",
+      "faces": "up",
+      "x": 19,
+      "y": 9.75,
+      "w": 6,
+      "h": 6,
+      "shape": "round",
+      "margin": 1,
+      "reach": true
+    }
+  ],
+  "electrical": {
+    "currentMa": {
+      "typical": 0.3,
+      "peak": 1.5
+    }
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "KY-040 rotary encoder module",
+      "KY-040 rotary encoder 5 pin with push button",
+      "EC11 rotary encoder module CLK DT SW"
+    ],
+    "priceUsd": 2
+  },
+  "verify": "No manufacturer drawing exists for the KY-040 module, and no source opened gives its outline, so the 30 x 19.5 mm board, the encoder body position, the 14 mm shaft length and the header position are clone-typical guesses. Sellers report 30 x 19 x 30 mm, 30 x 18 x 30 mm and 19 x 15 x 29 mm, and Parallax sells a different 15 x 16.5 mm module: measure yours. Confirmed by the Keyes user manual: header order CLK DT SW + GND (from top to bottom as drawn beside the knob), CLK and DT are encoder A and B, GND is the common pin C, pull-ups R2 and R3 are 10 kohm, the manual speaks of a 5 V supply and 30 detents per turn (other sellers say 20). Measure with calipers: board outline, encoder body (12 x 12 mm and 6.5 mm tall assumed; the Alps EC11 family it is based on is 11 mm class with 15 to 30 mm shafts), shaft diameter (6 mm assumed, flatted or knurled), shaft length above the body, body position on the board, header position and pitch. Some boards print the pins on the opposite edge. Current figures are an estimate from 10 kohm pull-ups (0.33 mA per closed contact at 3.3 V), not measured.",
+  "sources": [
+    "https://cdn.shopify.com/s/files/1/0672/9409/files/ky-040-rotary-encoder-datasheet-and-tutorial.pdf (opened: Keyes KY-040 manual, pin order CLK DT SW + GND, schematic with 10K pull-ups R2 R3, 5 V supply, 30 positions, no dimensions)",
+    "https://components101.com/modules/KY-04-rotary-encoder-pinout-features-datasheet-working-application-alternative (search snippet only, not opened: reports 30 x 19 mm class boards and the pin list)"
+  ],
+  "confidence": "typical"
+}

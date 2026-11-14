@@ -1,0 +1,918 @@
+{
+  "id": "esp32-s3-devkitc-1",
+  "name": "Espressif ESP32-S3-DevKitC-1",
+  "kind": "board",
+  "blurb": "Espressif's own ESP32-S3-DevKitC-1 (v1.0 and v1.1): 25.4 x 62.74 mm, two micro-USB ports, 44 header pins. Most shops sell a different board under the same name, a cheaper dual USB-C clone with fitted headers that is shorter, wider and laid out differently, and this file does not describe it. Read the verify note before ordering a case.",
+  "body": {
+    "w": 25.4,
+    "d": 62.74,
+    "h": 1.6
+  },
+  "maxHeight": 4.75,
+  "shapes": [
+    {
+      "kind": "box",
+      "x": 15.35,
+      "y": -0.7,
+      "w": 8,
+      "d": 7,
+      "h": 2.8,
+      "tag": "usb"
+    },
+    {
+      "kind": "box",
+      "x": 2.03,
+      "y": -0.7,
+      "w": 8,
+      "d": 7,
+      "h": 2.8,
+      "tag": "usb"
+    },
+    {
+      "kind": "box",
+      "x": 3.7,
+      "y": 43.44,
+      "w": 18,
+      "d": 19.3,
+      "h": 3.1,
+      "tag": "module",
+      "decals": [
+        {
+          "kind": "text",
+          "face": "top",
+          "x": 1.2,
+          "y": 9,
+          "text": "ESP32-S3-WROOM-1",
+          "size": 1.5
+        }
+      ]
+    },
+    {
+      "kind": "box",
+      "x": 3.7,
+      "y": 62.74,
+      "w": 18,
+      "d": 3.9,
+      "h": 0.8,
+      "tag": "antenna"
+    },
+    {
+      "kind": "box",
+      "x": 15.49,
+      "y": 12.3,
+      "w": 4.3,
+      "d": 3.4,
+      "h": 2,
+      "tag": "button"
+    },
+    {
+      "kind": "box",
+      "x": 5.01,
+      "y": 12.3,
+      "w": 4.3,
+      "d": 3.4,
+      "h": 2,
+      "tag": "button"
+    },
+    {
+      "kind": "box",
+      "x": 16.3,
+      "y": 27.9,
+      "w": 3.2,
+      "d": 3.2,
+      "h": 1,
+      "tag": "led"
+    }
+  ],
+  "pins": [
+    {
+      "name": "3V3",
+      "role": "power-out",
+      "x": 24.13,
+      "y": 61.34,
+      "volts": 3.3,
+      "supplyMa": 300,
+      "note": "Output of the onboard 5 V to 3.3 V regulator, shared with the module and its Wi-Fi bursts."
+    },
+    {
+      "name": "3V3.2",
+      "role": "power-out",
+      "x": 24.13,
+      "y": 58.8,
+      "volts": 3.3,
+      "supplyMa": 300,
+      "note": "Second 3V3 pad on the same rail as the other 3V3 pad."
+    },
+    {
+      "name": "RST",
+      "role": "passive",
+      "x": 24.13,
+      "y": 56.26,
+      "dir": "in",
+      "note": "Chip reset (EN). Pull to GND to restart; not a GPIO."
+    },
+    {
+      "name": "4",
+      "aliases": [
+        "GPIO4"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 53.72,
+      "volts": 3.3,
+      "gpio": 4,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "5",
+      "aliases": [
+        "GPIO5"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 51.18,
+      "volts": 3.3,
+      "gpio": 5,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "6",
+      "aliases": [
+        "GPIO6"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 48.64,
+      "volts": 3.3,
+      "gpio": 6,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "7",
+      "aliases": [
+        "GPIO7"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 46.1,
+      "volts": 3.3,
+      "gpio": 7,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "15",
+      "aliases": [
+        "GPIO15"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 43.56,
+      "volts": 3.3,
+      "gpio": 15,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "16",
+      "aliases": [
+        "GPIO16"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 41.02,
+      "volts": 3.3,
+      "gpio": 16,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "17",
+      "aliases": [
+        "GPIO17"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 38.48,
+      "volts": 3.3,
+      "gpio": 17,
+      "caps": [
+        "adc",
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "Default UART1 TX. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "18",
+      "aliases": [
+        "GPIO18"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 35.94,
+      "volts": 3.3,
+      "gpio": 18,
+      "caps": [
+        "adc",
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "Default UART1 RX. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "8",
+      "aliases": [
+        "GPIO8",
+        "SDA"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 33.4,
+      "volts": 3.3,
+      "gpio": 8,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SDA."
+    },
+    {
+      "name": "3",
+      "aliases": [
+        "GPIO3"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 30.86,
+      "volts": 3.3,
+      "gpio": 3,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "strapping",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Strapping pin that picks the JTAG signal source at reset; leave it floating or lightly loaded."
+    },
+    {
+      "name": "46",
+      "aliases": [
+        "GPIO46"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 28.32,
+      "volts": 3.3,
+      "gpio": 46,
+      "caps": [
+        "strapping",
+        "input-only"
+      ],
+      "note": "Strapping pin (boot messages) and reported to be input only; avoid it for outputs."
+    },
+    {
+      "name": "9",
+      "aliases": [
+        "GPIO9",
+        "SCL"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 25.78,
+      "volts": 3.3,
+      "gpio": 9,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SCL."
+    },
+    {
+      "name": "10",
+      "aliases": [
+        "GPIO10"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 23.24,
+      "volts": 3.3,
+      "gpio": 10,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI chip-select."
+    },
+    {
+      "name": "11",
+      "aliases": [
+        "GPIO11"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 20.7,
+      "volts": 3.3,
+      "gpio": 11,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI MOSI. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "12",
+      "aliases": [
+        "GPIO12"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 18.16,
+      "volts": 3.3,
+      "gpio": 12,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI clock. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "13",
+      "aliases": [
+        "GPIO13"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 15.62,
+      "volts": 3.3,
+      "gpio": 13,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI MISO. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "14",
+      "aliases": [
+        "GPIO14"
+      ],
+      "role": "io",
+      "x": 24.13,
+      "y": 13.08,
+      "volts": 3.3,
+      "gpio": 14,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "5V",
+      "role": "power-out",
+      "x": 24.13,
+      "y": 10.54,
+      "volts": 5,
+      "supplyMa": 400,
+      "backfeed": {
+        "minVolts": 4.5,
+        "maxVolts": 5.5
+      },
+      "note": "5 V from the USB ports when plugged in. Also where an external 5 V supply goes when running without USB."
+    },
+    {
+      "name": "G",
+      "role": "gnd",
+      "x": 24.13,
+      "y": 8,
+      "aliases": [
+        "GND"
+      ]
+    },
+    {
+      "name": "G.2",
+      "role": "gnd",
+      "x": 1.27,
+      "y": 61.34
+    },
+    {
+      "name": "TX",
+      "aliases": [
+        "GPIO43"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 58.8,
+      "volts": 3.3,
+      "gpio": 43,
+      "caps": [
+        "uart",
+        "pwm",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART0 TX, shared with the UART USB port (the USB-to-serial chip). Keep it free if you use the UART port."
+    },
+    {
+      "name": "RX",
+      "aliases": [
+        "GPIO44"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 56.26,
+      "volts": 3.3,
+      "gpio": 44,
+      "caps": [
+        "uart",
+        "pwm",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART0 RX, shared with the UART USB port (the USB-to-serial chip). Keep it free if you use the UART port."
+    },
+    {
+      "name": "1",
+      "aliases": [
+        "GPIO1"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 53.72,
+      "volts": 3.3,
+      "gpio": 1,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "2",
+      "aliases": [
+        "GPIO2"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 51.18,
+      "volts": 3.3,
+      "gpio": 2,
+      "caps": [
+        "adc",
+        "touch",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "42",
+      "aliases": [
+        "GPIO42"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 48.64,
+      "volts": 3.3,
+      "gpio": 42,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "41",
+      "aliases": [
+        "GPIO41"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 46.1,
+      "volts": 3.3,
+      "gpio": 41,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "40",
+      "aliases": [
+        "GPIO40"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 43.56,
+      "volts": 3.3,
+      "gpio": 40,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "39",
+      "aliases": [
+        "GPIO39"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 41.02,
+      "volts": 3.3,
+      "gpio": 39,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "38",
+      "aliases": [
+        "GPIO38"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 38.48,
+      "volts": 3.3,
+      "gpio": 38,
+      "caps": [
+        "pwm",
+        "onboard-led",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Drives the onboard RGB LED (a WS2812-type, one data wire) on v1.1 boards. Boards of version 1.0 and many clones use GPIO48 for it."
+    },
+    {
+      "name": "37",
+      "aliases": [
+        "GPIO37"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 35.94,
+      "volts": 3.3,
+      "gpio": 37,
+      "caps": [
+        "pwm",
+        "flash"
+      ],
+      "note": "Used internally by octal flash or PSRAM on N8R8 and N16R8 boards; only free on boards without octal memory."
+    },
+    {
+      "name": "36",
+      "aliases": [
+        "GPIO36"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 33.4,
+      "volts": 3.3,
+      "gpio": 36,
+      "caps": [
+        "pwm",
+        "flash"
+      ],
+      "note": "Used internally by octal flash or PSRAM on N8R8 and N16R8 boards; only free on boards without octal memory."
+    },
+    {
+      "name": "35",
+      "aliases": [
+        "GPIO35"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 30.86,
+      "volts": 3.3,
+      "gpio": 35,
+      "caps": [
+        "pwm",
+        "flash"
+      ],
+      "note": "Used internally by octal flash or PSRAM on N8R8 and N16R8 boards; only free on boards without octal memory."
+    },
+    {
+      "name": "0",
+      "aliases": [
+        "GPIO0"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 28.32,
+      "volts": 3.3,
+      "gpio": 0,
+      "caps": [
+        "pwm",
+        "strapping",
+        "boot-button",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Wired to the BOOT button. Held low at reset it starts download mode instead of your program."
+    },
+    {
+      "name": "45",
+      "aliases": [
+        "GPIO45"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 25.78,
+      "volts": 3.3,
+      "gpio": 45,
+      "caps": [
+        "pwm",
+        "strapping",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Strapping pin that sets the flash voltage at reset; do not pull it high from outside."
+    },
+    {
+      "name": "48",
+      "aliases": [
+        "GPIO48"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 23.24,
+      "volts": 3.3,
+      "gpio": 48,
+      "caps": [
+        "pwm",
+        "onboard-led",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Drives the onboard RGB LED on v1.0 boards and many clones; on v1.1 boards it is a free pin."
+    },
+    {
+      "name": "47",
+      "aliases": [
+        "GPIO47"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 20.7,
+      "volts": 3.3,
+      "gpio": 47,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "21",
+      "aliases": [
+        "GPIO21"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 18.16,
+      "volts": 3.3,
+      "gpio": 21,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ]
+    },
+    {
+      "name": "20",
+      "aliases": [
+        "GPIO20"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 15.62,
+      "volts": 3.3,
+      "gpio": 20,
+      "caps": [
+        "adc",
+        "pwm",
+        "usb",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "USB D+ of the native USB port. Using it as GPIO disables the native USB serial and JTAG. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "19",
+      "aliases": [
+        "GPIO19"
+      ],
+      "role": "io",
+      "x": 1.27,
+      "y": 13.08,
+      "volts": 3.3,
+      "gpio": 19,
+      "caps": [
+        "adc",
+        "pwm",
+        "usb",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "USB D- of the native USB port. Using it as GPIO disables the native USB serial and JTAG. ADC2 channel: analogue reads fail while Wi-Fi is on."
+    },
+    {
+      "name": "G.3",
+      "role": "gnd",
+      "x": 1.27,
+      "y": 10.54
+    },
+    {
+      "name": "G.4",
+      "role": "gnd",
+      "x": 1.27,
+      "y": 8
+    }
+  ],
+  "ports": [
+    {
+      "name": "USB (native, USB OTG)",
+      "faces": "y-",
+      "x": 6.03,
+      "y": 0,
+      "z": 1.4,
+      "w": 8,
+      "h": 3,
+      "shape": "rect",
+      "margin": 2
+    },
+    {
+      "name": "UART (USB-to-serial)",
+      "faces": "y-",
+      "x": 19.35,
+      "y": 0,
+      "z": 1.4,
+      "w": 8,
+      "h": 3,
+      "shape": "rect",
+      "margin": 2
+    },
+    {
+      "name": "BOOT button",
+      "faces": "up",
+      "x": 17.64,
+      "y": 14,
+      "w": 3,
+      "h": 3,
+      "shape": "round",
+      "margin": 0.5
+    },
+    {
+      "name": "RESET button",
+      "faces": "up",
+      "x": 7.16,
+      "y": 14,
+      "w": 3,
+      "h": 3,
+      "shape": "round",
+      "margin": 0.5
+    },
+    {
+      "name": "RGB LED",
+      "faces": "up",
+      "x": 17.9,
+      "y": 29.5,
+      "w": 3.2,
+      "h": 3.2,
+      "shape": "round",
+      "margin": 0.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 100,
+      "peak": 400
+    },
+    "i2cPullups": false
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "ESP32-S3-DevKitC-1-N8R8",
+      "ESP32-S3-DevKitC-1 N16R8",
+      "Espressif ESP32-S3-DevKitC-1 v1.1"
+    ],
+    "priceUsd": 15,
+    "links": [
+      {
+        "store": "Espressif docs (official user guide)",
+        "url": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html"
+      }
+    ]
+  },
+  "verify": "OFFICIAL ESPRESSIF MICRO-USB BOARD ONLY. Its 25.4×62.74 mm PCB and 22.86 mm header-row spacing do not describe dual USB-C clones. The separate VCC-GND YD-ESP32-S3 mechanical reference now has a published 27.94×57.15 mm PCB drawing and native Altium pad coordinates; see assets/geometry-evidence/variant-records.json and the full catalog record vcc-gnd:yd-esp32-s3:mechanical-reference. No exact match to Elkim/Fibel/RoboNordic seller hardware is established. Do not copy this file's coordinates, USB openings or heights to another board. This file's official drawing supports some planar geometry, but PCB thickness, component heights and LED size remain model assumptions. The antenna shape was previously clipped to 3.9 mm to satisfy a drawing validator; that is not source-backed. Independent review of the official V1.1 DXF PDF found no numerical antenna-overhang or overall assembled-length callout. The former claim of approximately 6.2 mm is therefore also unverified. This model must not be treated as a complete case-fit envelope. Measure the exact assembled board, antenna extent, fitted-header orientation and USB plug clearance before fabrication.",
+  "sources": [
+    "https://dl.espressif.com/dl/schematics/esp_idf/DXF_ESP32-S3-DevKitC-1_V1.1_20220429.pdf (Espressif dimension drawing, rendered and read)",
+    "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html (header tables J1/J3, RGB LED GPIO, octal-memory note)",
+    "https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/adc/adc_oneshot.html (ADC2 and Wi-Fi limitation)",
+    "https://www.espboards.dev/esp32/esp32-s3-devkitc-1/ (secondary: 70 x 28 mm overall incl. antenna, GPIO48 on v1.0)",
+    "https://elkim.no/produkt/esp32-s3-devkitc-1-utviklingskort-med-pinner/ (opened: the dual USB-C clone sold in Norway, seller's size and row-spacing claims; relevant only to the warning in verify)",
+    "https://raw.githubusercontent.com/vcc-gnd/YD-ESP32-S3/main/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-Metric.pdf (separate YD board only; dimensioned primary drawing, not an official Espressif or seller-clone identity match)"
+  ],
+  "confidence": "datasheet"
+}

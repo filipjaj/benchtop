@@ -1,0 +1,335 @@
+{
+  "id": "xiao-esp32-c3",
+  "name": "Seeed Studio XIAO ESP32C3",
+  "kind": "board",
+  "blurb": "Fingertip-sized Wi-Fi and Bluetooth LE controller with USB-C, 11 pins, LiPo charging and an external antenna socket.",
+  "body": {
+    "w": 17.8,
+    "d": 21,
+    "h": 1
+  },
+  "maxHeight": 4.25,
+  "shapes": [
+    {
+      "kind": "box",
+      "x": 4.430000000000001,
+      "y": 0,
+      "w": 8.94,
+      "d": 7.3,
+      "h": 3.2,
+      "tag": "usb"
+    },
+    {
+      "kind": "box",
+      "x": 4.4,
+      "y": 9.5,
+      "w": 9,
+      "d": 8,
+      "h": 1.2,
+      "tag": "chip"
+    },
+    {
+      "kind": "box",
+      "x": 7.9,
+      "y": 18.4,
+      "w": 2,
+      "d": 2,
+      "h": 1.25,
+      "tag": "antenna"
+    }
+  ],
+  "pins": [
+    {
+      "name": "D0",
+      "aliases": [
+        "GPIO2",
+        "A0"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 4.93,
+      "volts": 3.3,
+      "gpio": 2,
+      "caps": [
+        "adc",
+        "pwm",
+        "strapping",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "GPIO2 is a strapping pin: do not hold it low at reset. ADC1 channel."
+    },
+    {
+      "name": "D1",
+      "aliases": [
+        "GPIO3",
+        "A1"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 7.47,
+      "volts": 3.3,
+      "gpio": 3,
+      "caps": [
+        "adc",
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+    },
+    {
+      "name": "D2",
+      "aliases": [
+        "GPIO4",
+        "A2"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 10.01,
+      "volts": 3.3,
+      "gpio": 4,
+      "caps": [
+        "adc",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "ADC1 channel, safe for analogue reads with Wi-Fi on. Also a JTAG pin (MTMS)."
+    },
+    {
+      "name": "D3",
+      "aliases": [
+        "GPIO5",
+        "A3"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 12.55,
+      "volts": 3.3,
+      "gpio": 5,
+      "caps": [
+        "adc",
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "ADC2 channel: analogue reads are unreliable while Wi-Fi is on. Also a JTAG pin (MTDI)."
+    },
+    {
+      "name": "D4",
+      "aliases": [
+        "GPIO6",
+        "SDA"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 15.09,
+      "volts": 3.3,
+      "gpio": 6,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SDA."
+    },
+    {
+      "name": "D5",
+      "aliases": [
+        "GPIO7",
+        "SCL"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 17.63,
+      "volts": 3.3,
+      "gpio": 7,
+      "caps": [
+        "pwm",
+        "i2c",
+        "spi",
+        "uart"
+      ],
+      "note": "Default I2C SCL."
+    },
+    {
+      "name": "D6",
+      "aliases": [
+        "GPIO21",
+        "TX"
+      ],
+      "role": "io",
+      "x": 1.3,
+      "y": 20.17,
+      "volts": 3.3,
+      "gpio": 21,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART TX (U0TXD)."
+    },
+    {
+      "name": "D7",
+      "aliases": [
+        "GPIO20",
+        "RX"
+      ],
+      "role": "io",
+      "x": 16.5,
+      "y": 20.17,
+      "volts": 3.3,
+      "gpio": 20,
+      "caps": [
+        "pwm",
+        "uart",
+        "i2c",
+        "spi"
+      ],
+      "note": "UART RX (U0RXD)."
+    },
+    {
+      "name": "D8",
+      "aliases": [
+        "GPIO8",
+        "SCK"
+      ],
+      "role": "io",
+      "x": 16.5,
+      "y": 17.63,
+      "volts": 3.3,
+      "gpio": 8,
+      "caps": [
+        "pwm",
+        "spi",
+        "strapping",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI SCK. Strapping pin: do not hold it low at reset."
+    },
+    {
+      "name": "D9",
+      "aliases": [
+        "GPIO9",
+        "MISO"
+      ],
+      "role": "io",
+      "x": 16.5,
+      "y": 15.09,
+      "volts": 3.3,
+      "gpio": 9,
+      "caps": [
+        "pwm",
+        "spi",
+        "strapping",
+        "boot-button",
+        "i2c",
+        "uart"
+      ],
+      "note": "Wired to the BOOT button and default SPI MISO. Holding it low at power-up enters download mode instead of running your program."
+    },
+    {
+      "name": "D10",
+      "aliases": [
+        "GPIO10",
+        "MOSI"
+      ],
+      "role": "io",
+      "x": 16.5,
+      "y": 12.55,
+      "volts": 3.3,
+      "gpio": 10,
+      "caps": [
+        "pwm",
+        "spi",
+        "i2c",
+        "uart"
+      ],
+      "note": "Default SPI MOSI (FSPICS0)."
+    },
+    {
+      "name": "3V3",
+      "role": "power-out",
+      "x": 16.5,
+      "y": 10.01,
+      "volts": 3.3,
+      "supplyMa": 150,
+      "note": "Output of the onboard 3.3 V regulator. Seeed quotes 500 mA (700 mA elsewhere on the same page) as the regulator limit; the chip takes most of it during Wi-Fi bursts."
+    },
+    {
+      "name": "GND",
+      "role": "gnd",
+      "x": 16.5,
+      "y": 7.47
+    },
+    {
+      "name": "5V",
+      "role": "power-out",
+      "x": 16.5,
+      "y": 4.93,
+      "volts": 5,
+      "supplyMa": 400,
+      "backfeed": {
+        "minVolts": 4.5,
+        "maxVolts": 5.5
+      },
+      "note": "5 V straight from the USB-C port when plugged in. Also where an external 5 V supply goes when running without USB."
+    }
+  ],
+  "ports": [
+    {
+      "name": "USB-C",
+      "faces": "y-",
+      "x": 8.9,
+      "y": 0,
+      "z": 1.6,
+      "w": 8.94,
+      "h": 3.26,
+      "shape": "rect",
+      "margin": 1.5
+    }
+  ],
+  "electrical": {
+    "logicVolts": 3.3,
+    "fiveVoltTolerant": false,
+    "currentMa": {
+      "typical": 75,
+      "peak": 350
+    },
+    "i2cPullups": false
+  },
+  "footprint": {
+    "mount": "header",
+    "pitch": 2.54
+  },
+  "sourcing": {
+    "search": [
+      "Seeed Studio XIAO ESP32C3",
+      "XIAO ESP32-C3 Seeed 113991054",
+      "Seeed XIAO ESP32C3 with antenna"
+    ],
+    "priceUsd": 5.5,
+    "links": [
+      {
+        "store": "Seeed Studio wiki (official docs, links to the shop)",
+        "url": "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/"
+      }
+    ]
+  },
+  "verify": "Seeed gives only 21 x 17.8 mm; the dimensioning DXF was not opened. Measure with calipers: PCB length and width, PCB thickness (modelled 1.0), the pad-centre distance between the two rows (modelled 15.2 mm) and from the USB-C edge to the first pad (modelled 4.93), USB-C width and length (modelled 8.94 x 7.3, flush with the edge). The shield can and U.FL connector shapes are placed by estimate, not from a drawing; the BOOT and RESET buttons are not modelled. Pin y-positions assume the Wokwi artwork starts at the USB edge. Pin-header height is excluded from maxHeight (the board ships without headers).",
+  "sources": [
+    "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/ (21 x 17.8 mm, pin map, strapping pins, buttons, power figures)",
+    "Pad coordinates: Wokwi boards project data for XIAO ESP32-C3 (provided locally, shifted to the 17.8 x 21 outline; not a manufacturer drawing)",
+    "https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-reference/peripherals/gpio.html (ADC1/ADC2 channels)"
+  ],
+  "confidence": "typical"
+}
