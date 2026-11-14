@@ -1,0 +1,23 @@
+{
+  "id": "thermistor-ntc-10k",
+  "name": "NTC thermistor 10 kohm, 5 mm leads (through-hole)",
+  "kind": "sensor",
+  "blurb": "A resistor that drops from 10 kohm at 25 C as it warms, for measuring temperature with a voltage divider on an analog pin.",
+  "body": { "w": 3.3, "d": 3, "h": 9 },
+  "maxHeight": 9,
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0.38, "y": 1.5, "z": -9, "lead": 13, "note": "No polarity: either leg goes either way. To read temperature, wire the thermistor from 3V3 to an ADC pin and 10 kohm from that pin to GND (a matching divider, general practice). The pin voltage falls as it warms." },
+    { "name": "2", "role": "passive", "x": 2.92, "y": 1.5, "z": -9, "lead": 13 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2.54 },
+  "sourcing": {
+    "search": ["NTC thermistor 10k 3977", "NTCLE100E3103 thermistor", "NTC termistor 10k radial"],
+    "priceUsd": 0.4
+  },
+  "verify": "Outline is from the Vishay NTCLE100E3 datasheet for R25 330 ohm to 470 kohm: bead width B 3.3 +-0.5 mm, thickness T 3.0 mm max, lead diameter 0.6 mm, lead pitch 2.54 mm. On the drawing, H2 (6.0 mm max) runs from the top of the coating down to the line where the bead narrows, H1 (1.0 to 3.0 mm) from that line to the lowest edge of the coating, and L (24 +-1.5 mm) from the top of the bead to the lead ends. The body height 9 mm is H2 max plus H1 max, so it is an upper bound: a real bead is often shorter. Lead below the body is L minus 9 mm, 13 mm drawn from the 22.5 mm lower limit. Part number NTCLE100E3103 gives 10 kohm at 25 C, B25/85 3977 K. Power derating and 50 V DC maximum are on the datasheet. The blue-bead MF52 and the glass-bead types sold in hobby shops are similar but not this part: measure the bead and the leads. A 3 V to 5 V divider with a 10 kohm resistor is a starting point, not a datasheet figure.",
+  "sources": [
+    "https://www.vishay.com/docs/29049/ntcle100.pdf (opened and read: page 2 dimension drawing and table with B, d, H1, H2, L, P, T; B25/85 for 10 kohm; the drawing was viewed to work out what H1, H2 and L measure)"
+  ],
+  "confidence": "datasheet"
+}
