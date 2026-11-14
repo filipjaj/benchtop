@@ -1,0 +1,25 @@
+{
+  "id": "jst-xh-header-3p",
+  "name": "JST XH 3-pin header, top entry, 2.5 mm pitch (B3B-XH-A)",
+  "kind": "connector",
+  "blurb": "Board-side socket for a 2.5 mm JST-XH plug (LiPo balance leads, fans, sensor leads). The matching lead with a plug is bought ready-crimped.",
+  "body": { "w": 9.9, "d": 5.75, "h": 7 },
+  "maxHeight": 7,
+  "pins": [
+    { "name": "1", "role": "passive", "x": 2.45, "y": 2.35, "plug": true, "note": "Pin 1 is marked on the housing; with the pin row nearer the back, pin 1 is at the left. The lead arrives on an XH plug that is pushed onto the pins from above, not soldered." },
+    { "name": "2", "role": "passive", "x": 4.95, "y": 2.35, "plug": true, "note": "Pin 2, middle, 2.5 mm to the right of pin 1. The housing is keyed, so the plug only fits one way." },
+    { "name": "3", "role": "passive", "x": 7.45, "y": 2.35, "plug": true, "note": "Pin 3, right end, 2.5 mm to the right of pin 2." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 2.5, "ref": "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical" },
+  "sourcing": {
+    "search": ["JST XH 3 pin header B3B-XH-A", "JST XH 2.54 3-pin socket PCB with plug lead", "JST XH kontakt 3-pol kretskort"],
+    "priceUsd": 0.25
+  },
+  "verify": "Which wire of a bought lead lands on pin 1 is not standardised: check before plugging in; the header is keyed. Outline (A = 2.5 x (n - 1), B = A + 4.9 = 9.9), depth 5.75, 7.0 mm height above the board, 0.64 mm square posts, 3.4 mm tails and the pin row 2.35 mm from one long face are from the JST eXH sheet; pad positions match the KiCad footprint. Rating on the sheet: 3 A (AWG 22), 250 V. The housing is drawn as a plain box: the plug window and keying wall are not modelled.",
+  "sources": [
+    "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf (JST XH connector sheet, header page 5 opened and rendered: top entry type drawing for 3 circuits or more and the model table giving A and B per circuit count, depth 5.75, height 7, 0.64 square post, 3.4 tail, 2.35 pin row offset; the page shows the B3B-XH-A row with A 5.0, B 9.9)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_JST.pretty/JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical.kicad_mod (KiCad footprint, opened: pad 1 at x 0, outline x -2.45 to A + 2.45, y -2.35 to 3.40)"
+  ],
+  "confidence": "datasheet"
+}
