@@ -104,7 +104,7 @@ Each is optional: without it, that one output is skipped and the package says so
 
 ## Parts catalog
 
-`skills/benchtop/assets/catalog/maker_catalog.sqlite` holds 636 parts with the dimensions,
+`skills/benchtop/assets/catalog/maker_catalog.sqlite` holds 827 parts with the dimensions,
 pins and pad positions their manufacturers published, each value linked to its source.
 It contains no shop data, prices, copied text, images or CAD files.
 `skills/benchtop/references/catalog.md` explains how to use it and how it is built.
