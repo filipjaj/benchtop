@@ -1,0 +1,23 @@
+{
+  "id": "reed-switch-glass-14mm",
+  "name": "Glass reed switch, normally open, 14 mm glass x 2.2 mm (Standex-Meder KSK-1A66)",
+  "kind": "input",
+  "blurb": "A thin glass tube with two contacts that close when a magnet comes near; used to sense a door, a lid or a passing wheel magnet.",
+  "body": { "w": 14, "d": 2.2, "h": 2.2 },
+  "maxHeight": 2.2,
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0, "y": 1.1, "z": -1.1, "lead": 15, "note": "No polarity: either lead goes either way. The glass breaks easily: hold the lead with pliers between the glass and the bend, and bend or cut only beyond the pliers." },
+    { "name": "2", "role": "passive", "x": 14, "y": 1.1, "z": -1.1, "lead": 15 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["KSK-1A66 reed switch", "glass reed switch normally open 2x14mm", "reed switch N/O 14mm glass"],
+    "priceUsd": 0.5
+  },
+  "verify": "Sizes are the maker's maximum values for the KSK-1A66: glass 14.0 mm long and 2.2 mm in diameter, 44.3 mm over both leads (so about 15 mm of lead each side), lead 0.5 mm in diameter. Cheap unbranded '2 x 14 mm' reed switches are the same class but measure yours. The sheet gives no minimum distance for bending a lead; it only says to clamp the lead to keep stress off the seal and that cutting or bending the leads changes the magnetic sensitivity. Keeping the bend 3 mm or more from the glass is common practice, not a figure from this sheet. Contact limits on the sheet: 10 W, 0.5 A, 180 V; a controller input with a pull-up is far below that. Never switch a motor or relay coil directly with it. The switch closes when a magnet lies alongside the glass; how near depends on the magnet and on the pull-in class you buy (10 to 40 ampere-turns), so try it before fixing the position.",
+  "sources": [
+    "https://standexdetect.com/wp-content/uploads/sites/2/2025/09/datasheet-reed-switch-series-ksk-1a66.pdf (Standex Electronics KSK-1A66 series datasheet, version 03, opened and read: overall length max 44.3, glass length max 14.0, glass dia max 2.2, lead dia max 0.5, Form A normally open, 10 W, 180 V, 0.5 A, handling instructions)"
+  ],
+  "confidence": "datasheet"
+}

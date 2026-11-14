@@ -1,0 +1,33 @@
+{
+  "id": "potentiometer-16mm-panel",
+  "name": "16 mm panel potentiometer with solder lugs (Alpha RV16AF-10 type, 6 mm shaft)",
+  "kind": "input",
+  "blurb": "The ordinary round panel potentiometer: it is fixed in a hole with a nut, a knob goes on the shaft, and three wires are soldered to its lugs. The value (10 k linear is usual) is set per project.",
+  "body": { "w": 17, "d": 22, "h": 1 },
+  "maxHeight": 24.1,
+  "shapes": [
+    { "kind": "cyl", "tag": "pot-body", "x": 8.5, "y": 8.5, "z": 0, "r": 8.25, "h": 8.1 },
+    { "kind": "cyl", "tag": "bushing", "x": 8.5, "y": 8.5, "z": 8.1, "r": 3.5, "h": 6.5 },
+    { "kind": "cyl", "tag": "shaft", "x": 8.5, "y": 8.5, "z": 8.1, "r": 3, "h": 15 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 3.5, "y": 20.5, "note": "Look at the pot from the shaft side with the lugs pointing toward you: lug 1 is on the left. Fully counter-clockwise the wiper sits at this lug. Wire to GND so the reading rises clockwise." },
+    { "name": "2", "aliases": ["W"], "role": "passive", "x": 8.5, "y": 20.5, "note": "Middle lug: the wiper. Goes to the analogue input. Turning the shaft clockwise moves it from lug 1 toward lug 3." },
+    { "name": "3", "role": "passive", "x": 13.5, "y": 20.5, "note": "Right lug, seen from the shaft side with the lugs toward you. Wire to the controller's 3.3 V (the ADC reference), not to 5 V." }
+  ],
+  "ports": [
+    { "name": "bushing", "faces": "up", "x": 8.5, "y": 8.5, "w": 7, "h": 7, "shape": "round", "margin": 0.25, "reach": true }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire", "pitch": 5 },
+  "sourcing": {
+    "search": ["Alpha RV16AF-10 B10K potentiometer", "16mm potentiometer 10k linear solder lug 6mm shaft", "WH148 B10K potentiometer"],
+    "priceUsd": 1.5
+  },
+  "verify": "From Taiwan Alpha's 16 mm catalogue page, RV16AF-10 row: can 16.5 mm diameter (17 mm over the cover), 9.1 mm deep behind the panel, bushing M7 x 0.75, shaft 6 mm with 18-tooth knurl, lug tips 13.5 mm from the shaft axis, and a locating tab 2.8 mm wide and 1.2 mm thick 7.8 mm from the axis that needs its own 3 mm hole in the panel or is snapped off. Panel hole 7.5 mm (7 mm is tight). The circuit symbol on that page puts the wiper at lug 1 in the full counter-clockwise position, lugs numbered 1 2 3 from the left seen from the shaft side with the lugs down. Not from that row, so measure: lug pitch 5 mm (dimensioned only on the PCB-pin versions on the same page), lug solder point 12 mm from the axis (drawn, not dimensioned), bushing length (the row drawn has a 10 mm bushing; the common short one is about 6.5 mm) and shaft length, which is an order option (15, 20, 25 mm from the mounting face). The file draws the 6.5 mm bushing and a shaft ending 15 mm in front of the mounting face (24.1 mm from the back of the can). The pot hangs behind the panel with only the bushing through it, which the case tool does not model (it seats a shaft just proud of the lid): set the height by hand. With a 6.5 mm bushing, washer and nut the panel can be about 3 mm thick at most. The 1 mm base plate, the envelope depth of 22 mm (can plus lugs) and the pads on the lugs are drawing conventions. WH148 and other copies are close to these sizes but are not made to this drawing. Bourns PDB181 is the 17 mm branded equivalent.",
+  "sources": [
+    "https://electricdruid.net/wp-content/uploads/2016/12/Taiwan-Alpha-16mm-pots-datasheet.pdf (Taiwan Alpha catalogue pages, scanned, opened and read: '16mm metal shaft series' page 43, RV16AF-10B6 outline: dia 16.5, dia 17, 9.1, bushing 10 and M7x0.75, dia 6 shaft 18 teeth, 7.8 / 2.8 / 1.2 locating tab, 13.5 lug length, full CCW position and circuit 1 2 3; RV16AF-20 and -30 rows: 5 + 5 lug pitch, 6.5 bushing, dia 7.5 panel hole; terminal code 10 = solder lug)",
+    "https://www.bourns.com/docs/Product-Datasheets/PDB18.pdf (Bourns PDB18 17 mm series, opened for comparison only: 17.0 dia, M7 x 0.75 bushing 6.5 long, 5.0 lug pitch, shaft shown in CCW position; no dimension taken from it)"
+  ],
+  "confidence": "typical"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "toggle-switch-mts102",
+  "name": "MTS-102 miniature toggle switch (SPDT, ON-ON, 6 mm bushing, solder lugs)",
+  "kind": "input",
+  "blurb": "A small panel toggle switch with a metal lever and two positions; it connects the middle lug to one of the two outer lugs, so it works as an on/off or a changeover switch.",
+  "body": { "w": 13.2, "d": 7.9, "h": 9.5 },
+  "maxHeight": 29.3,
+  "shapes": [
+    { "kind": "cyl", "tag": "bushing", "x": 6.6, "y": 3.95, "z": 0, "r": 3, "h": 8.8 },
+    { "kind": "cyl", "tag": "lever", "x": 6.6, "y": 3.95, "z": 8.8, "r": 1.5, "h": 11 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 1.9, "y": 3.95, "z": -9.5, "lead": 4, "note": "Outer lug at one end of the row of three. The lever swings along this row. In this kind of toggle the middle lug is normally joined to the outer lug at the end OPPOSITE to where the lever points, but the sheet read does not say so: check with a continuity meter before soldering." },
+    { "name": "COM", "aliases": ["2"], "role": "passive", "x": 6.6, "y": 3.95, "z": -9.5, "lead": 4, "note": "Middle lug: the common contact. It is always connected to exactly one of the outer lugs (ON-ON, no off position). For an on/off switch use COM and one outer lug and leave the other empty." },
+    { "name": "3", "role": "passive", "x": 11.3, "y": 3.95, "z": -9.5, "lead": 4, "note": "Outer lug at the other end of the row. The switch is symmetric, so which end is called 1 and which 3 does not matter." }
+  ],
+  "ports": [
+    { "name": "bushing", "faces": "up", "x": 6.6, "y": 3.95, "w": 6, "h": 6, "shape": "round", "margin": 0.2, "reach": true }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire", "pitch": 4.7 },
+  "sourcing": {
+    "search": ["MTS-102 toggle switch SPDT ON-ON 3 pin", "miniature toggle switch 6mm SPDT ON-ON solder lug", "mini vippebryter MTS-102 6 mm"],
+    "priceUsd": 1
+  },
+  "verify": "MTS-102 is a generic type made by many factories; the numbers here are from one maker's catalogue drawing (unbranded copy, same data as Ningbo Jietong's MTS-102 sheet): body 13.2 x 7.9 mm and 9.5 mm tall, threaded bushing M6 x 0.75 (also sold as 1/4-40) 8.8 mm long, standard lever 3 mm diameter and 11 mm long swinging 24 degrees in total, three lugs 4.7 mm apart, 4 mm long, 0.8 mm thick and 2 mm wide. Panel hole 6 mm (6.4 mm for 1/4 inch bushings), plus an optional 2.4 mm hole 6.4 mm from the centre for the keyed washer that stops the switch turning. The switch is fixed with its nut from outside, so the panel must be thin enough for the 8.8 mm thread with both nuts and washers: about 5 mm at most; measure the thread on yours. The lever is drawn upright; in use it leans 12 degrees to either end. The catalogue does not show which outer lug the middle one connects to in each lever position: find it with a continuity meter. Rating on the sheet: 6 A at 125 V AC, 3 A at 250 V AC; this file is for low-voltage use only. Measure body, bushing length and lug pitch on your switch before a case depends on them.",
+  "sources": [
+    "https://www.electronicoscaldas.com/datasheet/MTS-SMTS-Series.pdf (MTS/SMTS series catalogue, opened; page 5 drawing of MTS-102 read: 13.2 x 7.9 body, 9.5 body height, 8.8 bushing M6x0.75 or 1/4-40NS, 11 lever, dia 3, 24 degrees, lugs 4.7 + 4.7 apart, 4 long, 0.8 thick, 2 wide, panel holes dia 6 and dia 2.4 at 6.4; page 4: ON-ON SPDT 3P, 6 A 125 VAC / 3 A 250 VAC)",
+    "https://img.gme.cz/files/eshop_data/eshop_data/Dokumenty/631-533/dsh.631-533.1.pdf (Ningbo Jietong MTS-102 sheet, opened: same ratings and options; its dimension drawing did not render, so no dimensions were taken from it)"
+  ],
+  "confidence": "typical"
+}

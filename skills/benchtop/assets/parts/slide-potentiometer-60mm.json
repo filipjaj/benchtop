@@ -1,0 +1,31 @@
+{
+  "id": "slide-potentiometer-60mm",
+  "name": "Slide potentiometer, 60 mm travel (Bourns PTA6043, 15 mm metal lever)",
+  "kind": "input",
+  "blurb": "A long fader: a variable resistor whose lever slides 60 mm in a straight line; read its wiper pin with an analogue input. The value (10 k linear is usual) is set per project.",
+  "body": { "w": 75, "d": 9, "h": 6.5 },
+  "maxHeight": 21.5,
+  "shapes": [
+    { "kind": "box", "tag": "lever", "x": 35, "y": 3.9, "z": 0, "w": 5, "d": 1.2, "h": 15 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0.75, "y": 2.75, "z": -6.5, "lead": 3.7, "note": "One end of the track. The end of the fader with TWO pins has pins 1 and 2; pin 1 is the one in line with the single pin at the other end. Wire to GND." },
+    { "name": "2", "aliases": ["W"], "role": "passive", "x": 0.75, "y": 6.25, "z": -6.5, "lead": 3.7, "note": "The wiper: the pin beside pin 1, 3.5 mm from it across the width. Goes to the analogue input." },
+    { "name": "3", "role": "passive", "x": 74.25, "y": 2.75, "z": -6.5, "lead": 3.7, "note": "Other end of the track: the single pin at the far end, 73.5 mm from pin 1. Wire to the controller's 3.3 V (the ADC reference), not to 5 V." }
+  ],
+  "ports": [
+    { "name": "lever-slot", "faces": "up", "x": 37.5, "y": 4.5, "w": 65, "h": 1.2, "shape": "rect", "margin": 0.5, "reach": true }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "ref": "Potentiometer_THT:Potentiometer_Bourns_PTA6043_Single_Slide" },
+  "sourcing": {
+    "search": ["Bourns PTA6043-2015DPB103", "slide potentiometer 60mm travel 10k linear", "fader 60mm B10K 75mm long"],
+    "priceUsd": 3
+  },
+  "verify": "From the Bourns PTA datasheet, PTAxx43 drawing and the PTA6043 row: housing 75 x 9.0 mm (9.4 over the lugs), 6.5 mm above the board, pins 3.7 mm and lugs 3.0 mm below it; pin 1 to pin 3 73.5 mm, pin 2 3.5 mm beside pin 1, 1.2 mm holes; four mounting lugs (not electrical, not listed as pins) in 1.7 mm holes, two rows 8.5 mm apart, 62.8 mm apart in the row on the pin 1 side and 65.2 mm in the row on the pin 2 side; two M2 threaded holes in the top face 71 mm apart for fixing under a panel. Schematic: 1 and 3 are the track ends, 2 the wiper. The sheet does not say at which end of the travel the wiper meets pin 1: check with a meter and swap the outer wires if the reading runs backwards. The sheet also does not say from which side its hole pattern is viewed; it is taken here as seen from above, as the KiCad footprint does. Before ordering a carrier board, print the footprint 1:1 and try the part on it. Assumed symmetric, not dimensioned: pins 0.75 mm in from each end and the 60 mm travel centred, so the lever centre runs from 7.5 to 67.5 mm; the lever is drawn at mid travel and the lid slot is 60 mm plus the lever width. Lever: DP style, 5 mm wide tapering to 3 mm, 15 mm long (10 mm also sold: edit the height); its 1.2 mm thickness is the CP style's figure, the DP drawing gives none. Rating 0.25 W linear.",
+  "sources": [
+    "https://www.bourns.com/docs/Product-Datasheets/pta.pdf (Bourns PTA series datasheet rev. 08/25, opened and read: PTAxx43 drawing with 9.0 width, 6.5 and 5.7 heights, 3.7 and 3.0 below the board, 3.5 pin offset, 8.5 lug rows, 9.4 over lugs, hole sizes 1.2 and 1.7 min, M2 x 0.4 2 places; single gang table PTA6043: A 75, B 71, C 62.8, D 65.2, E 73.5, travel 60; schematic 1-2-3; DP lever 5.0 / 4.0 / 3.0 wide, L 15 or 10; CP lever 1.2 thick)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Potentiometer_THT.pretty/Potentiometer_Bourns_PTA6043_Single_Slide.kicad_mod (KiCad footprint, opened: pads 1 at 0, 0; 2 at 0, 3.5; 3 at 73.5, 0; drill 1.2; lugs at 5.35 and 68.15 on the pin 1 side, 4.15 and 69.35 on the pin 2 side; body 75 x 9 starting 0.75 before pin 1)"
+  ],
+  "confidence": "typical"
+}
