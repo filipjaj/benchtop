@@ -29,7 +29,7 @@ import { Database } from "bun:sqlite";
 import { copyFileSync, existsSync, renameSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
 
-export const PUBLIC_BUILDER_VERSION = "1";
+export const PUBLIC_BUILDER_VERSION = "2";
 
 /** Source authorities whose facts are kept: the manufacturer's own claims, documents and CAD. */
 export const KEEP_AUTHORITIES = [
@@ -114,6 +114,46 @@ function columns(db: Database, table: string): string[] {
   return db.query<{ name: string }, []>(`SELECT name FROM pragma_table_info('${table}')`).all().map((r) => r.name);
 }
 
+/** Prefix of the data_issues notes that hold a raw page capture. */
+export const CAPTURE_PREFIX = "Source capture metadata:";
+
+/** An absolute path on the machine that built the catalog: POSIX home/temp dirs or a Windows drive. */
+const LOCAL_PATH = /(?:\/(?:Users|home|private|tmp|var\/folders)\/|\b[A-Za-z]:\\)[^"\s,}]*/g;
+/** SQL test for the same, used by the audit over every text column. */
+const LOCAL_PATH_SQL = (col: string) =>
+  `(${col} LIKE '%/Users/%' OR ${col} LIKE '%/home/%' OR ${col} LIKE '%/private/%' OR ${col} LIKE '%/var/folders/%')`;
+
+/** Drops every JSON member whose string value is a local path; other strings get the path replaced. */
+export function stripLocalPaths(text: string): string {
+  const isLocal = (v: unknown) => typeof v === "string" && new RegExp(`^${LOCAL_PATH.source}$`).test(v);
+  const clean = (v: unknown): unknown => {
+    if (Array.isArray(v)) return v.filter((x) => !isLocal(x)).map(clean);
+    if (v && typeof v === "object") {
+      return Object.fromEntries(Object.entries(v).filter(([, x]) => !isLocal(x)).map(([k, x]) => [k, clean(x)]));
+    }
+    return typeof v === "string" ? v.replace(LOCAL_PATH, "<local file>") : v;
+  };
+  // A detail may be "Label: {json}"; clean the JSON part as JSON so no key is left with a dangling value.
+  const brace = text.indexOf("{");
+  if (brace >= 0) {
+    try {
+      return text.slice(0, brace) + JSON.stringify(clean(JSON.parse(text.slice(brace))));
+    } catch {
+      // Not JSON after all: fall through to plain replacement.
+    }
+  }
+  return text.replace(LOCAL_PATH, "<local file>");
+}
+
+function scrubLocalPaths(db: Database, table: string, key: string, col: string): void {
+  const rows = db.query<Record<string, string | number>, []>(`SELECT "${key}" AS k, "${col}" AS v FROM "${table}" WHERE ${LOCAL_PATH_SQL(`"${col}"`)} OR "${col}" GLOB '*[A-Za-z]:\\*'`).all();
+  const update = db.prepare(`UPDATE "${table}" SET "${col}" = ? WHERE "${key}" = ?`);
+  for (const r of rows) {
+    const next = stripLocalPaths(String(r.v));
+    if (next !== r.v) update.run(next, r.k);
+  }
+}
+
 export interface PublicReport {
   parts_in: number;
   parts_out: number;
@@ -156,8 +196,12 @@ export function makePublic(db: Database): PublicReport {
   db.exec(`UPDATE specifications SET evidence_text = ''`);
 
   // 3. Data issues are our own findings; keep those about kept parts that cite no retailer.
+  //    Capture-metadata notes carry the scraped page itself (text, JSON-LD, prices): never ours to publish.
   db.exec(`DELETE FROM data_issues WHERE part_id IS NULL OR part_id NOT IN (SELECT part_id FROM parts)
-           OR (source_id IS NOT NULL AND NOT ${keptSource("source_id")})`);
+           OR (source_id IS NOT NULL AND NOT ${keptSource("source_id")})
+           OR detail LIKE '${CAPTURE_PREFIX}%'`);
+  scrubLocalPaths(db, "data_issues", "issue_id", "detail");
+  if (names.includes("geometry_objects")) scrubLocalPaths(db, "geometry_objects", "geometry_id", "payload_json");
 
   // 4. Part rows: no prose, no curation. selection_rank is UNIQUE, so renumber through negatives.
   db.exec(`UPDATE parts SET description = NULL, supplier_category = NULL, selection_score = 0,
@@ -216,6 +260,19 @@ export function auditPublic(db: Database): string[] {
     if (tables(db).includes(t) && n(`SELECT count(*) AS n FROM "${t}" WHERE evidence_text <> ''`)) problems.push(`${t}.evidence_text retained`);
   }
   if (n(`SELECT count(*) AS n FROM specifications WHERE ${proseSpec}`)) problems.push("descriptive specification text retained");
+  if (n(`SELECT count(*) AS n FROM data_issues WHERE detail LIKE '${CAPTURE_PREFIX}%'`)) problems.push("raw page captures retained in data_issues");
+  // Every text column of every table: no local paths, no scraped JSON-LD or offers.
+  for (const t of tables(db)) {
+    const textCols = db
+      .query<{ name: string; type: string }, []>(`SELECT name, type FROM pragma_table_info('${t}')`)
+      .all()
+      .filter((c) => c.type === "" || /TEXT|CHAR|CLOB/i.test(c.type))
+      .map((c) => `"${c.name}"`);
+    for (const c of textCols) {
+      if (n(`SELECT count(*) AS n FROM "${t}" WHERE ${LOCAL_PATH_SQL(c)}`)) problems.push(`${t}.${c.replaceAll('"', "")} holds a local file path`);
+      if (n(`SELECT count(*) AS n FROM "${t}" WHERE ${c} LIKE '%"@context"%' OR ${c} LIKE '%"offers"%'`)) problems.push(`${t}.${c.replaceAll('"', "")} holds scraped product JSON-LD`);
+    }
+  }
   return problems;
 }
 

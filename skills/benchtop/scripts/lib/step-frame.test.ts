@@ -3,7 +3,7 @@
 // small drawing of the whole bench saying where that is; and every step prints large enough.
 
 import { describe, expect, test } from "bun:test";
-import { BOARD, DEFS, DISPLAY, SENSOR, load } from "./drawing-fixtures";
+import { DEFS, SENSOR, load } from "./drawing-fixtures";
 import { HALF_PAGE, FULL_STEP, benchArt, benchFrame, trimSlivers, wiringStepArt } from "./scenes";
 import type { PartDef } from "./types";
 

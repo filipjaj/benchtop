@@ -54,11 +54,6 @@ export const TERMINAL_BLUE = mat("terminal", "#2459a8", 0, 0.45);
 export const DEFAULT_GREY = mat("default", "#7e7e82", 0, 0.6);
 export const GOLD_PAD = mat("gold-pad", "#d9a63a", 1, 0.26);
 
-export const PART_MATERIALS: PartMaterial[] = [
-  PCB_GREEN, PCB_PURPLE, PCB_BLUE, CONNECTOR_STEEL, SHIELD_CAN, CHIP_BLACK, ANTENNA_CERAMIC, BUTTON_BODY,
-  BUTTON_CAP, DISPLAY_GLASS, LED_WARM_WHITE, SENSOR_CAN, TERMINAL_BLUE, DEFAULT_GREY, GOLD_PAD,
-];
-
 const SHAPE_MATERIAL: Record<string, PartMaterial> = {
   usb: CONNECTOR_STEEL,
   "usb-c-socket": CONNECTOR_STEEL,

@@ -63,15 +63,11 @@ import type { Connection, PartDef, PartUse, PinRole, PlacedPart } from "./lib/ty
 const PAGE = { w: 297, h: 210, margin: 12, top: 31, bottom: 198 } as const;
 const f = (n: number): string => (Math.round(n * 100) / 100).toString();
 
-/** Largest of the usual drawing scales that fits, as a number and as the text printed in the title block. */
+/** The usual drawing scales, largest first. */
 const SCALES = [5, 4, 3, 2.5, 2, 1.5, 1.25, 1, 0.75, 2 / 3, 0.5, 0.4, 0.33, 0.25, 0.2];
 export function scaleText(s: number): string {
   if (s >= 1) return `${fmt(s)} : 1`;
   return `1 : ${fmt(1 / s)}`;
-}
-function pickScale(fits: (s: number) => boolean): number {
-  for (const s of SCALES) if (fits(s)) return s;
-  return SCALES[SCALES.length - 1]!;
 }
 
 const STYLE =
@@ -125,7 +121,6 @@ function ends(loaded: Loaded, c: Connection): [End, End] {
 }
 
 const isPassive = (p: PlacedPart): boolean => p.def.kind === "passive" && p.def.pins.length === 2;
-const labelOf = (p: PlacedPart): string => p.use.label ?? p.def.name;
 
 export interface Row {
   step: number;
@@ -257,8 +252,6 @@ interface Dims {
  * 1.6 mm is the smallest a soldering eye reads, 1.7 keeps a margin for rounding.
  */
 export const PIN_CAP_PRINT = 1.7;
-/** Cap height of a Noto Sans capital, in em. */
-const CAP_EM = 0.714;
 
 function dimsAt(S: number): Dims {
   const px = (mm: number): number => mm / S;
@@ -1525,7 +1518,7 @@ function clip(text: string, width: number, fs: number): string {
   return `${t}…`;
 }
 
-function drawSheet(full: Loaded, view: SheetView, s: Solved, title: string, notes: string[], legendRowsUnder: Row[] | null, footer: string[] = []): { svg: string; model: PlanSheet } {
+function drawSheet(full: Loaded, s: Solved, title: string, notes: string[], legendRowsUnder: Row[] | null, footer: string[] = []): { svg: string; model: PlanSheet } {
   const { plan, areaH } = s;
   const areaTop = PAGE.top + 2;
   const areaW = PAGE.w - 2 * PAGE.margin;
@@ -1636,7 +1629,7 @@ export function buildWiring(loaded: Loaded): WiringModel {
               ...(shared.length ? [clip(`Nets that continue on other sheets: ${shared.join(", ")}`, 255, 2.8)] : []),
               ...(cut ? ["A block \"to sheet N\" is the other end of a wire drawn on sheet N; its pads are numbered like the wire's step."] : []),
             ];
-            return drawSheet(loaded, v, solved[i]!, `Wiring, top view, sheet ${i + 1} of ${views.length}`, ["Step numbers: see the connections sheets"], null, footer);
+            return drawSheet(loaded, solved[i]!, `Wiring, top view, sheet ${i + 1} of ${views.length}`, ["Step numbers: see the connections sheets"], null, footer);
           });
 
           note = `split over ${views.length} sheets`;
@@ -1648,7 +1641,7 @@ export function buildWiring(loaded: Loaded): WiringModel {
     if (!split) {
       const s = single;
       const legendUnder = !legendOwn;
-      sheets = [drawSheet(loaded, whole, s, "Wiring, top view", legendOwn ? ["Step numbers: see the connections sheet"] : [], legendUnder ? rows : null)];
+      sheets = [drawSheet(loaded, s, "Wiring, top view", legendOwn ? ["Step numbers: see the connections sheet"] : [], legendUnder ? rows : null)];
       if (!readable && note) sheets[0]!.model.checks.push(`the wiring plan is ${s.fits ? `drawn at ${scaleText(s.S)}` : "on one sheet"}: ${note}`);
     }
 

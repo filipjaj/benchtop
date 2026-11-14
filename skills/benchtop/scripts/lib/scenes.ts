@@ -867,8 +867,6 @@ export function enclosureFloorArts(loaded: Loaded, L: EnclosureLayout): HoverArt
   });
 }
 
-export const enclosureFloorStep = (loaded: Loaded, L: EnclosureLayout): string => enclosureFloorArts(loaded, L)[0]?.svg ?? "";
-
 /** The lid parts seated in the turned-over lid, in as many drawings as it takes to keep them apart on the page. */
 export function enclosureLidArts(loaded: Loaded, L: EnclosureLayout): HoverArt[] {
   // The lid lies outer face down on the bench; its parts lower onto it face down, so
@@ -895,8 +893,6 @@ export function enclosureLidArts(loaded: Loaded, L: EnclosureLayout): HoverArt[]
     return { svg: toSvg(r.svg, r.bbox), geom: r.geom, refs: group.map((p) => p.item.id) };
   });
 }
-
-export const enclosureLidStep = (loaded: Loaded, L: EnclosureLayout): string => enclosureLidArts(loaded, L)[0]?.svg ?? "";
 
 export function enclosureCloseArt(loaded: Loaded, L: EnclosureLayout): Art {
   const hover = 20;
@@ -1013,5 +1009,3 @@ export function pcbDoneArt(P: PcbLayout): Art {
   const r = renderScene({ solids: [boardSolid(P, P.parts), ...P.parts.flatMap((p) => partSolids(p, { labels: false }))] });
   return { svg: toSvg(r.svg, r.bbox), geom: r.geom };
 }
-
-export const pcbDoneSvg = (P: PcbLayout): string => pcbDoneArt(P).svg;

@@ -15,7 +15,7 @@
 
 import { footprint, rotPoint } from "./iso";
 import { ProjectError, type Loaded } from "./project";
-import type { CapSpec, CustomOpening, EnclosureSpec, PartDef, PlacedMount, PlacedPart, PortDef, Shape } from "./types";
+import type { CapSpec, CustomOpening, PartDef, PlacedMount, PlacedPart, PortDef, Shape } from "./types";
 
 /** A printed cap over a button's stem. Outer (world) coordinates, like the openings. */
 export interface Cap {

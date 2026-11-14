@@ -74,6 +74,35 @@ describe("public catalog", () => {
     expect(auditPublic(db)).toEqual([]);
   });
 
+  test("drops raw page captures and strips local file paths from kept notes and geometry", () => {
+    const db = fixture();
+    db.exec(`CREATE TABLE geometry_objects(geometry_id INTEGER PRIMARY KEY, part_id TEXT NOT NULL, source_id INTEGER NOT NULL, payload_json TEXT NOT NULL)`);
+    const capture = JSON.stringify({ raw_file: "/Users/someone/work/page.html", raw_product_json_ld: { "@context": "https://schema.org/", offers: { price: 9.99 } } });
+    const conflict = JSON.stringify({ local_path: "/Users/someone/work/ds.md", url: "https://maker.test/ds.pdf", rows: ["/home/x/a.txt", "3.3 V"] });
+    const payload = JSON.stringify({ pads: [1], source_document: { page_number: 1, render_path: "/private/tmp/r.png" }, origin: "C:\\Users\\Admin\\board.PcbDoc" });
+    db.prepare(`INSERT INTO data_issues(part_id,code,detail,source_id) VALUES ('maker:board-a','source_note',?,1)`).run(`Source capture metadata: ${capture}`);
+    db.prepare(`INSERT INTO data_issues(part_id,code,detail,source_id) VALUES ('maker:board-a','conflict_note',?,1)`).run(conflict);
+    db.prepare(`INSERT INTO data_issues(part_id,code,detail,source_id) VALUES ('maker:board-a','plain_note',?,1)`).run("Read from /Users/someone/work/x.pdf page 2");
+    db.prepare(`INSERT INTO geometry_objects(part_id,source_id,payload_json) VALUES ('maker:board-a',1,?)`).run(payload);
+    expect(auditPublic(db)).toEqual(
+      expect.arrayContaining([
+        "raw page captures retained in data_issues",
+        "data_issues.detail holds a local file path",
+        "data_issues.detail holds scraped product JSON-LD",
+        "geometry_objects.payload_json holds a local file path",
+      ]),
+    );
+
+    makePublic(db);
+    const details = new Map(db.query<{ code: string; detail: string }, []>(`SELECT code, detail FROM data_issues`).all().map((r) => [r.code, r.detail] as const));
+    expect(details.has("source_note")).toBe(false);
+    expect(JSON.parse(String(details.get("conflict_note")))).toEqual({ url: "https://maker.test/ds.pdf", rows: ["3.3 V"] });
+    expect(details.get("plain_note")).toBe("Read from <local file> page 2");
+    const geo = JSON.parse(db.query<{ p: string }, []>(`SELECT payload_json AS p FROM geometry_objects`).get()!.p);
+    expect(geo).toEqual({ pads: [1], source_document: { page_number: 1 } });
+    expect(auditPublic(db)).toEqual([]);
+  });
+
   test("a table without a rule stops the build", () => {
     const db = fixture();
     db.exec(`CREATE TABLE new_prices(part_id TEXT, price REAL)`);

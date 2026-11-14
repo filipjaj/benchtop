@@ -106,9 +106,7 @@ export interface FlatPart {
   pads: FlatPad[];
 }
 
-export const DIR_VEC: Record<Dir, Pt> = { E: [1, 0], W: [-1, 0], N: [0, -1], S: [0, 1] };
 export const OPPOSITE: Record<Dir, Dir> = { E: "W", W: "E", N: "S", S: "N" };
-export const isHoriz = (d: Dir): boolean => d === "E" || d === "W";
 
 /** What the drawing calls a part: a resistor by its value ("1 k\u03a9"), anything else by its label. */
 export function drawnName(p: PlacedPart): string {
@@ -158,11 +156,6 @@ export function flatPart(p: PlacedPart): FlatPart {
   line("x");
   line("y");
   return { ref: p.use.ref, label: drawnName(p), placed: p, rect, pads };
-}
-
-/** The same part turned to a new rotation, with its position kept at the top-left corner. */
-export function turnedTo(p: PlacedPart, rot: 0 | 90 | 180 | 270): PlacedPart {
-  return { ...p, at: { ...p.at, rot } };
 }
 
 /** Outline, footprints of every shape, mounting holes. Pads are drawn separately, on top. */
@@ -811,11 +804,6 @@ export function overhangingShapes(fp: FlatPart): Box[] {
     if (b.x0 < r.x - 0.01 || b.y0 < r.y - 0.01 || b.x1 > r.x + r.w + 0.01 || b.y1 > r.y + r.d + 0.01) out.push(grow(b, 0.2));
   }
   return out;
-}
-
-/** Box of everything a part draws: its outline and the shapes that stand out past it. */
-export function partExtent(fp: FlatPart): Box {
-  return overhangingShapes(fp).reduce(unionBox, grow(rectBox(fp.rect), 0.2));
 }
 
 export interface DimOpts {

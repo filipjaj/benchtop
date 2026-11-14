@@ -30,7 +30,6 @@ export const CARD_SCHEMA_VERSION = 1;
 export const CATALOG_SCHEMA_VERSION = 2;
 
 type Cell = string | number | null;
-type Row = Record<string, Cell>;
 
 // ---------------------------------------------------------------------------------------
 // Card shape
