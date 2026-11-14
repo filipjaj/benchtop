@@ -1,0 +1,693 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Nokta Build Video</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one 16:9 film stage, transport bar under it, chapter rail below. Single dark look, taken from the Nokta manual. */
+:root{
+  color-scheme:dark;
+  --bg:#0b0c0e; --surface:#141619; --raise:#1b1e22; --ink:#f3f3f0; --muted:#8c9098; --line:#24272c; --accent:#e23d5b;
+  --display:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --text:"Inter",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--text);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+header h1{font:600 clamp(26px,3.4vw,38px)/1.05 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
+header h1 span{color:var(--muted)}
+header p{margin:6px 0 0;color:var(--muted);font-size:15px;max-width:60ch}
+header a{color:var(--muted);font-size:14px;border:1px solid var(--line);border-radius:999px;padding:8px 14px;text-decoration:none;white-space:nowrap}
+header a:hover{color:var(--ink)}
+.player{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.screen{position:relative;aspect-ratio:16/9;max-width:100%;background:#0b0c0e;cursor:pointer}
+.screen svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.big{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:88px;height:88px;border-radius:50%;border:0;background:rgba(243,243,240,.94);color:#0b0c0e;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 40px rgba(0,0,0,.5);transition:transform .2s cubic-bezier(.2,.8,.2,1)}
+.big[hidden]{display:none}
+.big:hover{transform:translate(-50%,-50%) scale(1.06)}
+.big svg{position:static;width:30px;height:30px;margin-left:5px}
+.bar{display:flex;align-items:center;gap:14px;padding:12px 16px;border-top:1px solid var(--line)}
+.btn{width:40px;height:40px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--raise);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.btn:hover{border-color:#3a3e45}
+.btn svg{width:16px;height:16px;fill:currentColor}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.time{font:500 13px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.track{position:relative;flex:1;min-width:0;height:28px;cursor:pointer;touch-action:none}
+.track .rail{position:absolute;left:0;right:0;top:12px;height:4px;border-radius:2px;background:var(--line)}
+.track .fill{position:absolute;left:0;top:12px;height:4px;border-radius:2px;background:var(--accent)}
+.track .tick{position:absolute;top:9px;width:2px;height:10px;background:#3a3e45;border-radius:1px}
+.track .knob{position:absolute;top:7px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--ink)}
+.now{padding:0 16px 14px;display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px}
+.now b{color:var(--ink);font-weight:500}
+.chapters{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.chapters button{display:flex;gap:10px;align-items:baseline;text-align:left;font:500 14px/1.3 var(--text);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:14px;padding:11px 14px;cursor:pointer}
+.chapters button span{font:500 12px/1 var(--mono);font-variant-numeric:tabular-nums;color:#5d616a;min-width:36px}
+.chapters button:hover{color:var(--ink)}
+.chapters button.on{color:var(--ink);border-color:var(--accent)}
+.chapters button.on span{color:var(--accent)}
+.foot{color:var(--muted);font-size:13px;max-width:70ch}
+@media (max-width:560px){.time{display:none}.bar{gap:10px;padding:10px 12px}.btn{width:36px;height:36px}.big{width:64px;height:64px}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Build Nokta. <span>The video.</span></h1>
+      <p>The assembly guide as a 4-minute animation: tools, the solder joint, all 39 connections in order, closing the case, the checks and first power-on.</p>
+    </div>
+    <a href="../guide/index.html">Open the written guide</a>
+  </header>
+
+  <div class="player">
+    <div class="screen" id="screen">
+      <svg id="stage" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Animated Nokta assembly instructions"></svg>
+      <button class="big" id="big" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z" fill="currentColor"/></svg></button>
+    </div>
+    <div class="bar">
+      <button class="btn" id="play" aria-label="Play"><svg viewBox="0 0 24 24" id="playIcon"><path d="M6 4l14 8-14 8z"/></svg></button>
+      <div class="track" id="track" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+        <div class="rail"></div><div class="fill" id="fill"></div><div id="ticks"></div><div class="knob" id="knob"></div>
+      </div>
+      <span class="time" id="time">0:00 / 0:00</span>
+      <button class="btn" id="sound" aria-pressed="true" aria-label="Mute" title="Narration and sound (M)"><svg viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z"/><path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="btn" id="full" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 24 24"><path d="M3 9V3h6v2H5v4zm12-6h6v6h-2V5h-4zM3 15h2v4h4v2H3zm16 0h2v6h-6v-2h4z"/></svg></button>
+    </div>
+    <div class="now"><span>Now: <b id="chap">Intro</b></span><span>Space play/pause · ← → 5 s · M sound · F full screen</span></div>
+  </div>
+
+  <nav class="chapters" id="chapters" aria-label="Chapters"></nav>
+  <p class="foot">Drawn from the Nokta assembly guide (NOKTA-WIRE-1). The guide notes nobody has assembled this exact console yet: print the fit test and run the bring-up sketch before you close the case. Narration uses your browser's built-in voice.</p>
+</div>
+
+<script>
+(()=>{
+const NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('stage');
+const C={bg:'#0b0c0e',surface:'#141619',raise:'#1b1e22',ink:'#f3f3f0',muted:'#8c9098',dim:'#5d616a',line:'#24272c',line2:'#3a3e45',accent:'#e23d5b',good:'#4cc38a',bad:'#e23d5b',copper:'#c98a3c',silver:'#d6dade',pcb:'#16241d',pcbLine:'#2c4a3a'};
+const FD='Space Grotesk, Helvetica Neue, Arial, sans-serif', FT='Inter, Helvetica Neue, Arial, sans-serif', FM='JetBrains Mono, Menlo, monospace';
+
+/* ---------- helpers ---------- */
+function E(tag,a={},p){const e=document.createElementNS(NS,tag);for(const k in a){if(k==='text')e.textContent=a[k];else e.setAttribute(k,a[k]);}if(p)p.appendChild(e);return e;}
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eo=x=>1-Math.pow(1-x,3);
+const eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c1=1.70158,c3=c1+1;return x<=0?0:x>=1?1:1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+function op(e,o){o=clamp(o);e.setAttribute('opacity',o.toFixed(3));e.style.display=o<=.001?'none':'';}
+function tf(e,x=0,y=0,s=1,r=0){e.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${s.toFixed(4)}) rotate(${r.toFixed(2)})`);}
+function T(p,x,y,str,o={}){return E('text',{x,y,fill:o.fill||C.ink,'font-family':o.ff||FT,'font-size':o.size||32,'font-weight':o.weight||400,'text-anchor':o.anchor||'start','letter-spacing':o.ls||0,text:str},p);}
+function lines(p,x,y,arr,o={}){const g=E('g',{},p);arr.forEach((s,i)=>T(g,x,y+i*(o.lh||(o.size||32)*1.35),s,o));return g;}
+function eyebrow(p,x,y,str){return T(p,x,y,str.toUpperCase(),{size:22,weight:500,fill:C.muted,ls:2.5});}
+function title(p,x,y,str,size=88){return T(p,x,y,str,{ff:FD,size,weight:600,ls:-size*0.03});}
+function pill(p,x,y,str,o={}){const g=E('g',{},p);const w=o.w||str.length*15+56;E('rect',{x:0,y:-30,width:w,height:56,rx:28,fill:o.fill||C.surface,stroke:o.stroke||C.line2,'stroke-width':1.5},g);if(o.dot!==false)E('circle',{cx:26,cy:-2,r:5,fill:o.dotc||C.accent},g);T(g,o.dot===false?w/2:44,7,str,{size:o.size||24,weight:500,anchor:o.dot===false?'middle':'start',fill:o.tfill||C.ink});tf(g,x,y);g._w=w;return g;}
+
+/* ---------- defs ---------- */
+const defs=E('defs',{},svg);
+defs.innerHTML=`
+<radialGradient id="heat"><stop offset="0" stop-color="#ff8a3d" stop-opacity=".85"/><stop offset=".5" stop-color="#e23d5b" stop-opacity=".35"/><stop offset="1" stop-color="#e23d5b" stop-opacity="0"/></radialGradient>
+<linearGradient id="solderG" x1="0" x2="1"><stop offset="0" stop-color="#9aa0a8"/><stop offset=".45" stop-color="#f4f6f8"/><stop offset="1" stop-color="#8d939b"/></linearGradient>
+<radialGradient id="vign" cx=".5" cy=".55" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+<radialGradient id="floor" cx=".5" cy="1" r="1"><stop offset="0" stop-color="#23272d"/><stop offset=".6" stop-color="#111316"/><stop offset="1" stop-color="#0b0c0e"/></radialGradient>
+<filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000" flood-opacity=".55"/></filter>`;
+E('rect',{width:1920,height:1080,fill:'url(#floor)'},svg);
+const root=E('g',{},svg);
+const hud=E('g',{},svg);
+E('rect',{width:1920,height:1080,fill:'url(#vign)','pointer-events':'none'},svg);
+
+/* ---------- audio ---------- */
+let soundOn=true,actx=null,master=null,musicBus=null,fxBus=null,voice=null;
+const hasTTS='speechSynthesis' in window;
+function pickVoice(){if(!hasTTS)return;const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));const pref=[/premium|enhanced|natural|neural/i,/google us english/i,/samantha|ava|allison|serena|daniel/i,/en-US/i];
+  for(const re of pref){const v=vs.find(v=>re.test(v.name)||re.test(v.lang));if(v){voice=v;return;}}voice=vs[0]||null;}
+if(hasTTS){pickVoice();try{speechSynthesis.addEventListener('voiceschanged',pickVoice);}catch(e){}}
+// Must run inside a click: browsers keep audio locked until the viewer interacts.
+function unlockAudio(){
+  try{if(!actx){actx=new (window.AudioContext||window.webkitAudioContext)();master=actx.createGain();master.gain.value=soundOn?1:0;master.connect(actx.destination);
+      musicBus=actx.createGain();musicBus.gain.value=.55;const lp=actx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;musicBus.connect(lp).connect(master);
+      fxBus=actx.createGain();fxBus.gain.value=.9;fxBus.connect(master);}
+    if(actx.state==='suspended')actx.resume();}catch(e){}
+  if(hasTTS){try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}}
+}
+function setSound(on){soundOn=on;if(master&&actx)master.gain.setTargetAtTime(on?1:0,actx.currentTime,.05);if(!on)hush();}
+function tone(f,d,type='sine',vol=.08,bus=fxBus,when=0){if(!actx||!bus)return;const t0=actx.currentTime+when;const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=f;
+  g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(vol,t0+.008);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g).connect(bus);o.start(t0);o.stop(t0+d+.05);}
+function beep(){tone(1250,.11,'square',.035);}
+function click(){tone(2400,.03,'square',.03);tone(180,.06,'sine',.12);}
+function tick(){tone(880,.08,'triangle',.06);tone(1320,.12,'sine',.03,fxBus,.05);}
+function chime(){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.9,'sine',.06,fxBus,i*.09));}
+// Music bed: soft pad + arpeggio in A minor, ducked while the voice speaks.
+const CHORDS=[[220,261.63,329.63],[174.61,220,261.63],[261.63,329.63,392],[196,246.94,293.66]];
+let musicTimer=null,nextBeat=0,beat=0;const BEAT=60/96/2;
+function scheduleMusic(){if(!actx)return;while(nextBeat<actx.currentTime+.25){const ch=CHORDS[Math.floor(beat/16)%4];const when=nextBeat-actx.currentTime;
+    if(beat%16===0)ch.forEach(f=>{tone(f/2,BEAT*16+.4,'triangle',.035,musicBus,when);tone(f,BEAT*16,'sine',.02,musicBus,when);});
+    const arp=[0,1,2,1,0,2,1,2][beat%8];tone(ch[arp]*2,BEAT*1.6,'sine',beat%2?.016:.024,musicBus,when);
+    nextBeat+=BEAT;beat++;}}
+function musicStart(){if(!actx||musicTimer)return;nextBeat=actx.currentTime+.05;musicTimer=setInterval(scheduleMusic,60);}
+function musicStop(){clearInterval(musicTimer);musicTimer=null;}
+function duck(on){if(musicBus&&actx)musicBus.gain.setTargetAtTime(on?.22:.55,actx.currentTime,.15);}
+function say(s){if(!soundOn||!hasTTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(s);u.rate=1.04;u.lang='en-US';if(voice)u.voice=voice;u.onstart=()=>duck(true);u.onend=()=>duck(false);u.onerror=()=>duck(false);speechSynthesis.speak(u);}catch(e){}}
+function hush(){try{if(hasTTS)speechSynthesis.cancel();}catch(e){}duck(false);}
+
+/* ---------- scenes ---------- */
+const scenes=[];
+function scene(o){o.g=E('g',{},root);o.build(o.g);scenes.push(o);}
+
+/* 1. Intro */
+scene({id:'intro',chap:'Intro',dur:9,
+ say:[[0.6,'Build Nokta: a pocket game console you build, and reprogram. About four hours, thirty-seven soldered wires.']],
+ build(g){
+  this.ghost=T(g,960,860,'NOKTA',{ff:FD,size:430,weight:700,anchor:'middle',fill:C.ink,ls:20});this.ghost.setAttribute('opacity',.04);
+  this.img=E('image',{href:'../files/renders/hero-alpha.png',x:-520,y:-390,width:1040,height:780},g);
+  this.imgG=E('g',{},g);this.imgG.appendChild(this.img);
+  this.eb=eyebrow(g,120,300,'Assembly guide · NOKTA-WIRE-1');
+  this.t1=title(g,116,410,'Build',120);this.t2=title(g,116,530,'Nokta.',120);
+  this.sub=lines(g,120,610,['A pocket game console','you build and reprogram.'],{size:36,fill:C.muted,lh:48});
+  this.chips=[['240 minutes',230],['37 wires',180],['78 solder joints',290],['Difficulty 3 of 3',290]].map(([s,w],i)=>pill(g,0,0,s,{w}));
+ },
+ update(t){
+  const a=eo(P(t,.2,1.6));op(this.imgG,a);tf(this.imgG,1330,560+lerp(70,0,a),1+t*.006);
+  [this.eb,this.t1,this.t2,this.sub].forEach((e,i)=>{const p=eo(P(t,.5+i*.25,1.3+i*.25));op(e,p);tf(e,0,lerp(30,0,p));});
+  const pos=[[120,770],[370,770],[120,846],[430,846]];
+  this.chips.forEach((c,i)=>{const p=back(P(t,2.4+i*.22,2.9+i*.22));op(c,P(t,2.4+i*.22,2.6+i*.22));tf(c,pos[i][0],pos[i][1],lerp(.85,1,p));});
+ }});
+
+/* 2. Safety */
+scene({id:'safety',chap:'Safety',dur:9,
+ say:[[0.4,'Before every joint: unplug USB and disconnect any battery. Work on a surface that does not burn, and wash your hands after handling solder.']],
+ build(g){
+  // USB socket and plug
+  const u=E('g',{},g);tf(u,250,330);
+  E('rect',{x:0,y:0,width:240,height:150,rx:18,fill:C.surface,stroke:C.line2,'stroke-width':2},u);
+  T(u,120,195,'USB',{size:24,fill:C.muted,anchor:'middle',weight:500});
+  E('rect',{x:200,y:52,width:40,height:46,rx:6,fill:'#000',stroke:C.line2,'stroke-width':2},u);
+  this.usbPlug=E('g',{},u);
+  E('rect',{x:0,y:-28,width:110,height:56,rx:12,fill:'#d9d9d4'},this.usbPlug);E('rect',{x:-30,y:-14,width:34,height:28,rx:3,fill:'#a9adb2'},this.usbPlug);E('path',{d:'M110 0 C 220 0 220 120 340 120',stroke:'#d9d9d4','stroke-width':16,fill:'none','stroke-linecap':'round'},this.usbPlug);
+  // battery
+  const b=E('g',{},g);tf(b,250,620);
+  E('rect',{x:0,y:0,width:240,height:150,rx:14,fill:'#2a2d33',stroke:C.line2,'stroke-width':2},b);T(b,120,85,'LiPo 3.7 V',{size:26,anchor:'middle',fill:C.ink,weight:500});
+  E('path',{d:'M240 60 C 300 60 300 60 330 60',stroke:C.accent,'stroke-width':8,fill:'none'},b);E('path',{d:'M240 88 C 300 88 300 88 330 88',stroke:'#444850','stroke-width':8,fill:'none'},b);
+  this.jst=E('g',{},b);E('rect',{x:0,y:-26,width:52,height:52,rx:6,fill:'#f3f3f0'},this.jst);
+  E('rect',{x:500,y:50,width:56,height:48,rx:6,fill:'#000',stroke:C.line2,'stroke-width':2},b);
+  this.x1=E('g',{},g);this.x2=E('g',{},g);
+  [[this.x1,640,405],[this.x2,640,695]].forEach(([e,x,y])=>{E('circle',{cx:0,cy:0,r:30,fill:C.accent},e);E('path',{d:'M-11 -11 L11 11 M11 -11 L-11 11',stroke:'#fff','stroke-width':5,'stroke-linecap':'round'},e);e._x=x;e._y=y;});
+  this.eb=eyebrow(g,1000,320,'Before every joint');
+  this.h=lines(g,996,410,['Unplug USB.','Disconnect the battery.'],{ff:FD,size:68,weight:600,lh:80,ls:-2});
+  this.rows=['Before you solder or change any wire.','Work on a surface that does not burn.','Wash your hands after handling solder.'].map((s,i)=>{const r=E('g',{},g);E('circle',{cx:8,cy:-10,r:5,fill:C.accent},r);T(r,30,0,s,{size:30,fill:C.muted});return r;});
+ },
+ update(t){
+  const p1=eio(P(t,1.0,2.2));this.usbPlug.setAttribute('transform',`translate(${lerp(178,300,p1)} 75)`);
+  const p2=eio(P(t,2.0,3.2));this.jst.setAttribute('transform',`translate(${lerp(500,360,p2)} 74)`);
+  [[this.x1,2.1],[this.x2,3.3]].forEach(([e,s])=>{const p=back(P(t,s,s+.45));op(e,P(t,s,s+.15));tf(e,e._x,e._y,p);});
+  op(this.eb,P(t,.3,.9));const hp=eo(P(t,.4,1.3));op(this.h,hp);tf(this.h,0,lerp(24,0,hp));
+  this.rows.forEach((r,i)=>{const p=eo(P(t,3.6+i*.6,4.3+i*.6));op(r,p);tf(r,1000,580+i*64+lerp(16,0,p));});
+ }});
+
+/* 3. Tools */
+const toolIcons={
+ iron:`<rect x="-62" y="-13" width="64" height="26" rx="12"/><path d="M2 -7 H40 M2 7 H40 M40 -7 L64 0 L40 7"/><path d="M-62 0 C -80 0 -80 30 -60 40"/>`,
+ solder:`<circle r="40"/><circle r="14"/><path d="M28 28 C 46 46 54 50 64 46"/>`,
+ strip:`<path d="M-50 50 L-8 -6 M50 50 L8 -6"/><path d="M-8 -6 L-14 -48 L-2 -48 L0 -20 L2 -48 L14 -48 L8 -6"/><circle cy="-10" r="5"/>`,
+ cutter:`<path d="M-46 52 L-10 0 M46 52 L10 0"/><circle cy="-2" r="10"/><path d="M-8 -10 L-4 -54 L0 -24 M8 -10 L4 -54 L0 -24"/>`,
+ meter:`<rect x="-38" y="-58" width="76" height="116" rx="12"/><rect x="-26" y="-46" width="52" height="26" rx="4"/><circle cy="14" r="16"/><path d="M0 14 L8 4"/><circle cx="-18" cy="44" r="5"/><circle cx="18" cy="44" r="5"/>`,
+ usb:`<rect x="-16" y="-58" width="32" height="34" rx="5"/><rect x="-10" y="-70" width="20" height="12"/><path d="M0 -24 C 0 10 -40 10 -40 40 C -40 60 0 60 20 56"/>`,
+ driver:`<rect x="-14" y="-60" width="28" height="56" rx="10"/><path d="M0 -4 V44 M-6 44 H6"/>`,
+ printer:`<rect x="-54" y="-56" width="108" height="112" rx="8"/><path d="M-54 -22 H54 M-6 -22 L0 -10 L6 -22 M-40 36 H40"/><rect x="-14" y="18" width="28" height="18"/>`};
+scene({id:'tools',chap:'Tools',dur:10,
+ say:[[0.4,'You need a soldering iron, solder, a wire stripper, side cutters, a multimeter, a USB cable, a small screwdriver, and a 3D printer.'],[7.4,'Print the fit test first.']],
+ build(g){
+  this.eb=eyebrow(g,120,140,'Tools');this.h=title(g,116,220,'What you need.',76);
+  const names=[['iron','Soldering iron'],['solder','Solder'],['strip','Wire stripper'],['cutter','Side cutters'],['meter','Multimeter'],['usb','USB cable'],['driver','Small screwdriver'],['printer','3D printer']];
+  this.cards=names.map(([k,n],i)=>{const c=E('g',{},g);E('rect',{x:-190,y:-125,width:380,height:250,rx:22,fill:C.surface,stroke:C.line,'stroke-width':1.5},c);
+    const ic=E('g',{fill:'none',stroke:C.ink,'stroke-width':4,'stroke-linecap':'round','stroke-linejoin':'round',transform:'translate(0 -22)'},c);ic.innerHTML=toolIcons[k];
+    T(c,0,92,n,{size:28,weight:500,anchor:'middle'});c._x=310+(i%4)*410;c._y=420+Math.floor(i/4)*280;return c;});
+  this.note=E('g',{},g);E('rect',{x:0,y:-38,width:1300,height:76,rx:38,fill:'none',stroke:C.accent,'stroke-width':2},this.note);E('circle',{cx:38,cy:0,r:6,fill:C.accent},this.note);
+  T(this.note,62,10,'Print the fit test first: two thin pieces that show in minutes whether your parts fit.',{size:28});
+ },
+ update(t){
+  op(this.eb,P(t,.2,.7));const hp=eo(P(t,.3,1.1));op(this.h,hp);tf(this.h,0,lerp(20,0,hp));
+  this.cards.forEach((c,i)=>{const s=1.0+i*.42;op(c,P(t,s,s+.2));tf(c,c._x,c._y,lerp(.8,1,back(P(t,s,s+.5))));});
+  const np=eo(P(t,7.2,7.9));op(this.note,np);tf(this.note,310,1000-lerp(10,0,np)-40);
+ }});
+
+/* 4. Soldering */
+scene({id:'solder',chap:'The solder joint',dur:21,
+ say:[[0.4,'The joint. Heat the pad and the pin together for two seconds.'],[3.6,'Feed solder into the joint, not onto the iron.'],[5.8,'Take the solder away first, then the iron.'],[9.0,'You want a shiny cone that wets both pad and pin. Not a ball sitting on the pin, not too little solder, and never solder joining two pins.'],[15.0,'For wires: strip three millimetres, twist the strands, and tin the end before you solder it to a pad.']],
+ build(g){
+  // phase A: close-up
+  const A=this.A=E('g',{},g);
+  E('rect',{x:110,y:130,width:860,height:760,rx:28,fill:C.surface,stroke:C.line,'stroke-width':1.5},A);
+  T(A,150,190,'CLOSE-UP · SIDE VIEW',{size:20,fill:C.dim,ls:2.5,weight:500});
+  E('rect',{x:170,y:650,width:740,height:44,rx:4,fill:C.pcb,stroke:C.pcbLine,'stroke-width':2},A);
+  E('rect',{x:470,y:638,width:140,height:14,rx:3,fill:C.copper},A);
+  E('rect',{x:530,y:430,width:20,height:310,rx:3,fill:'#bfc4ca'},A);
+  E('rect',{x:470,y:694,width:140,height:10,rx:3,fill:C.copper,opacity:.7},A);
+  T(A,620,760,'pad',{size:22,fill:C.muted});T(A,566,450,'pin',{size:22,fill:C.muted});
+  this.heat=E('circle',{cx:540,cy:630,r:120,fill:'url(#heat)'},A);
+  this.cone=E('path',{fill:'url(#solderG)',stroke:'#e9ecef','stroke-width':1},A);
+  this.wire=E('line',{stroke:'#c4c9cf','stroke-width':12,'stroke-linecap':'round'},A);
+  this.iron=E('g',{},A);
+  E('path',{d:'M0 0 L26 -14 L190 -14 L190 14 L26 14 Z',fill:'#9ea3aa'},this.iron);E('rect',{x:190,y:-30,width:260,height:60,rx:26,fill:'#2b2e33',stroke:C.line2,'stroke-width':2},this.iron);E('rect',{x:220,y:-30,width:16,height:60,fill:C.accent},this.iron);
+  this.timer=E('g',{},A);tf(this.timer,820,260);E('circle',{r:44,fill:'none',stroke:C.line2,'stroke-width':8},this.timer);
+  this.arc=E('circle',{r:44,fill:'none',stroke:C.accent,'stroke-width':8,'stroke-dasharray':276.5,'stroke-dashoffset':276.5,transform:'rotate(-90)','stroke-linecap':'round'},this.timer);
+  this.tlabel=T(this.timer,0,11,'0.0 s',{size:28,weight:600,anchor:'middle',ff:FD});
+  // steps on right
+  this.eb=eyebrow(A,1040,190,'Soldering · 78 joints');this.h=title(A,1036,280,'The joint.',80);
+  const st=[['Heat the pad and the pin','together for two seconds.'],['Feed solder into the joint,','not onto the iron.'],['Take the solder away first,','then the iron.']];
+  this.steps=st.map((ls,i)=>{const r=E('g',{},A);tf(r,1040,390+i*160);const c=E('circle',{cx:26,cy:-10,r:26,fill:'none',stroke:C.line2,'stroke-width':2},r);T(r,26,0,String(i+1),{size:24,weight:600,anchor:'middle',ff:FD});lines(r,80,0,ls,{size:34,lh:46});r._c=c;return r;});
+  // phase B: good vs bad
+  const B=this.B=E('g',{},g);
+  eyebrow(B,120,150,'Check every joint');title(B,116,235,'One good joint. Three to fix.',72);
+  const kinds=[['good','A shiny cone that wets','both pad and pin',true],['ball','A ball sitting','on the pin',false],['thin','Too little','solder',false],['bridge','Solder joining','two pins',false]];
+  this.kcards=kinds.map(([k,a,b,ok],i)=>{const c=E('g',{},B);E('rect',{x:-200,y:-250,width:400,height:500,rx:24,fill:C.surface,stroke:ok?C.good:C.line,'stroke-width':ok?2.5:1.5},c);
+    const d=E('g',{},c);E('rect',{x:-150,y:40,width:300,height:30,rx:3,fill:C.pcb,stroke:C.pcbLine,'stroke-width':2},d);
+    const pins=k==='bridge'?[-50,50]:[0];
+    pins.forEach(x=>{E('rect',{x:x-42,y:32,width:84,height:10,rx:2,fill:C.copper},d);E('rect',{x:x-8,y:-120,width:16,height:210,rx:2,fill:'#bfc4ca'},d);});
+    if(k==='good')E('path',{d:'M-42 34 Q-14 30 -8 -40 L8 -40 Q14 30 42 34 Z',fill:'url(#solderG)'},d);
+    if(k==='ball')E('ellipse',{cx:0,cy:-10,rx:34,ry:30,fill:'url(#solderG)'},d);
+    if(k==='thin')E('path',{d:'M-14 34 Q-9 28 -8 18 L8 18 Q9 28 14 34 Z',fill:'url(#solderG)'},d);
+    if(k==='bridge')E('path',{d:'M-92 34 Q-70 -30 -50 -30 Q0 -6 50 -30 Q70 -30 92 34 Z',fill:'url(#solderG)'},d);
+    tf(d,0,-40);
+    const m=E('g',{},c);tf(m,150,-200);E('circle',{r:24,fill:ok?C.good:C.bad},m);E('path',{d:ok?'M-10 0 L-3 8 L11 -8':'M-8 -8 L8 8 M8 -8 L-8 8',stroke:'#0b0c0e','stroke-width':5,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},m);
+    T(c,0,150,a,{size:28,anchor:'middle',weight:500});T(c,0,190,b,{size:28,anchor:'middle',fill:C.muted});
+    c._x=330+i*420;return c;});
+  // phase C: wire prep
+  const W=this.W=E('g',{},g);
+  eyebrow(W,120,150,'Every wire end');title(W,116,235,'Strip. Twist. Tin.',72);
+  this.ins=E('rect',{x:300,y:520,width:900,height:56,rx:28,fill:'#d6334f'},W);
+  this.strands=E('g',{},W);
+  this.strandPaths=[0,1,2,3,4].map(i=>E('path',{fill:'none','stroke-width':5,'stroke-linecap':'round'},this.strands));
+  this.tinCap=E('rect',{x:1190,y:528,width:170,height:40,rx:20,fill:'url(#solderG)'},W);
+  this.slug=E('rect',{x:1190,y:520,width:170,height:56,rx:28,fill:'#d6334f'},W);
+  this.dim=E('g',{},W);E('path',{d:'M1200 470 V448 H1360 V470',fill:'none',stroke:C.ink,'stroke-width':2},this.dim);T(this.dim,1280,430,'3 mm',{size:28,anchor:'middle',weight:600,ff:FD});
+  this.wl=['Strip 3 mm','Twist the strands','Tin the end'].map((s,i)=>{const r=E('g',{},W);tf(r,300+i*400,760);T(r,0,0,`${i+1}`,{size:26,fill:C.accent,weight:600,ff:FD});T(r,34,0,s,{size:34,weight:500});return r;});
+ },
+ update(t){
+  // phase opacities
+  op(this.A,Math.min(P(t,0,.3),1-P(t,8.4,8.9)));op(this.B,Math.min(P(t,8.9,9.3),1-P(t,14.2,14.6)));op(this.W,P(t,14.6,15));
+  // A
+  const ironIn=eio(P(t,.3,1.3)),ironOut=eio(P(t,6.7,7.5));const ip=ironIn*(1-ironOut);
+  this.iron.setAttribute('transform',`translate(${lerp(800,566,ip)} ${lerp(380,612,ip)}) rotate(-38)`);
+  const heat=P(t,1.3,2.6)*(1-P(t,6.7,7.8));this.heat.setAttribute('opacity',(heat*.9).toFixed(3));
+  const tm=P(t,1.4,3.4);this.arc.setAttribute('stroke-dashoffset',(276.5*(1-tm)).toFixed(1));this.tlabel.textContent=(tm*2).toFixed(1)+' s';op(this.timer,Math.min(P(t,1.2,1.5),1-P(t,4.2,4.6)));
+  const wIn=eio(P(t,3.5,4.3)),wOut=eio(P(t,5.8,6.5));const wp=wIn*(1-wOut);
+  const tx=lerp(330,515,wp),ty=lerp(430,612,wp);this.wire.setAttribute('x1',tx-260);this.wire.setAttribute('y1',ty-250);this.wire.setAttribute('x2',tx);this.wire.setAttribute('y2',ty);op(this.wire,P(t,3.2,3.5));
+  const h=eo(P(t,4.1,5.7))*70;const w=lerp(10,60,eo(P(t,4.1,5.2)));
+  this.cone.setAttribute('d',h<1?'M0 0':`M${540-w} 639 Q${540-12} ${639-2} ${532} ${639-h} L548 ${639-h} Q${540+12} ${639-2} ${540+w} 639 Z`);
+  const act=t<3.5?0:t<5.8?1:2;this.steps.forEach((r,i)=>{op(r,Math.min(P(t,.6+i*.3,1.2+i*.3),i===act?1:.38));r._c.setAttribute('stroke',i===act?C.accent:C.line2);});
+  op(this.eb,P(t,.2,.6));op(this.h,P(t,.3,.9));
+  // B
+  this.kcards.forEach((c,i)=>{const s=9.3+i*.5;op(c,P(t,s,s+.25));tf(c,c._x,600+lerp(30,0,eo(P(t,s,s+.5))));});
+  // C
+  const strip=eio(P(t,15.4,16.4)),twist=P(t,16.8,18.2),tin=eio(P(t,18.6,19.6));
+  this.slug.setAttribute('transform',`translate(${strip*160} 0)`);op(this.slug,1-P(t,16.0,16.5));
+  this.strandPaths.forEach((p,i)=>{let d='M1196 '+(536+i*6);for(let x=1196;x<=1356;x+=8){const ph=twist*Math.PI*6*((x-1196)/160)+i*1.25;const y=548+Math.sin(ph)*lerp(12,9,twist)*(twist>0?1:0)+(twist>0?0:(i-2)*6);d+=` L${x} ${y.toFixed(1)}`;}p.setAttribute('d',d);p.setAttribute('stroke',tin>0?`rgb(${Math.round(lerp(201,214,tin))},${Math.round(lerp(138,218,tin))},${Math.round(lerp(60,222,tin))})`:C.copper);});
+  op(this.strands,P(t,15.4,15.8));op(this.tinCap,tin);op(this.dim,Math.min(P(t,16.2,16.6),1));
+  this.wl.forEach((r,i)=>{const s=[15.4,16.8,18.6][i];op(r,P(t,s,s+.4)*(1-.6*P(t,s+1.6,s+1.9)*(i<2?1:0)));});
+ }});
+
+/* 5. Parts */
+function partArt(k){
+ const g=E('g',{});
+ const R=(x,y,w,h,f,s,rx=6)=>E('rect',{x,y,width:w,height:h,rx,fill:f,stroke:s||'none','stroke-width':2},g);
+ if(k==='pwr'){R(-80,-50,160,100,'#1c1f24','#4a4f57');R(-30,-20,40,40,'#0b0c0e');R(60,-14,24,28,'#c8ccd2');R(-84,-40,16,24,'#f3f3f0');}
+ if(k==='bat'){R(-90,-45,180,90,'#9aa0a8','#c4c9cf',10);E('text',{x:0,y:8,'text-anchor':'middle','font-size':20,'font-family':FD,'font-weight':600,fill:'#0b0c0e',text:'2000 mAh'},g);E('path',{d:'M90 -10 H120 M90 10 H120',stroke:C.accent,'stroke-width':5},g);}
+ if(k==='sw'){R(-50,-20,100,40,'#c8ccd2');R(-12,-42,22,24,'#2b2e33',null,3);[-30,0,30].forEach(x=>E('rect',{x:x-3,y:20,width:6,height:22,fill:'#c8ccd2'},g));}
+ if(k==='tft'){R(-95,-62,190,124,'#b5283f',null,6);R(-74,-50,150,100,'#0b0f17');[...Array(7)].forEach((_,i)=>E('circle',{cx:-86,cy:-36+i*12,r:3,fill:'#e6c27a'},g));}
+ if(k==='amp'){R(-55,-45,110,90,'#3a2a5c','#6a5a8c');R(-20,-15,40,30,'#0b0c0e');[...Array(5)].forEach((_,i)=>E('circle',{cx:-40,cy:-30+i*15,r:3,fill:'#e6c27a'},g));R(30,-30,20,24,'#2f6ad8',null,3);}
+ if(k==='spk'){E('circle',{r:56,fill:'#2b2e33',stroke:'#5d616a','stroke-width':3},g);E('circle',{r:30,fill:'#1b1e22',stroke:'#5d616a','stroke-width':2},g);E('circle',{r:10,fill:'#5d616a'},g);}
+ if(k==='btn'){[-60,0,60].forEach(x=>{R(x-24,-24,48,48,'#2b2e33','#5d616a',4);E('circle',{cx:x,cy:0,r:12,fill:'#0b0c0e'},g);});}
+ if(k==='mcu'){R(-110,-34,220,68,'#1c1f24','#4a4f57',5);R(-40,-24,60,48,'#9aa0a8',null,3);[...Array(15)].forEach((_,i)=>{E('circle',{cx:-98+i*14,cy:-26,r:3,fill:'#e6c27a'},g);E('circle',{cx:-98+i*14,cy:26,r:3,fill:'#e6c27a'},g);});R(96,-14,18,28,'#c8ccd2',null,2);R(-114,-14,18,28,'#c8ccd2',null,2);}
+ return g;}
+scene({id:'parts',chap:'Parts',dur:12,
+ say:[[0.4,'Sixteen parts, about sixty-five dollars. The charger and five volt supply, a two thousand milliamp-hour battery, a slide switch, a two point eight inch screen, an I2S amplifier, a speaker, nine buttons, and the ESP32-S3 controller.'],[8.4,'Buy Espressif’s own DevKitC-1 board. The cheaper USB-C clone sold under the same name is laid out differently.']],
+ build(g){
+  eyebrow(g,120,140,'16 parts · about 65 USD, estimated');title(g,116,220,'What goes inside.',76);
+  const ps=[['pwr','Charger and 5 V supply','PowerBoost 1000C'],['bat','Battery','3.7 V, 2000 mAh, JST-PH'],['sw','Power switch','SS12D00 slide switch'],['tft','Screen','2.8 in ILI9341, 240 × 320'],['amp','Amplifier','MAX98357A, I2S'],['spk','Speaker','28 mm, 8 Ω, 0.5 W'],['btn','Buttons × 9','6 × 6 mm tactile, 9.5 mm'],['mcu','Controller','ESP32-S3-DevKitC-1']];
+  this.cards=ps.map(([k,n,s],i)=>{const c=E('g',{},g);E('rect',{x:-190,y:-120,width:380,height:240,rx:22,fill:C.surface,stroke:k==='mcu'?C.accent:C.line,'stroke-width':k==='mcu'?2:1.5},c);const a=partArt(k);tf(a,0,-30,k==='spk'?.9:1);c.appendChild(a);T(c,0,70,n,{size:26,weight:500,anchor:'middle'});T(c,0,102,s,{size:21,anchor:'middle',fill:C.muted});c._x=310+(i%4)*410;c._y=410+Math.floor(i/4)*270;return c;});
+  this.warn=E('g',{},g);E('rect',{x:0,y:-46,width:1640,height:92,rx:20,fill:'rgba(226,61,91,.10)',stroke:C.accent,'stroke-width':2},this.warn);E('circle',{cx:44,cy:0,r:18,fill:C.accent},this.warn);T(this.warn,44,9,'!',{size:26,weight:700,anchor:'middle',fill:'#0b0c0e',ff:FD});
+  T(this.warn,84,-6,'Get Espressif’s own DevKitC-1, with two micro-USB ports.',{size:28,weight:500});T(this.warn,84,30,'The cheaper USB-C clone sold under the same name is shorter, wider and laid out differently.',{size:24,fill:C.muted});
+ },
+ update(t){
+  this.cards.forEach((c,i)=>{const s=.8+i*.38;op(c,P(t,s,s+.2));tf(c,c._x,c._y,lerp(.82,1,back(P(t,s,s+.5))));});
+  const w=eo(P(t,8.2,8.9));op(this.warn,w);tf(this.warn,140,960+lerp(16,0,w));
+ }});
+
+/* 6. Wiring */
+const NAMES={pwr:'Charger',sw:'Power switch',mcu:'Controller',tft:'Screen',amp:'Amplifier',spk:'Speaker',bat:'Battery',up:'D-pad up',left:'D-pad left',down:'D-pad down',right:'D-pad right',select:'Select',home:'Home',start:'Start',b:'B button',a:'A button'};
+const WC={white:'#eceae4',black:'#2a2c31',red:'#e0364f',orange:'#f08a2c',brown:'#8a5a34',purple:'#9a5de0',blue:'#3b82f6',yellow:'#f2c641',green:'#3fbf6f'};
+const CONN=[
+ [1,'white','pwr.EN','sw.COM','Power switch: enable line'],[2,'black','sw.A','pwr.GND','Switch to ground turns it off'],
+ [3,'red','pwr.5V','mcu.5V','5 V to the controller'],[4,'black','pwr.GND.2','mcu.G','Ground to the controller'],
+ [5,'red','pwr.5V','amp.VIN','5 V to the amplifier, same pad','The 5V pad already holds a wire. Add this one beside it.'],
+ [6,'black','pwr.GND.2','amp.GND','Ground to the amplifier, same pad','The GND.2 pad already holds a wire. Add this one beside it.'],
+ [7,'red','amp.VIN','tft.VCC','5 V carries on to the screen','The VIN pad already holds a wire. Add this one beside it.'],
+ [8,'black','amp.GND','tft.GND','Ground carries on to the screen','The GND pad already holds a wire. Add this one beside it.'],
+ [9,'orange','mcu.10','tft.CS','Screen select'],[10,'brown','mcu.4','tft.RESET','Screen reset'],[11,'purple','mcu.13','tft.DC','Screen data or command'],
+ [12,'blue','mcu.11','tft.SDI','Pixel data to the screen'],[13,'yellow','mcu.12','tft.SCK','Screen clock'],[14,'white','mcu.5','tft.LED','Backlight brightness'],
+ [15,'yellow','mcu.15','amp.BCLK','Audio bit clock'],[16,'green','mcu.16','amp.LRC','Audio word clock'],[17,'blue','mcu.17','amp.DIN','Audio data'],
+ [18,'red','amp.SPK+','spk.+','Speaker, first lead'],[19,'black','amp.SPK-','spk.-','Speaker, second lead'],
+ [20,'green','mcu.40','up.1','D-pad up button input'],[21,'black','pwr.GND.3','up.2','Ground for the buttons starts here'],
+ [22,'green','mcu.47','left.1','D-pad left button input'],[23,'black','up.2b','left.2','Ground hops on to this button'],
+ [24,'green','mcu.39','down.1','D-pad down button input'],[25,'black','left.2b','down.2','Ground hops on to this button'],
+ [26,'green','mcu.18','right.1','D-pad right button input'],[27,'black','down.2b','right.2','Ground hops on to this button'],
+ [28,'green','mcu.9','select.1','Select button input'],[29,'black','right.2b','select.2','Ground hops on to this button'],
+ [30,'green','mcu.6','home.1','Home button input'],[31,'black','select.2b','home.2','Ground hops on to this button'],
+ [32,'green','mcu.8','start.1','Start button input'],[33,'black','home.2b','start.2','Ground hops on to this button'],
+ [34,'green','mcu.14','b.1','B button input'],[35,'black','start.2b','b.2','Ground hops on to this button'],
+ [36,'green','mcu.7','a.1','A button input'],[37,'black','b.2b','a.2','Ground hops on to this button'],
+ [38,'red','bat.+','pwr.JST+','Last: plug the battery in, switch off','Red meets the + mark. With a child, an adult does this step.'],
+ [39,'black','bat.-','pwr.JST-','Same plug, nothing to solder','Stay nearby for the first charge.']];
+const GROUPS=[{n:'Power',from:1,to:8,d:3.2,chap:'Wiring: power'},{n:'Screen',from:9,to:14,d:2.6,chap:'Wiring: screen'},{n:'Sound',from:15,to:19,d:2.6,chap:'Wiring: sound'},{n:'Buttons',from:20,to:37,d:1.45,chap:'Wiring: buttons'},{n:'Battery',from:38,to:39,d:3.6,chap:'Battery'}];
+// board layout
+const BOARDS={
+ pwr:{x:100,y:140,w:300,h:230,label:'Charger + 5 V',pads:{EN:[380,178],GND:[380,212],'5V':[380,246],'GND.2':[380,280],'GND.3':[380,314],'JST+':[200,352],'JST-':[260,352]},side:'r'},
+ sw:{x:470,y:90,w:180,h:84,label:'Switch',pads:{COM:[520,156],A:[600,156]}},
+ bat:{x:100,y:470,w:300,h:140,label:'Battery',pads:{'+':[200,488],'-':[260,488]}},
+ mcu:{x:760,y:110,w:200,h:620,label:'Controller',pads:{'5V':[782,150],G:[782,184],'40':[782,450],'47':[782,480],'39':[782,510],'18':[782,540],'9':[782,570],'6':[782,600],'8':[782,630],'14':[782,660],'7':[782,690],'10':[938,150],'4':[938,180],'13':[938,210],'11':[938,240],'12':[938,270],'5':[938,300],'15':[938,420],'16':[938,450],'17':[938,480]}},
+ tft:{x:1220,y:90,w:560,h:320,label:'Screen',pads:{VCC:[1242,126],GND:[1242,160],CS:[1242,194],RESET:[1242,228],DC:[1242,262],SDI:[1242,296],SCK:[1242,330],LED:[1242,364]}},
+ amp:{x:1220,y:490,w:240,h:220,label:'Amplifier',pads:{VIN:[1242,526],GND:[1242,562],BCLK:[1242,598],LRC:[1242,634],DIN:[1242,670],'SPK+':[1438,570],'SPK-':[1438,630]}},
+ spk:{cx:1660,cy:600,r:92,label:'Speaker',pads:{'+':[1586,570],'-':[1586,630]}}};
+['up','left','down','right','select','home','start','b','a'].forEach((k,i)=>{const cx=150+i*118;BOARDS[k]={x:cx-32,y:782,w:64,h:64,label:NAMES[k].replace('D-pad ','').replace(' button',''),btn:true,pads:{'1':[cx-20,794],'2':[cx+20,794],'2b':[cx+20,834]}};});
+function padXY(ref){const i=ref.indexOf('.');const b=ref.slice(0,i),p=ref.slice(i+1);return BOARDS[b].pads[p];}
+function wireD(a,b,i){const [x1,y1]=a,[x2,y2]=b;const dx=x2-x1,dy=y2-y1;const k=(i%5-2)*6;
+ if(Math.abs(dx)>=Math.abs(dy)*0.8){const mx=x1+dx*.5;return `M${x1} ${y1} C ${mx+k} ${y1}, ${mx+k} ${y2}, ${x2} ${y2}`;}
+ const my=y1+dy*.5;return `M${x1} ${y1} C ${x1} ${my+k}, ${x2} ${my+k}, ${x2} ${y2}`;}
+// timing
+const STEPS=[];let wt=3.2;GROUPS.forEach(G=>{for(let n=G.from;n<=G.to;n++){STEPS.push({n,s:wt,d:G.d,G});wt+=G.d;}});const WIRE_DUR=wt+2.4;
+scene({id:'wiring',chap:'Wiring: power',dur:WIRE_DUR,
+ say:(()=>{const s=[[0.3,'Thirty-seven wires, one per step. Solder each one from pad to pad, in this order.']];
+   STEPS.forEach(st=>{const c=CONN[st.n-1];const [ba,pa]=[c[2].split('.')[0],c[2].slice(c[2].indexOf('.')+1)],[bb,pb]=[c[3].split('.')[0],c[3].slice(c[3].indexOf('.')+1)];
+     const sp=(b,p)=>b==='mcu'?`controller pin ${p}`:`${NAMES[b].toLowerCase()} ${p.replace('.',' ').replace('+',' plus').replace('-',' minus')}`;
+     if(st.G.n==='Buttons'){if(st.n===20)s.push([st.s+.05,'Buttons. A green wire carries each input from the controller. A black wire hops ground from one button to the next.']);}
+     else if(st.G.n==='Battery'){if(st.n===38)s.push([st.s+.05,'Last, plug in the battery. Red to plus, black to minus, switch off. Nothing to solder.']);}
+     else s.push([st.s+.05,`${st.n}. ${c[1]}: ${sp(ba,pa)} to ${sp(bb,pb)}.`]);});
+   return s;})(),
+ build(g){
+  this.eb=eyebrow(g,100,60,'Wiring');
+  this.grp=T(g,100,60,'',{size:22,weight:500,fill:C.ink,ls:2.5});
+  // boards
+  this.bg={};const BL=E('g',{},g);const WL=E('g',{},g);const PL=E('g',{},g);
+  for(const k in BOARDS){const b=BOARDS[k];const bg=E('g',{},BL);this.bg[k]=bg;
+    if(k==='spk'){E('circle',{cx:b.cx,cy:b.cy,r:b.r,fill:'#1b1e22',stroke:C.line2,'stroke-width':2},bg);E('circle',{cx:b.cx,cy:b.cy,r:52,fill:'none',stroke:C.line2,'stroke-width':2},bg);T(bg,b.cx+10,b.cy+b.r+40,b.label,{size:22,fill:C.muted,anchor:'middle',weight:500});}
+    else{E('rect',{x:b.x,y:b.y,width:b.w,height:b.h,rx:b.btn?10:16,fill:b.btn?'#1b1e22':C.surface,stroke:C.line2,'stroke-width':2},bg);
+      if(b.btn){E('circle',{cx:b.x+32,cy:b.y+38,r:11,fill:'#0b0c0e',stroke:C.line2,'stroke-width':2},bg);T(bg,b.x+32,b.y+b.h+32,b.label,{size:20,fill:C.muted,anchor:'middle',weight:500});}
+      else if(k==='tft'){E('rect',{x:b.x+150,y:b.y+30,width:b.w-180,height:b.h-60,rx:6,fill:'#0b0f17',stroke:C.line,'stroke-width':1},bg);T(bg,b.x+150+(b.w-180)/2,b.y+b.h/2+10,b.label,{size:30,fill:C.muted,anchor:'middle',ff:FD,weight:600});}
+      else if(k==='mcu'){const lb=T(bg,0,0,b.label,{size:30,fill:C.ink,ff:FD,weight:600,anchor:'middle'});lb.setAttribute('transform',`translate(${b.x+b.w/2-6} ${b.y+b.h/2}) rotate(-90)`);const s2=T(bg,0,0,'ESP32-S3-DevKitC-1',{size:16,fill:C.muted,anchor:'middle',ff:FM});s2.setAttribute('transform',`translate(${b.x+b.w/2+22} ${b.y+b.h/2}) rotate(-90)`);}
+      else T(bg,k==='pwr'||k==='bat'?b.x+24:b.x+b.w/2,k==='sw'?b.y+36:k==='amp'?b.y+b.h-24:k==='bat'?b.y+b.h-28:b.y+44,b.label,{size:k==='sw'?22:28,fill:C.ink,ff:FD,weight:600,anchor:k==='sw'||k==='amp'?'middle':'start'});
+    }
+    for(const p in b.pads){const [x,y]=b.pads[p];E('circle',{cx:x,cy:y,r:7,fill:'#0b0c0e',stroke:'#e6c27a','stroke-width':3},bg);
+      if(!b.btn){const right=(k==='pwr'||k==='mcu'&&x>900||k==='amp'&&x>1400);const below=(k==='sw'||k==='bat'||k==='pwr'&&p.startsWith('JST'));
+        const lx=below?x:right?x-16:x+16,ly=below?(k==='bat'?y+30:y-16):y+6;T(bg,lx,ly,p,{size:17,fill:C.muted,anchor:below?'middle':right?'end':'start',ff:FM});}
+      else T(bg,x,p==='2b'?y+4:y-12,p,{size:13,fill:C.dim,anchor:'middle',ff:FM});}
+  }
+  // wires
+  this.wires=CONN.map((c,i)=>{const a=padXY(c[2]),b=padXY(c[3]);const d=c[0]>=38?`M${a[0]} ${a[1]} L${b[0]} ${b[1]}`:wireD(a,b,i);
+    const wg=E('g',{},WL);const o=E('path',{d,fill:'none',stroke:c[1]==='black'?'#80858e':'#0b0c0e','stroke-width':c[1]==='black'?10:11,'stroke-linecap':'round'},wg);
+    const glow=E('path',{d,fill:'none',stroke:WC[c[1]],'stroke-width':18,'stroke-linecap':'round',opacity:0},wg);
+    const core=E('path',{d,fill:'none',stroke:WC[c[1]],'stroke-width':c[1]==='black'?7:6,'stroke-linecap':'round'},wg);
+    const L=core.getTotalLength?core.getTotalLength():800;[o,core,glow].forEach(p=>p.setAttribute('stroke-dasharray',L+1));return {g:wg,o,core,glow,L,a,b};});
+  // active pad rings
+  this.ringA=E('circle',{r:16,fill:'none',stroke:C.ink,'stroke-width':3},PL);this.ringB=E('circle',{r:16,fill:'none',stroke:C.ink,'stroke-width':3},PL);
+  this.iron=E('g',{},PL);E('path',{d:'M0 0 L14 -8 L80 -8 L80 8 L14 8 Z',fill:'#9ea3aa'},this.iron);E('rect',{x:80,y:-16,width:120,height:32,rx:14,fill:'#2b2e33',stroke:C.line2,'stroke-width':2},this.iron);E('rect',{x:94,y:-16,width:10,height:32,fill:C.accent},this.iron);
+  // caption bar
+  const cap=this.cap=E('g',{},g);
+  E('rect',{x:60,y:900,width:1800,height:150,rx:26,fill:'rgba(20,22,25,.94)',stroke:C.line,'stroke-width':1.5},cap);
+  T(cap,110,950,'STEP',{size:20,fill:C.muted,ls:2.5,weight:500});
+  this.cn=T(cap,106,1020,'1',{ff:FD,size:72,weight:600,ls:-2});this.ct=T(cap,0,1020,'/ 39',{size:26,fill:C.muted});
+  E('line',{x1:330,y1:928,x2:330,y2:1022,stroke:C.line2,'stroke-width':2},cap);
+  this.cv=T(cap,370,958,'',{size:34,weight:500});this.sw=E('rect',{x:0,y:934,width:54,height:16,rx:8},cap);this.cv2=T(cap,0,958,'',{size:34,weight:500});
+  this.cr=T(cap,370,1004,'',{size:30,fill:C.ink,ff:FD,weight:500});
+  this.cnote=T(cap,370,1036,'',{size:22,fill:C.muted});
+  this.pbar=E('rect',{x:60,y:1046,height:4,rx:2,fill:C.accent},cap);
+  // intro overlay
+  this.intro=E('g',{},g);E('rect',{x:560,y:400,width:800,height:200,rx:30,fill:'rgba(11,12,14,.86)',stroke:C.line2,'stroke-width':1.5},this.intro);
+  T(this.intro,960,490,'37 wires. One per step.',{ff:FD,size:60,weight:600,anchor:'middle',ls:-1.5});T(this.intro,960,548,'Each runs pad to pad, 120 mm, in the colour shown.',{size:28,fill:C.muted,anchor:'middle'});
+ },
+ update(t){
+  op(this.intro,Math.min(P(t,.2,.6),1-P(t,2.6,3.1)));
+  // current step
+  let cur=null;for(const s of STEPS){if(t>=s.s)cur=s;}
+  const idx=cur?cur.n-1:-1;
+  const G=cur?cur.G:GROUPS[0];this.grp.textContent='';this.eb.textContent=('Wiring · '+G.n).toUpperCase();
+  const involved=new Set();if(cur){const c=CONN[idx];involved.add(c[2].split('.')[0]);involved.add(c[3].split('.')[0]);}
+  for(const k in this.bg)op(this.bg[k],cur?(involved.has(k)?1:.42):lerp(.42,1,P(t,0,.8)));
+  this.wires.forEach((w,i)=>{const st=STEPS[i];const p=eio(P(t,st.s+.15,st.s+Math.min(st.d*.62,1.6)));const off=(w.L+1)*(1-p);
+    [w.o,w.core,w.glow].forEach(e=>e.setAttribute('stroke-dashoffset',off.toFixed(1)));op(w.g,p>0?1:0);
+    w.glow.setAttribute('opacity',i===idx?(.35*(.6+.4*Math.sin(t*6))).toFixed(3):0);
+    w.core.setAttribute('opacity',cur&&i<idx?.85:1);});
+  if(cur){const w=this.wires[idx];const lp=P(t,cur.s,cur.s+.35);
+    const pulse=1+.25*Math.sin((t-cur.s)*7);[[this.ringA,w.a],[this.ringB,w.b]].forEach(([r,p])=>{r.setAttribute('cx',p[0]);r.setAttribute('cy',p[1]);r.setAttribute('r',(16*pulse).toFixed(1));op(r,lp);});
+    // iron touches end pad after wire is drawn (not for battery plug)
+    const solderOn=cur.n<38;const ip=P(t,cur.s+Math.min(cur.d*.62,1.6)-.1,cur.s+cur.d-.15);const atB=ip<.5;
+    const tgt=atB?w.b:w.a;op(this.iron,solderOn?Math.sin(Math.PI*clamp(ip))*1:0);this.iron.setAttribute('transform',`translate(${tgt[0]+6} ${tgt[1]-6}) rotate(-35)`);
+    const c=CONN[idx];this.cn.textContent=String(c[0]);this.ct.setAttribute('x',106+this.cn.getComputedTextLength()+12);
+    const verb=c[0]>=38?'Plug in the':'Solder a';this.cv.textContent=verb+' ';const vx=370+this.cv.getComputedTextLength()+4;this.sw.setAttribute('x',vx);this.sw.setAttribute('fill',WC[c[1]]);this.sw.setAttribute('stroke',c[1]==='black'?'#80858e':'none');
+    this.cv2.setAttribute('x',vx+66);this.cv2.textContent=c[1]+(c[0]>=38?' lead':' wire');
+    const nm=r=>{const b=r.split('.')[0],p=r.slice(r.indexOf('.')+1);return `${NAMES[b]} ${p}`;};
+    this.cr.textContent=`${nm(c[2])}  →  ${nm(c[3])}`;this.cnote.textContent=c[4]+(c[5]?'  ·  '+c[5]:'');
+    this.pbar.setAttribute('width',(1800*c[0]/39).toFixed(1));op(this.cap,1);
+  }else{op(this.ringA,0);op(this.ringB,0);op(this.iron,0);op(this.cap,P(t,2.6,3.1));}
+ }});
+
+/* 7. Case */
+scene({id:'case',chap:'Into the case',dur:26,
+ say:[[0.4,'Into the case. Lower the controller, battery, charger, amplifier, D-pad up, A and B onto the posts in the body. Connectors go toward their openings in the wall.'],[6.0,'Then D-pad down, left, right, and start.'],[8.4,'Then select and home.'],[10.6,'Turn the lid over, and seat the screen, power switch and speaker face down in it.'],[15.2,'Set a cap over each button stem, fold the wires in, and lower the lid.'],[18.0,'Fit the four M3 by ten countersunk screws. Before the last one, press every button: each must click and spring back. Stop turning as soon as a screw is snug.']],
+ build(g){
+  this.eb=eyebrow(g,120,120,'Steps 40 to 44');this.h=title(g,116,196,'Into the case.',72);
+  const X=536,Y=250,Wd=848,Hd=440;this.box={X,Y,Wd,Hd};
+  const body=this.body=E('g',{},g);
+  E('rect',{x:X,y:Y,width:Wd,height:Hd,rx:34,fill:'#e6e4de',filter:'url(#shadow)'},body);E('rect',{x:X+16,y:Y+16,width:Wd-32,height:Hd-32,rx:22,fill:'#cfcdc6'},body);
+  [[X+30,Y+30],[X+Wd-30,Y+30],[X+30,Y+Hd-30],[X+Wd-30,Y+Hd-30]].forEach(([x,y])=>E('circle',{cx:x,cy:y,r:9,fill:'#bdbab2'},body));
+  // openings in wall: left (charge), top (flash)
+  E('rect',{x:X-2,y:Y+300,width:18,height:44,rx:4,fill:'#6f6c66'},body);E('rect',{x:X+Wd-200,y:Y-2,width:56,height:18,rx:4,fill:'#6f6c66'},body);
+  const part=(x,y,w,h,f,lab,dark)=>{const p=E('g',{},body);E('rect',{x:-w/2,y:-h/2,width:w,height:h,rx:8,fill:f,stroke:'rgba(0,0,0,.25)','stroke-width':2},p);if(lab)T(p,0,8,lab,{size:20,anchor:'middle',weight:600,fill:dark?'#0b0c0e':'#f3f3f0',ff:FD});p._x=x;p._y=y;return p;};
+  const btn=(x,y)=>{const p=E('g',{},body);E('rect',{x:-22,y:-22,width:44,height:44,rx:5,fill:'#2b2e33'},p);E('circle',{r:9,fill:'#0b0c0e'},p);p._x=x;p._y=y;return p;};
+  const B=this.btnPos={up:[700,326],down:[700,414],left:[656,370],right:[744,370],select:[640,500],home:[700,520],start:[760,540],b:[860,470],a:[940,470]};
+  this.batches=[
+   [part(1170,320,340,100,'#1c1f24','Controller'),part(1180,470,300,140,'#9aa0a8','Battery',true),part(630,620,150,80,'#1c1f24','Charger'),part(880,600,100,76,'#3a2a5c','Amp'),btn(...B.up),btn(...B.a),btn(...B.b)],
+   [btn(...B.down),btn(...B.left),btn(...B.right),btn(...B.start)],
+   [btn(...B.select),btn(...B.home)]];
+  // caps
+  this.caps=Object.entries(B).map(([k,[x,y]])=>{const c=E('g',{},g);const red=k==='a'||k==='b',round=['select','home','start'].includes(k)||red;
+    if(round)E('circle',{r:red?28:22,fill:red?'#e05264':'#1e2024'},c);else E('rect',{x:-23,y:-23,width:46,height:46,rx:6,fill:'#1e2024'},c);c._x=x;c._y=y;c._k=k;return c;});
+  // lid underside (face down)
+  const under=this.under=E('g',{},g);
+  E('rect',{x:X,y:Y,width:Wd,height:Hd,rx:34,fill:'#ecebe6',filter:'url(#shadow)'},under);T(under,X+30,Y+56,'LID, FACE DOWN',{size:20,fill:'#6f6c66',ls:2.5,weight:500});
+  this.seat=[['Screen',[1000,280,300,236],'#b5283f'],['Switch',[640,320,70,40],'#2b2e33'],['Speaker',[780,560,0,0],'#2b2e33']].map(([n,[x,y,w,h],f])=>{const s=E('g',{},under);
+    if(n==='Speaker'){E('circle',{cx:0,cy:0,r:58,fill:f,stroke:'#5d616a','stroke-width':3},s);E('circle',{r:26,fill:'#1b1e22'},s);T(s,0,100,n,{size:22,anchor:'middle',fill:'#3a3a38',weight:600});s._x=x;s._y=y;}
+    else{E('rect',{x:-w/2,y:-h/2,width:w,height:h,rx:6,fill:f},s);if(n==='Screen')E('rect',{x:-w/2+20,y:-h/2+20,width:w-60,height:h-40,rx:4,fill:'#7d1c2c'},s);T(s,0,h/2+34,n,{size:22,anchor:'middle',fill:'#3a3a38',weight:600});s._x=x+w/2;s._y=y+h/2;}
+    return s;});
+  // lid face (closed)
+  const lid=this.lid=E('g',{},g);
+  E('rect',{x:X,y:Y,width:Wd,height:Hd,rx:34,fill:'#f0efea',filter:'url(#shadow)'},lid);
+  E('rect',{x:1000,y:290,width:320,height:250,rx:8,fill:'#d9d8d2'},lid);E('rect',{x:1014,y:304,width:292,height:222,rx:5,fill:'#0b0f17'},lid);
+  E('rect',{x:830,y:330,width:30,height:16,rx:4,fill:'#d9d8d2',stroke:'#bdbab2'},lid);
+  E('circle',{cx:790,cy:610,r:52,fill:'#d6d6d3',stroke:'#c4c2bb','stroke-width':3},lid);
+  this.lidBtns=Object.entries(B).map(([k,[x,y]])=>{const c=E('g',{},lid);const red=k==='a'||k==='b',round=['select','home','start'].includes(k)||red;
+    if(round)E('circle',{r:red?28:22,fill:red?'#e05264':'#1e2024'},c);else E('rect',{x:-23,y:-23,width:46,height:46,rx:6,fill:'#1e2024'},c);
+    const ring=E('circle',{r:40,fill:'none',stroke:C.good,'stroke-width':4,opacity:0},c);c._ring=ring;c._x=x;c._y=y;tf(c,x,y);return c;});
+  this.screws=[[X+30,Y+30],[X+Wd-30,Y+30],[X+30,Y+Hd-30],[X+Wd-30,Y+Hd-30]].map(([x,y])=>{const s=E('g',{},g);E('circle',{r:16,fill:'#a6abb2',stroke:'#6f747b','stroke-width':2},s);E('path',{d:'M-9 0 H9 M0 -9 V9',stroke:'#3a3e45','stroke-width':4,'stroke-linecap':'round'},s);s._x=x;s._y=y;return s;});
+  // caption
+  const cap=this.cap=E('g',{},g);E('rect',{x:60,y:900,width:1800,height:150,rx:26,fill:'rgba(20,22,25,.94)',stroke:C.line,'stroke-width':1.5},cap);
+  this.cs=T(cap,110,964,'40',{ff:FD,size:56,weight:600});this.c1=T(cap,230,956,'',{size:32,weight:500});this.c2=T(cap,230,1004,'',{size:26,fill:C.muted});
+  E('line',{x1:200,y1:928,x2:200,y2:1022,stroke:C.line2,'stroke-width':2},cap);
+  this.hero=E('image',{href:'../files/renders/hero-alpha.png',x:420,y:120,width:1080,height:810},g);
+ },
+ update(t){
+  op(this.eb,P(t,.2,.6));op(this.h,P(t,.3,.9));
+  const bStart=[.8,5.8,8.2];
+  this.batches.forEach((b,bi)=>b.forEach((p,i)=>{const s=bStart[bi]+i*.32;const k=eo(P(t,s,s+.6));op(p,P(t,s,s+.2));tf(p,p._x,p._y-lerp(60,0,k),lerp(1.15,1,k));}));
+  const bodyO=1-P(t,10.2,10.6)+P(t,14.8,15.2);op(this.body,t<10.2?1:t<15?1-P(t,10.2,10.6):P(t,14.8,15.2));
+  op(this.under,Math.min(P(t,10.4,10.8),1-P(t,14.6,15)));
+  this.seat.forEach((s,i)=>{const st=11+i*.8;const k=eo(P(t,st,st+.6));op(s,P(t,st,st+.2));tf(s,s._x,s._y-lerp(50,0,k),lerp(1.12,1,k));});
+  this.caps.forEach((c,i)=>{const st=15.3+i*.15;const k=back(P(t,st,st+.4));op(c,Math.min(P(t,st,st+.1),1-P(t,17.2,17.5)));tf(c,c._x,c._y,lerp(.4,1,k));});
+  const lk=eo(P(t,16.8,17.6));op(this.lid,Math.min(P(t,16.8,17.1),1-P(t,24.2,24.8)));tf(this.lid,960*(1-lerp(1.06,1,lk)),540*(1-lerp(1.06,1,lk)),lerp(1.06,1,lk));
+  // screws: 3 then button test then last
+  const sS=[17.9,18.6,19.3,22.9];
+  this.screws.forEach((s,i)=>{const st=sS[i];const k=P(t,st,st+.6);op(s,Math.min(P(t,st,st+.12),1-P(t,24.2,24.8)));tf(s,s._x,s._y,lerp(1.4,1,eo(k)),k*540);});
+  this.lidBtns.forEach((c,i)=>{const st=20+i*.3;const d=P(t,st,st+.12)-P(t,st+.14,st+.3);tf(c,c._x,c._y,1-.12*clamp(d));c._ring.setAttribute('opacity',(clamp(1-Math.abs(t-st-.2)/.35)*.9).toFixed(3));});
+  const step=t<10.4?(t<5.8?40:t<8.2?41:42):t<15?43:44;this.cs.textContent=String(step);
+  const txt={40:['Lower the controller, battery, charger, amplifier, D-pad up, A and B onto the posts.','Connectors go toward their openings in the wall.'],41:['Lower D-pad down, D-pad left, D-pad right and Start onto the posts.','Connectors go toward their openings in the wall.'],42:['Lower Select and Home onto the posts.','Connectors go toward their openings in the wall.'],43:['Turn the lid over. Seat the screen, power switch and speaker face down in it.','Each part looks out through its own opening.'],44:t<19.9?['Caps over each stem, fold the wires in, lower the lid, fit 4 M3 × 10 mm countersunk screws.','Each cap has a flange the lid holds down, so it cannot fall out.']:['Before the last screw: press every button. Each must click and spring back.','Stop turning as soon as a screw is snug. Printed plastic strips easily.']};
+  this.c1.textContent=txt[step][0];this.c2.textContent=txt[step][1];op(this.cap,Math.min(P(t,.4,.8),1-P(t,24,24.5)));
+  const hk=eo(P(t,24.4,25.6));op(this.hero,hk);this.hero.setAttribute('transform',`translate(0 ${lerp(30,0,hk)})`);
+ }});
+
+/* 8. Checks */
+const NETS=['pwr_EN','GND','5V','TFT_CS','TFT_RST','TFT_DC','TFT_MOSI','TFT_SCK','TFT_LED','I2S_BCLK','I2S_LRC','I2S_DIN','amp_SPK+','amp_SPK-','BTN_UP','BTN_LEFT','BTN_DOWN','BTN_RIGHT','BTN_SELECT','BTN_HOME','BTN_START','BTN_B','BTN_A','button ground chain','battery +','battery GND'];
+scene({id:'checks',chap:'Before power-on',dur:25,
+ say:[[0.4,'Before you switch it on, look. Every joint is a shiny cone. No solder touches a neighbouring pad. No stray strands of wire.'],[6.4,'Set the multimeter to continuity. Five volts to ground must not beep. Battery plus to ground must not beep. A beep means a short: find it before you plug in.'],[13.2,'Then probe the two ends of every connection. These must beep.'],[20.0,'Plug in. Nothing gets warm, nothing smells. If something does, unplug at once.']],
+ build(g){
+  // look
+  const L=this.L=E('g',{},g);eyebrow(L,120,170,'Before you switch it on');title(L,116,260,'Look.',96);
+  lines(L,120,360,['Every joint is a shiny cone.','No solder touches a neighbouring pad.','No stray strands of wire.'],{size:34,fill:C.muted,lh:52});
+  const row=E('g',{},L);tf(row,1000,600);E('rect',{x:0,y:40,width:760,height:30,rx:3,fill:C.pcb,stroke:C.pcbLine,'stroke-width':2},row);
+  for(let i=0;i<6;i++){const x=70+i*124;E('rect',{x:x-34,y:32,width:68,height:10,rx:2,fill:C.copper},row);E('rect',{x:x-7,y:-70,width:14,height:150,rx:2,fill:'#bfc4ca'},row);E('path',{d:`M${x-34} 34 Q${x-12} 30 ${x-7} -20 L${x+7} -20 Q${x+12} 30 ${x+34} 34 Z`,fill:'url(#solderG)'},row);}
+  this.mag=E('g',{},L);E('circle',{r:90,fill:'rgba(243,243,240,.06)',stroke:C.ink,'stroke-width':6},this.mag);E('path',{d:'M64 64 L130 130',stroke:C.ink,'stroke-width':16,'stroke-linecap':'round'},this.mag);
+  // no beep
+  const N=this.N=E('g',{},g);eyebrow(N,120,170,'Multimeter on continuity');title(N,116,260,'These must not beep.',84);
+  lines(N,120,350,['A beep means a short.','Find it before you plug in.'],{size:34,fill:C.muted,lh:50});
+  const m=E('g',{},N);tf(m,1240,330);E('rect',{x:-130,y:-140,width:260,height:400,rx:30,fill:'#e6c231'},m);E('rect',{x:-100,y:-110,width:200,height:90,rx:8,fill:'#1d2a22'},m);
+  this.disp=T(m,0,-48,'OL',{ff:FM,size:52,anchor:'middle',fill:'#bde8c7'});E('circle',{cx:0,cy:80,r:60,fill:'#2b2e33'},m);E('path',{d:'M0 80 L30 40',stroke:'#e6c231','stroke-width':8,'stroke-linecap':'round'},m);
+  E('circle',{cx:-50,cy:200,r:14,fill:'#2b2e33'},m);E('circle',{cx:50,cy:200,r:14,fill:'#c0283f'},m);
+  this.probeR=E('path',{fill:'none',stroke:'#c0283f','stroke-width':8,'stroke-linecap':'round'},N);this.probeB=E('path',{fill:'none',stroke:'#2b2e33','stroke-width':8,'stroke-linecap':'round'},N);
+  this.pairs=[['5V','GND'],['+','GND']].map(([a,b],i)=>{const pg=E('g',{},N);tf(pg,120,520+i*170);
+    [a,b].forEach((s,j)=>{E('rect',{x:j*300,y:0,width:220,height:110,rx:20,fill:C.surface,stroke:C.line2,'stroke-width':2},pg);E('circle',{cx:j*300+110,cy:36,r:10,fill:'#0b0c0e',stroke:'#e6c27a','stroke-width':3},pg);T(pg,j*300+110,90,s,{size:30,anchor:'middle',ff:FD,weight:600});});
+    const x=E('g',{},pg);tf(x,640,55);E('circle',{r:30,fill:C.bad},x);E('path',{d:'M-10 -10 L10 10 M10 -10 L-10 10',stroke:'#fff','stroke-width':5,'stroke-linecap':'round'},x);T(x,48,10,'silent',{size:28,fill:C.ink});pg._x=x;return pg;});
+  // must beep
+  const Y=this.Y=E('g',{},g);eyebrow(Y,120,170,'Probe both ends of every connection');title(Y,116,260,'These must beep.',84);
+  this.nets=NETS.map((n,i)=>{const r=E('g',{},Y);const col=Math.floor(i/9),row=i%9;tf(r,120+col*580,350+row*62);
+    const ck=E('circle',{cx:16,cy:-9,r:16,fill:'none',stroke:C.line2,'stroke-width':2},r);const tk=E('path',{d:'M8 -9 L14 -3 L25 -15',stroke:'#0b0c0e','stroke-width':4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},r);T(r,50,0,n,{ff:FM,size:28,fill:C.ink});r._ck=ck;r._tk=tk;return r;});
+  // plug in
+  const U=this.U=E('g',{},g);eyebrow(U,120,170,'First power');title(U,116,260,'Plug in.',96);
+  lines(U,120,360,['Nothing gets warm, nothing smells.','If something does, unplug at once.'],{size:36,fill:C.muted,lh:54});
+  this.dev=E('image',{href:'../files/renders/hero-alpha.png',x:880,y:300,width:900,height:675},U);
+  this.cable=E('g',{},U);E('rect',{x:0,y:-22,width:90,height:44,rx:10,fill:'#d9d9d4'},this.cable);E('path',{d:'M0 0 H-500',stroke:'#d9d9d4','stroke-width':16,'stroke-linecap':'round'},this.cable);
+ },
+ cues:[...Array(26)].map((_,i)=>13.6+i*.24),
+ update(t){
+  op(this.L,Math.min(P(t,0,.3),1-P(t,5.8,6.2)));op(this.N,Math.min(P(t,6.2,6.6),1-P(t,12.8,13.2)));op(this.Y,Math.min(P(t,13.2,13.6),1-P(t,19.6,20)));op(this.U,P(t,20,20.4));
+  const mx=lerp(1070,1070+620,eio(P(t,1,5.4)));tf(this.mag,mx,560);
+  const pi=t<9.6?0:1;const pp=eo(P(t,pi?9.6:7.2,pi?10.4:8.0));const base=[[230,556],[530,556]].map(([x,y])=>[x,y+pi*170]);
+  const mr=[1290,530],mb=[1190,530];
+  this.probeR.setAttribute('d',`M${mr[0]} ${mr[1]} C ${mr[0]} 700, ${lerp(mr[0],base[0][0],pp)} 700, ${lerp(mr[0],base[0][0],pp)} ${lerp(mr[1]+80,base[0][1],pp)}`);
+  this.probeB.setAttribute('d',`M${mb[0]} ${mb[1]} C ${mb[0]} 760, ${lerp(mb[0],base[1][0],pp)} 760, ${lerp(mb[0],base[1][0],pp)} ${lerp(mb[1]+80,base[1][1],pp)}`);
+  this.pairs.forEach((p,i)=>{const s=i?10.4:8.0;op(p,P(t,6.6+i*.3,7+i*.3));const k=back(P(t,s,s+.4));op(p._x,P(t,s,s+.1));p._x.setAttribute('transform',`translate(640 55) scale(${k.toFixed(3)})`);});
+  this.nets.forEach((r,i)=>{const s=13.6+i*.24;const on=t>=s;r._ck.setAttribute('fill',on?C.good:'none');r._ck.setAttribute('stroke',on?C.good:C.line2);op(r._tk,on?1:0);op(r,P(t,13.3,13.7)*(on?1:.5));});
+  const cp=eio(P(t,21,22.2));tf(this.cable,lerp(520,830,cp),640);
+ }});
+
+/* 9. Bring-up */
+scene({id:'flash',chap:'Bring-up test',dur:12,
+ say:[[0.4,'Flash the bring-up test, over the top port, with a cable that carries data. It reports every part it can find before you load the real firmware.']],
+ build(g){
+  eyebrow(g,120,170,'Top port · data cable');title(g,116,260,'Flash the bring-up test.',84);
+  lines(g,120,350,['It reports every part it can find','before you load the real firmware.'],{size:36,fill:C.muted,lh:52});
+  const w=E('g',{},g);tf(w,120,520);E('rect',{x:0,y:0,width:1680,height:300,rx:22,fill:'#08090b',stroke:C.line2,'stroke-width':2},w);
+  E('rect',{x:0,y:0,width:1680,height:56,rx:22,fill:C.raise},w);E('rect',{x:0,y:34,width:1680,height:22,fill:C.raise},w);
+  ['#ff5f57','#febc2e','#28c840'].forEach((c,i)=>E('circle',{cx:34+i*28,cy:28,r:8,fill:c},w));T(w,840,36,'Terminal',{size:20,fill:C.muted,anchor:'middle',ff:FM});
+  this.cmd=T(w,40,150,'',{ff:FM,size:36,fill:C.ink});this.cur=E('rect',{y:120,width:20,height:40,fill:C.ink},w);
+  this.hint=T(w,40,230,'',{ff:FM,size:26,fill:C.muted});this.full='$ pio run -e bringup -t upload && pio device monitor';
+ },
+ update(t){
+  const n=Math.floor(clamp((t-1.2)/4.6)*this.full.length);this.cmd.textContent=this.full.slice(0,n);
+  const x=40+(this.cmd.getComputedTextLength?this.cmd.getComputedTextLength():0)+6;this.cur.setAttribute('x',x);op(this.cur,(Math.floor(t*2.4)%2===0||n<this.full.length)?1:0);
+  this.hint.textContent=t>6.4?'# leave the monitor open and read what it finds':'';
+ }});
+
+/* 10. Play */
+const GAMES=['Snake','Pong','Tetris','Breakout','Invaders','PacBoy','FlapBoy'];
+scene({id:'play',chap:'Play',dur:22,
+ say:[[0.4,'Slide the switch on. D-pad to choose, A to play, Home to come back.'],[12.6,'Charge through the port on the left side, while you keep playing. Plug the top port into a computer to flash a game of your own.'],[17.6,'Nokta is built. Every game is one small file: copy the shortest one, change it, and add it to the menu.']],
+ build(g){
+  const D=this.D=E('g',{},g);
+  const X=220,Y=230;this.o=[X,Y];
+  E('rect',{x:X,y:Y,width:1000,height:520,rx:44,fill:'#efeee9',filter:'url(#shadow)'},D);
+  E('rect',{x:X+620,y:Y+50,width:340,height:290,rx:10,fill:'#d9d8d2'},D);
+  const scr=this.scr=E('g',{},D);tf(scr,X+636,Y+66);E('rect',{width:308,height:258,rx:6,fill:'#0b0f17'},scr);
+  this.menu=E('g',{},scr);T(this.menu,18,34,'NOKTA',{ff:FD,size:22,weight:700,fill:C.accent,ls:3});
+  this.hl=E('rect',{x:10,y:0,width:288,height:28,rx:5,fill:'rgba(243,243,240,.14)'},this.menu);
+  GAMES.forEach((n,i)=>T(this.menu,22,72+i*28,n,{ff:FM,size:19,fill:C.ink}));
+  this.game=E('g',{},scr);E('rect',{x:4,y:4,width:300,height:250,fill:'none',stroke:'#2b3a2f','stroke-width':2},this.game);
+  this.snake=[...Array(7)].map(()=>E('rect',{width:13,height:13,rx:2,fill:C.good},this.game));this.food=E('rect',{width:13,height:13,rx:6,fill:C.accent},this.game);
+  this.score=T(this.game,292,26,'0',{ff:FM,size:18,anchor:'end',fill:C.muted});
+  const BP={up:[400,330],down:[400,426],left:[352,378],right:[448,378],select:[340,520],home:[410,545],start:[480,570],b:[600,520],a:[690,500]};
+  this.btns={};for(const k in BP){const [x,y]=BP[k];const c=E('g',{},D);const red=k==='a'||k==='b',round=['select','home','start'].includes(k)||red;
+    if(round)E('circle',{r:red?32:24,fill:red?'#e05264':'#1e2024'},c);else E('rect',{x:-24,y:-24,width:48,height:48,rx:6,fill:'#1e2024'},c);
+    c._ring=E('circle',{r:44,fill:'none',stroke:C.accent,'stroke-width':4,opacity:0},c);c._x=x;c._y=y;tf(c,x,y);this.btns[k]=c;}
+  E('circle',{cx:560,cy:660,r:56,fill:'#d6d6d3',stroke:'#c4c2bb','stroke-width':3},D);E('rect',{x:540,y:315,width:34,height:18,rx:4,fill:'#d9d8d2',stroke:'#bdbab2'},D);
+  // ports
+  E('rect',{x:X-6,y:Y+340,width:12,height:50,rx:4,fill:'#6f6c66'},D);E('rect',{x:X+800,y:Y-6,width:60,height:12,rx:4,fill:'#6f6c66'},D);
+  // right copy
+  this.eb=eyebrow(g,1320,280,'Seven games on board');this.h=title(g,1316,370,'Play.',96);
+  this.rows=[['D-pad','to choose'],['A','to play'],['Home','to come back']].map(([a,b],i)=>{const r=E('g',{},g);tf(r,1320,470+i*72);T(r,0,0,a,{ff:FD,size:40,weight:600});T(r,a.length*27+20,0,b,{size:36,fill:C.muted});return r;});
+  // ports callouts
+  this.pl=E('g',{},g);E('path',{d:`M${X-20} ${Y+365} H120 V880`,fill:'none',stroke:C.accent,'stroke-width':3},this.pl);T(this.pl,140,870,'Left port: charge while you play',{size:30,weight:500});
+  this.pt=E('g',{},g);E('path',{d:`M${X+830} ${Y-20} V150 H${X+500}`,fill:'none',stroke:C.accent,'stroke-width':3},this.pt);T(this.pt,X+480,158,'Top port: flash a game of your own',{size:30,weight:500,anchor:'end'});
+  // end card
+  this.end=E('g',{},g);title(this.end,960,470,'Nokta is built.',120).setAttribute('text-anchor','middle');
+  T(this.end,960,560,'Every game is one small file. Copy the shortest one, change it, add it to the menu.',{size:34,fill:C.muted,anchor:'middle'});
+  T(this.end,960,700,'Nokta · MIT · firmware derived from Cihaz-Console',{size:22,fill:C.dim,anchor:'middle',ls:1});
+ },
+ update(t){
+  op(this.D,Math.min(P(t,0,.4),1-P(t,17,17.6)));
+  // presses: [time, button]
+  const presses=[[1.6,'down'],[2.4,'down'],[3.2,'down'],[4.0,'up'],[4.8,'up'],[5.6,'up'],[6.6,'a'],[11.4,'home']];
+  for(const k in this.btns){const c=this.btns[k];let d=0,r=0;presses.forEach(([pt,b])=>{if(b===k){d=Math.max(d,clamp(1-Math.abs(t-pt-.08)/.16));r=Math.max(r,clamp(1-Math.abs(t-pt-.2)/.4));}});tf(c,c._x,c._y,1-.1*d);c._ring.setAttribute('opacity',(r*.9).toFixed(3));}
+  let sel=0;presses.forEach(([pt,b])=>{if(t>=pt){if(b==='down')sel=Math.min(6,sel+1);if(b==='up')sel=Math.max(0,sel-1);}});
+  this.hl.setAttribute('y',72+sel*28-21);
+  const inGame=t>=6.8&&t<11.6;op(this.menu,inGame?0:1);op(this.game,inGame?1:0);
+  if(inGame){const path=[];for(let x=1;x<=19;x++)path.push([x,3]);for(let y=4;y<=15;y++)path.push([19,y]);for(let x=18;x>=1;x--)path.push([x,15]);for(let y=14;y>=4;y--)path.push([1,y]);
+    const step=Math.floor((t-6.8)*9);this.snake.forEach((s,i)=>{const p=path[((step-i)%path.length+path.length)%path.length];s.setAttribute('x',p[0]*15);s.setAttribute('y',p[1]*15);});
+    const fi=Math.floor(step/14);const fp=path[(fi*14+14)%path.length];this.food.setAttribute('x',fp[0]*15);this.food.setAttribute('y',fp[1]*15);this.score.textContent=String(fi*10);}
+  op(this.eb,Math.min(P(t,.3,.8),1-P(t,12.2,12.6)));op(this.h,Math.min(P(t,.4,1),1-P(t,12.2,12.6)));
+  const act=t<6.6?0:t<11.4?1:2;this.rows.forEach((r,i)=>op(r,Math.min(P(t,.8+i*.3,1.3+i*.3),1-P(t,12.2,12.6))*(i===act?1:.4)));
+  op(this.pl,Math.min(P(t,12.6,13.2),1-P(t,17,17.4)));op(this.pt,Math.min(P(t,14,14.6),1-P(t,17,17.4)));
+  const e=eo(P(t,17.6,18.6));op(this.end,e);tf(this.end,0,lerp(24,0,e));
+ }});
+
+/* ---------- timeline ---------- */
+let acc=0;scenes.forEach(s=>{s.start=acc;acc+=s.dur;});const TOTAL=acc;
+const chapters=[];scenes.forEach(s=>{if(s.id==='wiring'){GROUPS.forEach((G,i)=>{const st=STEPS.find(x=>x.n===G.from);chapters.push({t:s.start+(i===0?0:st.s),label:G.chap});});}else chapters.push({t:s.start,label:s.chap});});
+const byId=Object.fromEntries(scenes.map(s=>[s.id,s]));
+byId.intro.fx=[[.3,chime]];
+byId.wiring.fx=STEPS.map(st=>[st.s+.1,st.n>=38?click:tick]);
+byId.case.fx=[...[[.8,7],[5.8,4],[8.2,2]].flatMap(([s,n])=>[...Array(n)].map((_,i)=>[s+i*.32+.45,click])),
+  ...[0,1,2].map(i=>[11+i*.8+.45,click]),...[...Array(9)].map((_,i)=>[15.3+i*.15+.25,click]),[17.4,click],
+  ...[17.9,18.6,19.3,22.9].map(s=>[s+.35,tick]),...[...Array(9)].map((_,i)=>[20+i*.3+.08,click]),[24.6,chime]];
+byId.play.fx=[...[1.6,2.4,3.2,4.0,4.8,5.6,6.6,11.4].map(s=>[s+.06,click]),[6.75,chime],[17.6,chime]];
+const cues=[];scenes.forEach(s=>{(s.say||[]).forEach(([lt,txt])=>cues.push({t:s.start+lt,f:()=>say(txt)}));(s.cues||[]).forEach(lt=>cues.push({t:s.start+lt,f:beep}));(s.fx||[]).forEach(([lt,f])=>cues.push({t:s.start+lt,f}));});
+cues.sort((a,b)=>a.t-b.t);
+
+function render(t){
+  scenes.forEach((s,i)=>{const lt=t-s.start;const vis=lt>=0&&lt<s.dur||(i===scenes.length-1&&lt>=s.dur);
+    if(!vis){op(s.g,0);return;}
+    const fin=i===0?1:P(lt,0,.35),fout=i===scenes.length-1?1:1-P(lt,s.dur-.35,s.dur);op(s.g,Math.min(fin,fout));s.update(Math.min(lt,s.dur));});
+}
+
+/* ---------- player ---------- */
+const $=id=>document.getElementById(id);
+const track=$('track'),fill=$('fill'),knob=$('knob'),timeEl=$('time'),chapEl=$('chap'),big=$('big'),playBtn=$('play'),playIcon=$('playIcon');
+let t=0,playing=false,started=false,last=null,dirty=true;
+track.setAttribute('aria-valuemax',Math.round(TOTAL));
+const fmt=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const ticks=$('ticks');chapters.forEach(c=>{if(c.t>0){const d=document.createElement('div');d.className='tick';d.style.left=(c.t/TOTAL*100)+'%';ticks.appendChild(d);}});
+const nav=$('chapters');const chapBtns=chapters.map(c=>{const b=document.createElement('button');b.innerHTML=`<span>${fmt(c.t)}</span>${c.label}`;b.addEventListener('click',()=>{seek(c.t+.01);if(!playing)play();});nav.appendChild(b);return b;});
+function setIcon(){playIcon.innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M6 4l14 8-14 8z"/>';playBtn.setAttribute('aria-label',playing?'Pause':'Play');big.hidden=playing;}
+function play(){unlockAudio();if(t>=TOTAL-.05)t=0;started=true;playing=true;last=null;musicStart();setIcon();dirty=true;}
+function pause(){playing=false;hush();musicStop();setIcon();}
+function seek(nt){t=clamp(nt,0,TOTAL);started=true;hush();dirty=true;}
+function ui(){const p=t/TOTAL*100;fill.style.width=p+'%';knob.style.left=p+'%';timeEl.textContent=fmt(t)+' / '+fmt(TOTAL);track.setAttribute('aria-valuenow',Math.round(t));
+  let ci=0;chapters.forEach((c,i)=>{if(t>=c.t-.001)ci=i;});chapEl.textContent=chapters[ci].label;chapBtns.forEach((b,i)=>b.classList.toggle('on',i===ci&&started));}
+function frame(now){
+  if(playing){if(last!==null){const prev=t;t=Math.min(TOTAL,t+Math.min(.1,(now-last)/1000));cues.forEach(c=>{if(c.t>prev&&c.t<=t)c.f();});if(t>=TOTAL){playing=false;musicStop();setIcon();}}last=now;dirty=true;}
+  if(dirty){render(started?t:5.2);ui();dirty=false;}
+  requestAnimationFrame(frame);}
+big.addEventListener('click',e=>{e.stopPropagation();play();});
+playBtn.addEventListener('click',()=>playing?pause():play());
+$('screen').addEventListener('click',()=>playing?pause():play());
+let drag=false;const tpos=e=>{const r=track.getBoundingClientRect();return clamp((e.clientX-r.left)/r.width)*TOTAL;};
+track.addEventListener('pointerdown',e=>{drag=true;track.setPointerCapture(e.pointerId);seek(tpos(e));});
+track.addEventListener('pointermove',e=>{if(drag)seek(tpos(e));});
+track.addEventListener('pointerup',()=>{drag=false;});
+const sndBtn=$('sound');
+if(!hasTTS)sndBtn.title='Music and effects (this browser has no narration voice)';
+sndBtn.addEventListener('click',()=>{unlockAudio();setSound(!soundOn);sndBtn.setAttribute('aria-pressed',soundOn);sndBtn.setAttribute('aria-label',soundOn?'Mute':'Unmute');if(soundOn&&playing)musicStart();});
+$('full').addEventListener('click',()=>{const el=$('screen');try{if(document.fullscreenElement)document.exitFullscreen();else el.requestFullscreen&&el.requestFullscreen().catch(()=>{});}catch(e){}});
+document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('button')&&e.key===' ')return;
+  if(e.key===' '||e.key==='k'){e.preventDefault();playing?pause():play();}
+  else if(e.key==='ArrowRight'){e.preventDefault();seek(t+5);}else if(e.key==='ArrowLeft'){e.preventDefault();seek(t-5);}
+  else if(e.key==='m'||e.key==='M')sndBtn.click();else if(e.key==='f'||e.key==='F')$('full').click();});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{dirty=true;});
+window.__nokta={seek:(x)=>{seek(x);},get t(){return t;},TOTAL,chapters,get audio(){return {ctx:actx&&actx.state,voices:hasTTS?speechSynthesis.getVoices().length:-1,voice:voice&&voice.name,speaking:hasTTS&&speechSynthesis.speaking,music:!!musicTimer,soundOn};}};
+setIcon();requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>

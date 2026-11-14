@@ -1,0 +1,260 @@
+{
+  "schema": 1,
+  "slug": "luft",
+  "name": "Luft",
+  "tagline": "A desk air monitor you build in an evening",
+  "summary": "Luft sits on your desk and shows temperature, humidity and air pressure on a small OLED. Press the button to cycle through readings and a 24 hour trend. It runs from any USB charger and keeps its data on the device.",
+  "build": {
+    "path": "wire",
+    "joint": "solder",
+    "difficulty": 1,
+    "minutes": 60
+  },
+  "power": {
+    "source": "usb",
+    "volts": 5,
+    "budgetMa": 500,
+    "entry": "mcu.5V"
+  },
+  "parts": [
+    {
+      "ref": "mcu",
+      "part": "esp32-c3-supermini",
+      "label": "Controller"
+    },
+    {
+      "ref": "oled",
+      "part": "ssd1306-oled-096-i2c",
+      "label": "Display"
+    },
+    {
+      "ref": "env",
+      "part": "bme280-breakout",
+      "label": "Air sensor"
+    },
+    {
+      "ref": "btn",
+      "part": "tactile-button-6mm-tall",
+      "label": "Button"
+    }
+  ],
+  "connections": [
+    {
+      "from": "mcu.3V3",
+      "to": "oled.VCC",
+      "color": "red",
+      "why": "Power for the display"
+    },
+    {
+      "from": "mcu.GND",
+      "to": "oled.GND",
+      "color": "black",
+      "why": "Ground for the display"
+    },
+    {
+      "from": "mcu.GPIO6",
+      "to": "oled.SDA",
+      "net": "I2C_SDA",
+      "color": "blue",
+      "why": "Data line"
+    },
+    {
+      "from": "mcu.GPIO7",
+      "to": "oled.SCL",
+      "net": "I2C_SCL",
+      "color": "yellow",
+      "why": "Clock line"
+    },
+    {
+      "from": "oled.VCC",
+      "to": "env.VCC",
+      "color": "red",
+      "why": "Power carries on to the sensor"
+    },
+    {
+      "from": "oled.GND",
+      "to": "env.GND",
+      "color": "black",
+      "why": "Ground carries on to the sensor"
+    },
+    {
+      "from": "oled.SDA",
+      "to": "env.SDA",
+      "color": "blue",
+      "why": "The sensor shares the data line"
+    },
+    {
+      "from": "oled.SCL",
+      "to": "env.SCL",
+      "color": "yellow",
+      "why": "The sensor shares the clock line"
+    },
+    {
+      "from": "mcu.GPIO10",
+      "to": "btn.1",
+      "net": "BUTTON",
+      "color": "green",
+      "why": "Button input"
+    },
+    {
+      "from": "btn.2",
+      "to": "mcu.GND",
+      "color": "black",
+      "why": "Pressing the button pulls the input to ground"
+    }
+  ],
+  "enclosure": {
+    "wall": 2,
+    "fit": 0.3,
+    "radius": 3,
+    "lid": "screw",
+    "mounts": [
+      {
+        "ref": "mcu",
+        "on": "floor",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "env",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "oled",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "ref": "btn",
+        "on": "lid",
+        "x": 0,
+        "y": 0
+      }
+    ],
+    "openings": [
+      {
+        "ref": "mcu",
+        "port": "USB-C"
+      },
+      {
+        "ref": "oled",
+        "port": "display"
+      },
+      {
+        "ref": "btn",
+        "port": "button-cap"
+      },
+      {
+        "ref": "env",
+        "port": "vent"
+      }
+    ],
+    "material": "PLA",
+    "color": "#f2efe8"
+  },
+  "firmware": {
+    "framework": "arduino",
+    "board": "esp32-c3-devkitm-1",
+    "libs": [
+      "adafruit/Adafruit SSD1306",
+      "adafruit/Adafruit BME280 Library"
+    ],
+    "behaviour": "Read the BME280 every 10 seconds. Show temperature large, with humidity and pressure below. A button press cycles: now, 24 hour temperature trend, 24 hour pressure trend. Dim the display after 60 seconds without a press."
+  },
+  "showcase": {
+    "headline": "Know your air. At a glance.",
+    "subhead": "Temperature, humidity and pressure on a small display that sits on your desk. Four parts, one evening, no cloud account.",
+    "howItWorks": [
+      {
+        "title": "Plug it in",
+        "body": "Any USB charger or laptop port powers it. It starts measuring as soon as it has power."
+      },
+      {
+        "title": "Glance at it",
+        "body": "The current temperature is always on screen, with humidity and pressure underneath."
+      },
+      {
+        "title": "Press for history",
+        "body": "One button cycles through the last 24 hours as a simple trend line."
+      }
+    ],
+    "features": [
+      {
+        "title": "Stays on your desk",
+        "body": "Readings and history live on the device. Nothing is sent anywhere."
+      },
+      {
+        "title": "Four standard parts",
+        "body": "A controller, a display, a sensor and a button, all sold by more than one shop."
+      },
+      {
+        "title": "A case cut to the parts",
+        "body": "The printed enclosure is generated from the same part dimensions as the guide."
+      },
+      {
+        "title": "Drawn to scale",
+        "body": "Every step of the guide shows the real pads in their real positions."
+      },
+      {
+        "title": "Tested before it runs",
+        "body": "A bring-up sketch reports each part it finds before the real firmware goes on."
+      },
+      {
+        "title": "Yours to change",
+        "body": "One project file drives the wiring, the case and the firmware pin map."
+      }
+    ],
+    "stats": [
+      {
+        "value": "4",
+        "label": "parts to buy"
+      },
+      {
+        "value": "60",
+        "unit": "min",
+        "label": "from bag of parts to working"
+      },
+      {
+        "value": "20",
+        "label": "solder joints"
+      },
+      {
+        "value": "0",
+        "label": "accounts, apps or subscriptions"
+      }
+    ],
+    "faq": [
+      {
+        "q": "Do I need to have soldered before?",
+        "a": "No. The guide starts with how to make a good joint and what a bad one looks like, and every connection is drawn with a close-up of the exact pad."
+      },
+      {
+        "q": "Can I build it without a 3D printer?",
+        "a": "Yes. It works on the bench without the case, and print services accept the included 3MF file as it is."
+      },
+      {
+        "q": "Which USB cable does it need?",
+        "a": "A USB-C cable that carries data, for the first flash. After that any USB-C charger cable will do."
+      },
+      {
+        "q": "Can I change what it shows?",
+        "a": "Yes. The firmware is a small PlatformIO project, and the pin numbers are generated from the wiring so they cannot drift apart."
+      },
+      {
+        "q": "Has anyone built this one?",
+        "a": "Not yet. The wiring is checked by software and the case is generated from the part sizes, but nobody has assembled this exact kit. Treat the first build as the test, and measure your parts before printing."
+      }
+    ],
+    "theme": {
+      "mood": "minimal-light",
+      "accent": "#ff5a1f",
+      "display": "Inter Tight",
+      "text": "Inter"
+    },
+    "license": "CERN-OHL-P and MIT",
+    "featuresHeading": "Four parts. One evening."
+  }
+}

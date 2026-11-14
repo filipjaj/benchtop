@@ -1,0 +1,1050 @@
+{
+  "inner": {
+    "w": 54.9,
+    "d": 32,
+    "h": 16.7
+  },
+  "outer": {
+    "w": 58.9,
+    "d": 36,
+    "h": 18.7
+  },
+  "wall": 2,
+  "floor": 2,
+  "lidThickness": 2.4,
+  "lipHeight": 2,
+  "fit": 0.3,
+  "radius": 3,
+  "parts": [
+    {
+      "use": {
+        "ref": "mcu",
+        "part": "esp32-c3-supermini",
+        "label": "Controller"
+      },
+      "def": {
+        "id": "esp32-c3-supermini",
+        "name": "ESP32-C3 SuperMini",
+        "kind": "board",
+        "blurb": "Thumb-sized Wi-Fi and Bluetooth LE controller with USB-C, 16 pins and an onboard blue LED.",
+        "body": {
+          "w": 18,
+          "d": 22.5,
+          "h": 1
+        },
+        "maxHeight": 4.3,
+        "shapes": [
+          {
+            "kind": "box",
+            "x": 4.53,
+            "y": -0.3,
+            "w": 8.94,
+            "d": 6.8,
+            "h": 3.2,
+            "tag": "usb"
+          },
+          {
+            "kind": "box",
+            "x": 12.799999999999999,
+            "y": 12.49,
+            "w": 1.6,
+            "d": 0.8,
+            "h": 0.6,
+            "tag": "led"
+          },
+          {
+            "kind": "box",
+            "x": 2.3200000000000003,
+            "y": 6.619999999999999,
+            "w": 1.6,
+            "d": 0.8,
+            "h": 0.6,
+            "tag": "led"
+          },
+          {
+            "kind": "box",
+            "x": 6.5,
+            "y": 9.2,
+            "w": 5,
+            "d": 5,
+            "h": 0.85,
+            "tag": "chip"
+          },
+          {
+            "kind": "box",
+            "x": 5.6,
+            "y": 19.6,
+            "w": 6.8,
+            "d": 1.8,
+            "h": 1.2,
+            "tag": "antenna"
+          },
+          {
+            "kind": "box",
+            "x": 3.4,
+            "y": 4.6,
+            "w": 2.6,
+            "d": 3.2,
+            "h": 1.6,
+            "tag": "button"
+          },
+          {
+            "kind": "box",
+            "x": 12,
+            "y": 4.6,
+            "w": 2.6,
+            "d": 3.2,
+            "h": 1.6,
+            "tag": "button"
+          }
+        ],
+        "pins": [
+          {
+            "name": "5",
+            "aliases": [
+              "GPIO5"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 3.24,
+            "volts": 3.3,
+            "gpio": 5,
+            "caps": [
+              "adc",
+              "pwm",
+              "spi",
+              "i2c",
+              "uart"
+            ],
+            "note": "ADC2 channel: analogue reads are unreliable while Wi-Fi is on. Also an SPI pin."
+          },
+          {
+            "name": "6",
+            "aliases": [
+              "GPIO6"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 5.78,
+            "volts": 3.3,
+            "gpio": 6,
+            "caps": [
+              "pwm",
+              "spi",
+              "i2c",
+              "uart"
+            ],
+            "note": "Default SPI clock pin (FSPICLK)."
+          },
+          {
+            "name": "7",
+            "aliases": [
+              "GPIO7"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 8.32,
+            "volts": 3.3,
+            "gpio": 7,
+            "caps": [
+              "pwm",
+              "spi",
+              "i2c",
+              "uart"
+            ],
+            "note": "Default SPI data-out pin (FSPID)."
+          },
+          {
+            "name": "8",
+            "aliases": [
+              "GPIO8",
+              "SDA"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 10.86,
+            "volts": 3.3,
+            "gpio": 8,
+            "caps": [
+              "pwm",
+              "i2c",
+              "strapping",
+              "onboard-led",
+              "spi",
+              "uart"
+            ],
+            "note": "Drives the onboard blue LED, which lights when the pin is LOW (inverted). Strapping pin: do not hold it low at reset. Default I2C SDA in the Arduino core."
+          },
+          {
+            "name": "9",
+            "aliases": [
+              "GPIO9",
+              "SCL"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 13.4,
+            "volts": 3.3,
+            "gpio": 9,
+            "caps": [
+              "pwm",
+              "i2c",
+              "strapping",
+              "boot-button",
+              "spi",
+              "uart"
+            ],
+            "note": "Wired to the BOOT button and sampled at reset: holding it low at power-up enters download mode instead of running your program. Default I2C SCL."
+          },
+          {
+            "name": "10",
+            "aliases": [
+              "GPIO10"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 15.94,
+            "volts": 3.3,
+            "gpio": 10,
+            "caps": [
+              "pwm",
+              "spi",
+              "i2c",
+              "uart"
+            ],
+            "note": "Default SPI chip-select pin (FSPICS0)."
+          },
+          {
+            "name": "20",
+            "aliases": [
+              "GPIO20",
+              "RX"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 18.48,
+            "volts": 3.3,
+            "gpio": 20,
+            "caps": [
+              "pwm",
+              "uart",
+              "i2c",
+              "spi"
+            ],
+            "note": "UART0 RX. USB serial uses the native USB port, so this pin is free for a second serial device."
+          },
+          {
+            "name": "21",
+            "aliases": [
+              "GPIO21",
+              "TX"
+            ],
+            "role": "io",
+            "x": 1.38,
+            "y": 21.02,
+            "volts": 3.3,
+            "gpio": 21,
+            "caps": [
+              "pwm",
+              "uart",
+              "i2c",
+              "spi"
+            ],
+            "note": "UART0 TX. USB serial uses the native USB port, so this pin is free for a second serial device."
+          },
+          {
+            "name": "5V",
+            "role": "power-out",
+            "x": 16.62,
+            "y": 3.24,
+            "volts": 5,
+            "supplyMa": 400,
+            "backfeed": {
+              "minVolts": 4.5,
+              "maxVolts": 5.5
+            },
+            "note": "5 V straight from the USB-C port when plugged in. Also the pin to feed 5 V into when running without USB. Never power from both at once through a separate supply."
+          },
+          {
+            "name": "GND",
+            "role": "gnd",
+            "x": 16.62,
+            "y": 5.78,
+            "aliases": [
+              "G"
+            ]
+          },
+          {
+            "name": "3V3",
+            "role": "power-out",
+            "x": 16.62,
+            "y": 8.32,
+            "volts": 3.3,
+            "supplyMa": 150,
+            "note": "Output of the onboard 3.3 V regulator. The chip itself takes most of its capacity during Wi-Fi bursts, so keep external loads small."
+          },
+          {
+            "name": "4",
+            "aliases": [
+              "GPIO4"
+            ],
+            "role": "io",
+            "x": 16.62,
+            "y": 10.86,
+            "volts": 3.3,
+            "gpio": 4,
+            "caps": [
+              "adc",
+              "pwm",
+              "spi",
+              "i2c",
+              "uart"
+            ],
+            "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+          },
+          {
+            "name": "3",
+            "aliases": [
+              "GPIO3"
+            ],
+            "role": "io",
+            "x": 16.62,
+            "y": 13.4,
+            "volts": 3.3,
+            "gpio": 3,
+            "caps": [
+              "adc",
+              "pwm",
+              "i2c",
+              "spi",
+              "uart"
+            ],
+            "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+          },
+          {
+            "name": "2",
+            "aliases": [
+              "GPIO2"
+            ],
+            "role": "io",
+            "x": 16.62,
+            "y": 15.94,
+            "volts": 3.3,
+            "gpio": 2,
+            "caps": [
+              "adc",
+              "pwm",
+              "strapping",
+              "i2c",
+              "spi",
+              "uart"
+            ],
+            "note": "Strapping pin: sampled at reset, so avoid a hard pull-down on it. ADC1 channel."
+          },
+          {
+            "name": "1",
+            "aliases": [
+              "GPIO1"
+            ],
+            "role": "io",
+            "x": 16.62,
+            "y": 18.48,
+            "volts": 3.3,
+            "gpio": 1,
+            "caps": [
+              "adc",
+              "pwm",
+              "i2c",
+              "spi",
+              "uart"
+            ],
+            "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+          },
+          {
+            "name": "0",
+            "aliases": [
+              "GPIO0"
+            ],
+            "role": "io",
+            "x": 16.62,
+            "y": 21.02,
+            "volts": 3.3,
+            "gpio": 0,
+            "caps": [
+              "adc",
+              "pwm",
+              "i2c",
+              "spi",
+              "uart"
+            ],
+            "note": "ADC1 channel, safe for analogue reads with Wi-Fi on."
+          }
+        ],
+        "ports": [
+          {
+            "name": "USB-C",
+            "faces": "y-",
+            "x": 9,
+            "y": 0,
+            "z": 1.6,
+            "w": 8.94,
+            "h": 3.26,
+            "shape": "rect",
+            "margin": 1.5
+          },
+          {
+            "name": "Blue LED (GPIO8)",
+            "faces": "up",
+            "x": 13.6,
+            "y": 12.89,
+            "w": 2.5,
+            "h": 2.5,
+            "shape": "round",
+            "margin": 0.5
+          }
+        ],
+        "electrical": {
+          "logicVolts": 3.3,
+          "fiveVoltTolerant": false,
+          "currentMa": {
+            "typical": 75,
+            "peak": 350
+          },
+          "i2cPullups": false
+        },
+        "footprint": {
+          "mount": "header",
+          "pitch": 2.54
+        },
+        "sourcing": {
+          "search": [
+            "ESP32-C3 SuperMini",
+            "ESP32-C3 Super Mini development board USB-C",
+            "ESP32-C3FH4 SuperMini 4MB"
+          ],
+          "priceUsd": 3
+        },
+        "verify": "Clone board with no official drawing or open board file found; batches differ. Confirmed by independent sources: outline 22.5 (22.52) x 18 mm, 0.1 in pitch, 15.24 mm between rows. NOT confirmed by any source: PCB thickness (modelled 1.0; measure it, clones are often 0.8 to 1.2), distance from the USB-C front edge to the first pad (modelled 3.24), USB-C shell width and overhang (modelled flush, 8.94 wide), all shape heights, LED and button positions. Variants: the 'Plus' and v2 boards have different outlines and pin counts; this file is the plain 16-pin board. Some listings and ESPHome pages use SDA=GPIO5/SCL=GPIO6 as software defaults; the Arduino default is GPIO8/GPIO9. Supply: sources quote the 5V pin as 3.3-6 V or 5-7 V and 3V3 output as 150 to 500 mA; the modelled 150 mA is the conservative figure. With calipers measure: PCB length and width; PCB thickness; distance from the USB-C front edge to the first pad; USB-C width and overhang. Confirm LED polarity (modelled active-low on GPIO8) and which row carries 5V/GND/3V3 with USB at the top and the component side up. Both buttons (BOOT, RST) are not modelled because their position is unverified; measure them if the case needs access. Pin y-positions come from the Wokwi board definition, which is drawn on an 18 x 24.576 mm canvas (artwork derived from the Adafruit QT Py ESP32-C3, per its own description) while the real board is 22.5 mm long, so the offset from the USB edge is an assumption: measure it. Component positions on the board face (chip, antenna, buttons) are drawn for recognition only; rely on the outline and pad positions.",
+        "sources": [
+          "https://protosupplies.com/product/esp32c3-supermini/ (seller: 22.5 x 18 mm, 15.24 mm row spacing, 0.1 in pitch, 130 mA typical)",
+          "https://mischianti.org/esp32-c3-super-mini-high-resolution-pinout-datasheet-and-specs/ (reference site: 22.5 x 18 mm, 5V pin 3.3-6 V)",
+          "https://www.makerguides.com/esp32-c3-supermini-board/ (reference site: 22.52 x 18 mm, 5V pin 3.3-6 V)",
+          "https://www.espboards.dev/esp32/esp32-c3-super-mini/ (reference site: 22.52 x 18 mm, 2.54 mm pitch, pin list)",
+          "https://www.flux.ai/therealjoe/esp32-c3-supermini (user-made Flux project: pin names and order only, no dimensions)"
+        ],
+        "confidence": "typical"
+      },
+      "at": {
+        "x": 8.3,
+        "y": 2.3,
+        "z": 5,
+        "rot": 0
+      }
+    },
+    {
+      "use": {
+        "ref": "env",
+        "part": "bme280-breakout",
+        "label": "Air sensor"
+      },
+      "def": {
+        "id": "bme280-breakout",
+        "name": "BME280 breakout (GY-BME280, 3.3 V, I2C)",
+        "kind": "sensor",
+        "blurb": "Measures temperature, humidity and air pressure over I2C; the small purple 4-pin GY-BME280 board.",
+        "body": {
+          "w": 15,
+          "d": 11.5,
+          "h": 1.6
+        },
+        "maxHeight": 2.53,
+        "shapes": [
+          {
+            "kind": "box",
+            "tag": "sensor-can",
+            "x": 6.25,
+            "y": 6,
+            "z": 0,
+            "w": 2.5,
+            "d": 2.5,
+            "h": 0.93
+          }
+        ],
+        "pins": [
+          {
+            "name": "VCC",
+            "role": "power-in",
+            "x": 3.69,
+            "y": 1.5,
+            "volts": 3.3,
+            "minVolts": 1.8,
+            "maxVolts": 3.6,
+            "note": "3.3 V only on this board. The BME280 chip runs from 1.71 to 3.6 V and its absolute maximum is 4.25 V (Bosch datasheet), so never use the 5 V pin on a bare 3.3 V board. Boards sold as 3.3 V to 5 V have an extra regulator, but you cannot tell from the outside: use 3.3 V."
+          },
+          {
+            "name": "GND",
+            "role": "gnd",
+            "x": 6.23,
+            "y": 1.5
+          },
+          {
+            "name": "SCL",
+            "role": "io",
+            "x": 8.77,
+            "y": 1.5,
+            "needs": [
+              "i2c"
+            ],
+            "dir": "in",
+            "maxVolts": 3.6,
+            "note": "I2C clock. 3.3 V logic: use a level shifter from 5 V controllers."
+          },
+          {
+            "name": "SDA",
+            "role": "io",
+            "x": 11.31,
+            "y": 1.5,
+            "needs": [
+              "i2c"
+            ],
+            "maxVolts": 3.6,
+            "note": "I2C data. 3.3 V logic."
+          }
+        ],
+        "ports": [
+          {
+            "name": "vent",
+            "faces": "up",
+            "x": 7.5,
+            "y": 7.25,
+            "w": 2.5,
+            "h": 2.5,
+            "shape": "round",
+            "margin": 1.5
+          }
+        ],
+        "electrical": {
+          "logicVolts": 3.3,
+          "fiveVoltTolerant": false,
+          "currentMa": {
+            "typical": 0.004,
+            "peak": 0.7
+          },
+          "i2cAddresses": [
+            118,
+            119
+          ],
+          "i2cPullups": true
+        },
+        "footprint": {
+          "mount": "header",
+          "pitch": 2.54
+        },
+        "sourcing": {
+          "search": [
+            "GY-BME280 3.3V I2C breakout",
+            "BME280 temperature humidity pressure module 4 pin",
+            "BME280 breakout purple"
+          ],
+          "priceUsd": 4
+        },
+        "verify": "The board outline is NOT confirmed. Sellers of the GY-BME280 give 15.4 x 11.6 mm, 15.5 x 12 mm and 9 x 11 mm, and no source gives 15 x 11.5, so the modelled body, header position and sensor-can position are a guess within about 1 mm: measure length, width, header-to-edge distances, can position and PCB thickness (modelled 1.6) with calipers. Two 3.5 mm mounting holes are reported by several sellers on the 15 mm boards, not modelled here. Variants: this file is the 4-pin VCC GND SCL SDA board (the pin label may read VIN). 6-pin boards add CSB and SDO and some have an on-board regulator for 3.3 to 5 V; Adafruit's board is 25.2 x 18 mm with different pins and STEMMA QT; none of those fit this file. Chip facts from the Bosch datasheet: VDD 1.71 to 3.6 V, VDDIO 1.2 to 3.6 V, absolute maximum 4.25 V, interface pins at most VDDIO + 0.3 V, 3.6 uA at 1 Hz humidity + pressure + temperature, 0.1 uA sleep, SDO low = 0x76 and SDO high = 0x77, SDI/SCK need external pull-ups to VDDIO (so whether the module has them depends on the clone: check with a meter, i2cPullups is unconfirmed). Confirm the address with a scanner. A BMP280 sold as BME280 has no humidity: the BME280 can is square (2.5 x 2.5 mm) and the BMP280 can rectangular (2.0 x 2.5 mm), which is hard to judge by eye; the reliable test is chip ID register 0xD0, which reads 0x60 for BME280 and 0x58 for BMP280. Variant warning for sourcing: boards sold as \"3.3V/5V\" or \"5 V version\" carry a regulator and level shifting, are larger, and take up to 5 V on VIN; this file is the small 3.3 V-only GY-BME280. The only Norwegian listing found in the local parts catalog (robonordic.no item 499) is the 5 V version. If that is what arrives, override this part in the project with its real size and supply range.",
+        "sources": [
+          "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf (Bosch datasheet, opened: package 2.5 x 2.5 x 0.93 mm LGA, VDD 1.71-3.6 V, VDDIO 1.2-3.6 V, abs max 4.25 V, 3.6 uA at 1 Hz, address 0x76/0x77 by SDO, SDI needs external pull-up)",
+          "https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/ (Bosch product page: same package and supply figures)",
+          "https://cdn.shopify.com/s/files/1/1509/1638/files/BME280_Barometrischer_Sensor_Modul_Datenblatt_AZ-Delivery_Vertriebs_GmbH.pdf (AZ-Delivery GY-BME280 sheet: lists 9 x 11 x 2 mm, 3.3 to 5 V, below 1 mA; disagrees with the modelled outline)",
+          "https://www.adafruit.com/product/2652 (cross-check only: Adafruit board 25.2 x 18 x 4.6 mm, a different board)"
+        ],
+        "confidence": "typical"
+      },
+      "at": {
+        "x": 40.1,
+        "y": 9.8,
+        "z": 15.87,
+        "rot": 0
+      }
+    },
+    {
+      "use": {
+        "ref": "oled",
+        "part": "ssd1306-oled-096-i2c",
+        "label": "Display"
+      },
+      "def": {
+        "id": "ssd1306-oled-096-i2c",
+        "name": "0.96 inch SSD1306 OLED, 128x64, I2C",
+        "kind": "display",
+        "blurb": "Tiny 128x64 pixel monochrome OLED screen driven over two wires; shows text, icons and simple graphs.",
+        "body": {
+          "w": 27.3,
+          "d": 27.8,
+          "h": 1.6
+        },
+        "maxHeight": 3.1,
+        "shapes": [
+          {
+            "kind": "box",
+            "tag": "glass",
+            "x": 0.3,
+            "y": 4.27,
+            "z": 0,
+            "w": 26.7,
+            "d": 19.27,
+            "h": 1.5,
+            "decals": [
+              {
+                "kind": "rect",
+                "face": "top",
+                "x": 2.5,
+                "y": 2.1,
+                "w": 21.74,
+                "h": 10.86,
+                "fill": "hatch"
+              }
+            ]
+          }
+        ],
+        "pins": [
+          {
+            "name": "GND",
+            "role": "gnd",
+            "x": 9.84,
+            "y": 2.3
+          },
+          {
+            "name": "VCC",
+            "role": "power-in",
+            "x": 12.38,
+            "y": 2.3,
+            "volts": 3.3,
+            "minVolts": 3.3,
+            "maxVolts": 5.5,
+            "note": "Most modules have a 3.3 V regulator and accept 3.3 to 5 V. A few clones have no regulator and die at 5 V. Use 3.3 V unless you have checked."
+          },
+          {
+            "name": "SCL",
+            "role": "io",
+            "x": 14.92,
+            "y": 2.3,
+            "needs": [
+              "i2c"
+            ],
+            "dir": "in",
+            "note": "I2C clock."
+          },
+          {
+            "name": "SDA",
+            "role": "io",
+            "x": 17.46,
+            "y": 2.3,
+            "needs": [
+              "i2c"
+            ],
+            "note": "I2C data."
+          }
+        ],
+        "holes": [
+          {
+            "x": 2,
+            "y": 2,
+            "dia": 2
+          },
+          {
+            "x": 25.3,
+            "y": 2,
+            "dia": 2
+          },
+          {
+            "x": 2,
+            "y": 25.8,
+            "dia": 2
+          },
+          {
+            "x": 25.3,
+            "y": 25.8,
+            "dia": 2
+          }
+        ],
+        "ports": [
+          {
+            "name": "display",
+            "faces": "up",
+            "x": 13.65,
+            "y": 11.8,
+            "w": 21.74,
+            "h": 10.86,
+            "shape": "rect",
+            "margin": 0.5
+          }
+        ],
+        "electrical": {
+          "logicVolts": 3.3,
+          "fiveVoltTolerant": true,
+          "currentMa": {
+            "typical": 10,
+            "peak": 20
+          },
+          "i2cAddresses": [
+            60,
+            61
+          ],
+          "i2cPullups": true
+        },
+        "footprint": {
+          "mount": "header",
+          "pitch": 2.54
+        },
+        "sourcing": {
+          "search": [
+            "0.96 inch OLED 128x64 I2C SSD1306 4 pin",
+            "SSD1306 OLED module 0.96 GND VCC SCL SDA"
+          ],
+          "priceUsd": 3
+        },
+        "verify": "Variants: this file is the most common 4-pin 27.3 x 27.8 mm module (PCB, panel 26.7 x 19.27, active area 21.74 x 10.86, header pads 9.84 mm from the left edge at 2.54 pitch, four 2 mm holes with 3.5 mm pads, all from the module maker's drawing). Pin order differs between factories: this file is GND VCC SCL SDA (Adafruit-style and the lcdwiki text), but the maker's own drawing for the same outline is silkscreened VCC GND SCL SDA. Read the silkscreen on the board and wire by label; a board wired backwards dies. Other 0.96 inch modules exist with 26 x 26, 30 x 30 or 41 x 26 mm outlines (Waveshare, Soldered, DFRobot Gravity); use a part file of their own for those. Not dimensioned in the drawing, so still estimates: pad row distance from the top edge (modelled 2.3, drawing suggests about 1.9), hole centres (modelled 2.0 from each edge), PCB thickness (modelled 1.6, drawing shows 1.2 and 1.5 mm callouts that cannot be matched to PCB versus glass), glass height above the PCB. Measure those with calipers. Panel position from the drawing: glass top edge 4.27 mm below the PCB top edge, active area starts 2.10 mm below that. Address is 0x3C by default (0x78 write address in the maker's text); a resistor jumper on some boards selects 0x3D (0x7A). Whether VCC takes 5 V depends on a regulator on the board: the maker lists 3 to 5 V, but a few clones have none and die at 5 V. On-board I2C pull-ups are not confirmed by any source opened: check with a meter before relying on i2cPullups.",
+        "sources": [
+          "https://lcdwiki.com/0.96inch_OLED_Module_MC096GX (module maker's page: 27.3 x 27.8 mm, active area 21.744 x 10.864 mm, 3 to 5 V, address 0x78/0x7A write form, text pin order GND VCC SCL SDA)",
+          "https://www.lcdwiki.com/res/MC096GX/MC096GX-size-EN.jpg (maker's dimensioned drawing: panel 26.70 x 19.27, glass top 4.27 from PCB edge, active area 2.10 below glass edge, pads 9.84 from edge, 2 mm holes, silkscreen VCC GND SCL SDA)",
+          "https://www.adafruit.com/product/326 (cross-check only: a different board, PCB 29.2 x 26.7 mm, screen 26.6 x 19 mm, I2C address 0x3C-0x3D, ~20 mA in practice)",
+          "https://www.buydisplay.com/i2c-white-0-96-inch-oled-display-module-128x64-arduino-raspberry-pi (seen in search result snippet only, page returned 403: outline 27.30 x 27.80, active area 21.74 x 10.86)",
+          "https://wiki.dfrobot.com/dfr0486/ (search snippet only: DFRobot Gravity 41.2 x 26.2 mm variant exists)"
+        ],
+        "confidence": "typical"
+      },
+      "at": {
+        "x": 9.8,
+        "y": 3.8,
+        "z": 15.299999999999999,
+        "rot": 0
+      }
+    },
+    {
+      "use": {
+        "ref": "btn",
+        "part": "tactile-button-6mm-tall",
+        "label": "Button"
+      },
+      "def": {
+        "id": "tactile-button-6mm-tall",
+        "name": "6 x 6 mm tactile switch, 9.5 mm tall (through-hole, 4 legs)",
+        "kind": "input",
+        "blurb": "Small push button with a long stem that reaches through an enclosure lid; the four legs are really two electrical connections.",
+        "body": {
+          "w": 6.5,
+          "d": 6,
+          "h": 3.4
+        },
+        "maxHeight": 9.5,
+        "shapes": [
+          {
+            "kind": "cyl",
+            "tag": "button-cap",
+            "x": 3.25,
+            "y": 3,
+            "z": 0,
+            "r": 1.75,
+            "h": 6.1
+          }
+        ],
+        "pins": [
+          {
+            "name": "1",
+            "role": "passive",
+            "x": 0,
+            "y": 0.75,
+            "z": -3.4,
+            "lead": 3.5,
+            "note": "Legs 1 and 1b are connected inside the switch. Use either one."
+          },
+          {
+            "name": "2",
+            "role": "passive",
+            "x": 0,
+            "y": 5.25,
+            "z": -3.4,
+            "lead": 3.5,
+            "note": "Legs 2 and 2b are connected inside the switch. Pressing the button joins node 1 to node 2."
+          },
+          {
+            "name": "1b",
+            "role": "passive",
+            "x": 6.5,
+            "y": 0.75,
+            "z": -3.4,
+            "lead": 3.5,
+            "note": "Duplicate of pin 1 (same electrical node)."
+          },
+          {
+            "name": "2b",
+            "role": "passive",
+            "x": 6.5,
+            "y": 5.25,
+            "z": -3.4,
+            "lead": 3.5,
+            "note": "Duplicate of pin 2 (same electrical node)."
+          }
+        ],
+        "ports": [
+          {
+            "name": "button-cap",
+            "faces": "up",
+            "x": 3.25,
+            "y": 3,
+            "w": 3.5,
+            "h": 3.5,
+            "shape": "round",
+            "margin": 0.5,
+            "reach": true
+          }
+        ],
+        "electrical": {
+          "currentMa": {
+            "typical": 0,
+            "peak": 0
+          }
+        },
+        "footprint": {
+          "mount": "tht",
+          "pitch": 6.5,
+          "ref": "Button_Switch_THT:SW_PUSH_6mm"
+        },
+        "sourcing": {
+          "search": [
+            "6x6x9.5mm tactile push button switch 4 pin",
+            "tactile switch 6x6 9.5mm"
+          ],
+          "priceUsd": 0.1
+        },
+        "verify": "The 9.5 mm overall height is NOT confirmed by any source opened: Omron's tallest 6 x 6 part in the B3F catalogue is 7.3 mm (B3F-1050, a 2.4 mm square plunger), and sellers list 7, 8, 9.5 and 13 mm clones with a thicker stem. Measure overall height from the PCB seat to the top of the stem, and the stem diameter (modelled 3.5 mm), and edit maxHeight and the cap height (modelled 6.1 mm above a 3.4 mm body). Confirmed by the Omron B3F drawing and the KiCad footprint (two independent sources): 6 x 6 mm body, leg pitch 6.5 mm by 4.5 mm (the earlier 6.25 mm was wrong), 3.5 mm plunger, body about 3.4 mm high. Legs 6.5 mm apart (same y) are the same node in the KiCad footprint; confirm with a continuity meter. The 6.5 mm wide body here is the 6 mm housing plus the leg overhang. Peak current is the Omron 50 mA at 24 V DC contact rating for the plain switch. Drawing-only fields on the pins: z -3.4 puts each leg at the foot of the 3.4 mm body, where the legs leave it; lead 3.5 mm is a typical leg length for this switch and was not read from the drawing.",
+        "sources": [
+          "https://media.onlinecomponents.com/productfiles/mf-om/d22b3f0401.pdf (Omron B3F catalogue, opened and read: body 6 +-0.2 x 6 +-0.2, PCB holes 6.5 +-0.1 x 4.5 +-0.1 at 1 mm dia, plunger 3.5 mm dia, body 3.4, B3F-1000 total 4.3 +-0.2, B3F-1020 5 +0.05/-0.2, B3F-1050 7.3 +-0.2, 50 mA 24 V DC rating)",
+          "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Button_Switch_THT.pretty/SW_PUSH_6mm.kicad_mod (KiCad library, opened: pads at 0 and 6.5 mm by 0 and 4.5 mm, 1.1 mm drill, same pad number 1 or 2 on legs 6.5 mm apart, body 6 x 6 mm)"
+        ],
+        "confidence": "typical"
+      },
+      "at": {
+        "x": 39.8,
+        "y": 23.8,
+        "z": 12.1,
+        "rot": 0
+      }
+    }
+  ],
+  "standoffs": [
+    {
+      "x": 12.3,
+      "y": 3.8,
+      "h": 3,
+      "dia": 3,
+      "hole": 0,
+      "from": "floor"
+    },
+    {
+      "x": 22.3,
+      "y": 3.8,
+      "h": 3,
+      "dia": 3,
+      "hole": 0,
+      "from": "floor"
+    },
+    {
+      "x": 12.8,
+      "y": 23.3,
+      "h": 3,
+      "dia": 3,
+      "hole": 0,
+      "from": "floor"
+    },
+    {
+      "x": 21.8,
+      "y": 23.3,
+      "h": 3,
+      "dia": 3,
+      "hole": 0,
+      "from": "floor"
+    },
+    {
+      "x": 41.6,
+      "y": 13.3,
+      "h": 1.2299999999999995,
+      "dia": 3,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 53.6,
+      "y": 13.3,
+      "h": 1.2299999999999995,
+      "dia": 3,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 41.6,
+      "y": 19.8,
+      "h": 1.2299999999999995,
+      "dia": 3,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 53.6,
+      "y": 19.8,
+      "h": 1.2299999999999995,
+      "dia": 3,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 11.8,
+      "y": 5.8,
+      "h": 1.7999999999999998,
+      "dia": 5,
+      "hole": 2,
+      "from": "lid"
+    },
+    {
+      "x": 35.1,
+      "y": 5.8,
+      "h": 1.7999999999999998,
+      "dia": 5,
+      "hole": 2,
+      "from": "lid"
+    },
+    {
+      "x": 11.8,
+      "y": 29.6,
+      "h": 1.7999999999999998,
+      "dia": 5,
+      "hole": 2,
+      "from": "lid"
+    },
+    {
+      "x": 35.1,
+      "y": 29.6,
+      "h": 1.7999999999999998,
+      "dia": 5,
+      "hole": 2,
+      "from": "lid"
+    },
+    {
+      "x": 42.3,
+      "y": 24.8,
+      "h": 3.1999999999999997,
+      "dia": 2,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 43.8,
+      "y": 24.8,
+      "h": 3.1999999999999997,
+      "dia": 2,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 42.3,
+      "y": 28.8,
+      "h": 3.1999999999999997,
+      "dia": 2,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 43.8,
+      "y": 28.8,
+      "h": 3.1999999999999997,
+      "dia": 2,
+      "hole": 0,
+      "from": "lid"
+    },
+    {
+      "x": 43.05,
+      "y": 26.8,
+      "h": 9.9,
+      "dia": 3,
+      "hole": 0,
+      "from": "floor"
+    }
+  ],
+  "seats": [],
+  "caps": [],
+  "openings": [
+    {
+      "ref": "mcu",
+      "port": "USB-C",
+      "face": "y-",
+      "u": 17.3,
+      "v": 7.6,
+      "w": 12.54,
+      "h": 6.859999999999999,
+      "shape": "rect"
+    },
+    {
+      "ref": "env",
+      "port": "vent",
+      "face": "lid",
+      "u": 47.6,
+      "v": 17.05,
+      "w": 6.1,
+      "h": 6.1,
+      "shape": "round"
+    },
+    {
+      "ref": "oled",
+      "port": "display",
+      "face": "lid",
+      "u": 23.450000000000003,
+      "v": 15.600000000000001,
+      "w": 23.34,
+      "h": 12.459999999999999,
+      "shape": "rect"
+    },
+    {
+      "ref": "btn",
+      "port": "button-cap",
+      "face": "lid",
+      "u": 43.05,
+      "v": 26.8,
+      "w": 5.1,
+      "h": 5.1,
+      "shape": "round"
+    }
+  ],
+  "screws": [
+    {
+      "x": 4.5,
+      "y": 4.5,
+      "dia": 3
+    },
+    {
+      "x": 4.5,
+      "y": 31.5,
+      "dia": 3
+    },
+    {
+      "x": 54.4,
+      "y": 4.5,
+      "dia": 3
+    },
+    {
+      "x": 54.4,
+      "y": 31.5,
+      "dia": 3
+    }
+  ],
+  "hardware": [
+    {
+      "name": "M3 x 10 mm countersunk screw",
+      "qty": 4,
+      "use": "lid to body"
+    },
+    {
+      "name": "M2 x 5 mm pan-head screw",
+      "qty": 4,
+      "use": "oled to its lid posts"
+    }
+  ],
+  "warnings": []
+}

@@ -1,0 +1,11 @@
+{
+  "quality": "draft",
+  "images": [
+    "hero.png",
+    "hero-alpha.png",
+    "exploded.png",
+    "top.png"
+  ],
+  "lit": null,
+  "device": "gpu"
+}
