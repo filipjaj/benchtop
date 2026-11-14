@@ -1,0 +1,29 @@
+{
+  "id": "dc-jack-5521-panel",
+  "name": "Panel-mount DC socket, 5.5 x 2.1 mm, solder lugs, with break contact (Lumberg NEB/J 21 C)",
+  "kind": "connector",
+  "blurb": "A round DC power socket that is pushed through a hole in the case wall and held by a nut; the adapter plugs in from outside and the wires are soldered to three lugs inside.",
+  "body": { "w": 16, "d": 13.8, "h": 16 },
+  "maxHeight": 16,
+  "pins": [
+    { "name": "CENTER", "aliases": ["J", "TIP"], "role": "passive", "x": 5.9, "y": 13.8, "z": -9.7, "lead": 4.5, "note": "The centre pin: the lug with the round eye, the one that leaves the back in line with the pin. Positive on nearly every adapter, but check the symbol on the adapter and measure before connecting: this file gives the pin no voltage, it carries whatever is plugged in." },
+    { "name": "SLEEVE", "aliases": ["S"], "role": "passive", "x": 6.9, "y": 13.8, "z": -4, "lead": 4.5, "note": "The spring that touches the outside of the plug: the flat lug farthest from the eye lug, at the edge of the body. Ground on a centre-positive adapter." },
+    { "name": "SWITCH", "aliases": ["B"], "role": "passive", "x": 9.6, "y": 13.8, "z": -6.7, "lead": 4.5, "note": "Break contact: the flat lug between the other two. It touches SLEEVE while no plug is in and opens when one goes in. Leave it unconnected unless a battery has to be cut out. Confirm all three lugs with a continuity meter and a plug before soldering." }
+  ],
+  "ports": [
+    { "name": "panel-hole", "faces": "y-", "x": 8, "y": 0, "z": -8, "w": 12.8, "h": 12.8, "shape": "round", "margin": 0 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Lumberg NEB/J 21 C", "DC socket panel mount 5.5 x 2.1 mm solder lugs M12", "DC-022B panel mount DC jack 5.5x2.1"],
+    "priceUsd": 2.5
+  },
+  "verify": "Panel hole from the Lumberg drawing: 12.8 mm diameter with two flats 11.8 mm apart (the flats stop it turning; a plain 12.8 mm round hole, which is what the port cuts, also works). Thread M12.5 x 1, plastic hex nut 14 mm across flats and 4 mm thick, tightened from inside; the 16 mm, 2 mm thick collar stays outside. Overall length 18.3 mm including the lugs, which stand 4.5 mm out of the back; the body modelled here is the 13.8 mm without them. Plug opening 6.3 mm, centre pin 1.95 mm, and the opening sits 1.75 mm off the centre of the round body. The drawing does not state the wall thickness it accepts: check that the thread left behind your wall takes the nut. RATING: Lumberg gives 0.5 A at 12 V DC for this part. Look-alike sockets sold as DC-022B are listed at 2 to 5 A without a datasheet; for more than 0.5 A buy a socket whose maker rates it (Same Sky PJ-005A: 5 A, 24 V, metal 5/16 inch-32 bush for an 8 mm hole, different lugs, not this file). Drawn as a block lying on its side with the plug end at y = 0; the real part is round. The lug positions (x and height) are scaled off the rear view of the drawing, not dimensioned, good to about 0.5 mm. Which lug is which is read from the section view and the schematic (spring S, break contact B, pin J): the lugs carry no letters on the part, so check with a meter.",
+  "sources": [
+    "https://aionfx.com/app/files/2025/07/lumberg-neb-j21c-switched-dc-jack-datasheet.pdf (copy of the Lumberg NEB/J 21 C data sheet 09/2023, opened and read: drawing with 16 and 14 dia, M12.5-P1, 18.3 overall, 2 and 4, lugs 4.5, opening 6.3, pin 1.95, 1.75 offset, panel port 12.8 x 11.8, nut 14 across flats, section view and schematic S / B / J; 0.5 A, 12 V DC, 5000 cycles)",
+    "https://www.lumberg.com/en/products/product/NEB%252FJ+21+C (Lumberg product page, search result only: confirms 5.5 x 2.1 mm plugs, 6.3 mm opening)",
+    "https://www.sameskydevices.com/product/resource/pj-005a.pdf (Same Sky PJ-005A datasheet, opened for the alternative named in verify: 5 A, 24 V DC, 5/16 inch-32 thread, 10.8 mm flange; not used for this file's geometry)"
+  ],
+  "confidence": "typical"
+}

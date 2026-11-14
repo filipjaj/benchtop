@@ -1,0 +1,31 @@
+{
+  "id": "dc-jack-5521-pcb",
+  "name": "DC barrel jack, 5.5 x 2.1 mm, through-hole, 3 pins (Same Sky / CUI PJ-102AH, DC-005 type)",
+  "kind": "connector",
+  "blurb": "The black socket a wall adapter's round plug goes into, soldered to a board by three legs. Power comes in on the centre pin and the sleeve; the third leg is a switch contact most builds leave unused.",
+  "body": { "w": 9, "d": 14.4, "h": 11 },
+  "maxHeight": 11,
+  "decals": [
+    { "kind": "text", "face": "top", "x": 1.5, "y": 8, "text": "DC IN", "size": 2 }
+  ],
+  "pins": [
+    { "name": "CENTER", "aliases": ["1", "TIP"], "role": "passive", "x": 4.5, "y": 13.7, "z": -11, "lead": 3.5, "note": "Terminal 1 on the datasheet: the centre pin. It is the leg at the back, on the centre line, farthest from the plug opening. Positive on nearly every adapter (look for the centre-positive symbol on the adapter label), but measure with a multimeter before connecting anything: a centre-negative adapter puts the supply on backwards. This file gives the pin no voltage: it carries whatever the adapter delivers." },
+    { "name": "SLEEVE", "aliases": ["2", "RING"], "role": "passive", "x": 4.5, "y": 7.7, "z": -11, "lead": 3.5, "note": "Terminal 2: the spring that touches the outside of the plug. The leg on the centre line, 6 mm in front of the centre-pin leg. Ground on a centre-positive adapter." },
+    { "name": "SWITCH", "aliases": ["3"], "role": "passive", "x": -0.2, "y": 10.7, "z": -11, "lead": 3.5, "note": "Terminal 3: the thin leg on the outside of the housing, to the right when you look into the plug opening. It touches SLEEVE while no plug is in and opens when a plug goes in (used to cut a battery out). Leave it unconnected or tie it to SLEEVE." }
+  ],
+  "ports": [
+    { "name": "plug", "faces": "y-", "x": 4.5, "y": 0, "z": -4.5, "w": 6.5, "h": 6.5, "shape": "round", "margin": 1 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "ref": "Connector_BarrelJack:BarrelJack_CUI_PJ-102AH_Horizontal" },
+  "sourcing": {
+    "search": ["PJ-102AH DC power jack 2.0 mm", "DC-005 barrel jack 5.5x2.1 PCB 3 pin", "DC jack 5.5 x 2.1 mm through hole right angle"],
+    "priceUsd": 0.8
+  },
+  "verify": "From the Same Sky PJ-102AH drawing: housing 9.00 wide, 14.40 long, 11.00 high; barrel axis 6.50 above the board; opening 6.50 dia for a 5.5 mm plug, 2.0 mm centre pin, 9.5 mm insertion depth; legs 3.50 long; centre-pin leg 13.70 behind the front face, sleeve leg 7.70, switch leg 10.70 and 4.70 off the centre line; slots 1.0 x 1.6 mm (the legs are flat blades, KiCad drills 1.6 mm round). Which leg is which is from the datasheet schematic (1 centre pin, 2 sleeve spring, 3 break contact) and its PCB layout, which numbers the pads. The frame here has the plug opening at y = 0, so it is the KiCad footprint turned 180 degrees (KiCad pad 1 is at the top, the opening at the bottom). The switch leg sits 0.2 mm outside the 9 mm housing, which is why its x is -0.2; that is the real position. Rated 24 V DC, 5 A. The port is the 6.5 mm opening in the housing with 1 mm added; the moulded grip of a plug is wider (not on the drawing), so if the jack sits back from the wall, measure your plug. Cheap DC-005 jacks follow the same outline but are not held to this drawing: check the three hole positions against the part before ordering a board. A 5.5 x 2.5 mm plug fits loosely and makes poor contact.",
+  "sources": [
+    "https://www.sameskydevices.com/product/resource/pj-102ah.pdf (Same Sky PJ-102AH datasheet rev 1.05, opened and read: mechanical drawing with 9.00, 14.40, 11.00, 6.50 axis height, 3.50 flange and leg length, 10.70 / 3.00 / 3.00 / 4.70 leg positions, recommended PCB layout numbering pads 1#, 2#, 3#, schematic 1 centre pin / 2 spring / 3 break contact, mating plug 5.5 dia, insertion depth 9.5, 24 V DC 5 A)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Connector_BarrelJack.pretty/BarrelJack_CUI_PJ-102AH_Horizontal.kicad_mod (KiCad footprint, opened: pad 1 at 0,0, pad 2 at 0,6.0, pad 3 at 4.7,3.0, 1.6 mm drill, outline 9.0 x 14.4; agrees with the drawing)"
+  ],
+  "confidence": "datasheet"
+}

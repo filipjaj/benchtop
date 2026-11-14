@@ -1,0 +1,30 @@
+{
+  "id": "bnc-jack-panel",
+  "name": "BNC panel jack, 50 ohm, solder cup and ground tag (Amphenol RF 31-221-RFX)",
+  "kind": "connector",
+  "blurb": "The bayonet socket that probe and antenna cables twist onto. It goes through a hole in the case wall and is held by a nut; the signal wire is soldered to the pin at the back and ground to a tag under the nut.",
+  "body": { "w": 12.7, "d": 26.9, "h": 12.7 },
+  "maxHeight": 20.6,
+  "shapes": [
+    { "kind": "box", "tag": "ground-tag", "x": 4.75, "y": 15, "z": 0, "w": 3.2, "d": 0.5, "h": 7.9 }
+  ],
+  "pins": [
+    { "name": "SIG", "aliases": ["CENTER", "1"], "role": "passive", "x": 6.35, "y": 26.9, "z": -6.35, "note": "The centre contact: the small tube (solder cup) sticking out of the middle of the back. Push the stripped wire into the cup and solder." },
+    { "name": "GND", "aliases": ["SHELL", "2"], "role": "passive", "x": 6.35, "y": 15, "z": 6.35, "note": "The metal shell. Solder to the hole in the loose ring tag that sits on the thread under the nut, inside the case; it can point any way, it is drawn pointing up. The shell also touches a metal panel directly, so in a metal case the case becomes ground." }
+  ],
+  "ports": [
+    { "name": "panel-hole", "faces": "y-", "x": 6.35, "y": 0, "z": -6.35, "w": 9.7, "h": 9.7, "shape": "round", "margin": 0 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["Amphenol 31-221-RFX", "BNC bulkhead jack solder cup front mount 50 ohm", "BNC panel mount female socket solder nut"],
+    "priceUsd": 8
+  },
+  "verify": "From the Amphenol RF customer drawing of 31-221-RFX: panel hole 9.7 mm with one flat at 8.85 mm (a plain 9.7 mm round hole also works, the flat only stops it turning); thread 3/8 inch-32 UNEF; panel no thicker than 3.3 mm, so a 3 mm printed wall is the limit and the nut has little thread left: thin the wall around the hole if it does not catch. Flange 12.7 mm, overall length 26.9 mm (reference), nut 11 mm (7/16 inch) across flats and 2.4 mm thick, lock washer 12.7 x 0.5 mm, ground tag hole 1.6 mm at 12.7 mm from the axis, solder cup 2.1 mm outside and 1.5 mm inside. It mounts from outside: the bayonet body and the flange stay outside the wall. How far the flange is from the front is not dimensioned on the sheet; scaled off the drawing it is about 10.6 mm, which leaves about 15 mm inside the case with a thin wall. The tag is drawn 15 mm from the front and 3.2 mm wide for recognition; its real place depends on the wall thickness. Drawn as a block lying on its side with the mating end at y = 0; the real part is round. 50 ohm, 1000 V RMS withstand. A mating BNC plug is about 15 mm across and needs room to be twisted. Cheap unbranded BNC panel jacks use the same hole but check their length.",
+  "sources": [
+    "https://www.amphenolrf.com/en-us/assets/file/4065787961/ (Amphenol RF customer outline drawing B6351D4-ND3G-50 for 31-221-RFX, rev L, opened in a browser and read: 26.9 REF, flange 12.7, 3/8-32UNEF-2A, recommended mounting hole 9.7 with flat 8.85 +-0.1, max panel 3.3, solder cup 1.5 / 2.1, lock washer 12.7 x 0.5, hex nut 11 x 2.4, solder tag 12.7 hole distance and 1.6 hole, 50 ohm, 500 cycles)",
+    "https://www.amphenolrf.com/en-us/part/031-221-rfx/1986/ (product page, search result: BNC straight receptacle jack, solder cup, bulkhead front mount, 50 ohm)"
+  ],
+  "confidence": "typical"
+}

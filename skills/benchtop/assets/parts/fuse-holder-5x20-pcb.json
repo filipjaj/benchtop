@@ -1,0 +1,27 @@
+{
+  "id": "fuse-holder-5x20-pcb",
+  "name": "PCB holder for 5 x 20 mm fuses, open, 22.5 mm pin spacing (Schurter OGN 0031.8201)",
+  "kind": "passive",
+  "blurb": "A small black base with two spring clips that is soldered to a board; a 5 x 20 mm glass fuse snaps into the clips and can be swapped by hand.",
+  "body": { "w": 22.5, "d": 9.6, "h": 11.5 },
+  "maxHeight": 11.5,
+  "decals": [
+    { "kind": "rect", "face": "top", "x": 1.25, "y": 2.3, "w": 20, "h": 5, "fill": "none", "r": 2.5 }
+  ],
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0, "y": 4.8, "z": -11.5, "lead": 4, "note": "The leg at one end. A fuse has no direction: either leg goes to the supply. Put the fuse in the positive line, right where power enters the board." },
+    { "name": "2", "role": "passive", "x": 22.5, "y": 4.8, "z": -11.5, "lead": 4, "note": "The leg at the other end, 22.5 mm away." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 22.5, "ref": "Fuse:Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open" },
+  "sourcing": {
+    "search": ["Schurter 0031.8201", "5x20 mm fuse holder PCB open 22.5 mm", "PCB fuse holder 5x20 through hole"],
+    "priceUsd": 1.5
+  },
+  "verify": "From the Schurter OGN datasheet, THT variant: 22.5 mm long, 9.6 mm wide, 11.5 mm high above the board (12.7 mm with the optional cover, which is also 25 mm long and 10.8 mm wide), legs 4 mm long and 1.1 mm thick in 1.3 mm holes 22.5 mm apart, and a 2.7 mm locating peg under the middle that needs its own hole in the board (in the KiCad footprint). Order number 0031.8201 has the 22.5 mm spacing; 0031.8211 is the same holder with legs 25 mm apart and does not fit these holes. Rated 16 A, 500 V. The clips are live and open: with mains or anything above about 30 V fit the cover. The fuse outline is drawn on top for recognition. Other makers' 5 x 20 holders (two separate clips, or closed holders with a cap) have other hole spacings: check before ordering a board. The fuse value is per project: put it in `value`.",
+  "sources": [
+    "https://www.schurter.com/en/datasheet/typ_ogn.pdf (Schurter OGN datasheet, 01.09.2025, opened and read: THT variant drawing with 22.5 and 25, 11.5, 12.7, 4, 9.6, 10.8 installation dimension, 1.1, peg 2.7, drilling diagram 1.3 +0.1 at 22.5 or 25; variants table 0031.8201 = THT 22.5, 0031.8211 = THT 25; 16 A, 500 V)",
+    "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/Fuse.pretty/Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open.kicad_mod (KiCad footprint citing the same datasheet, opened: pads 1 and 2 at 0 and 22.5, 1.3 mm drill, unplated 2.7 mm hole at 11.25, outline 22.5 x 9.6)"
+  ],
+  "confidence": "datasheet"
+}

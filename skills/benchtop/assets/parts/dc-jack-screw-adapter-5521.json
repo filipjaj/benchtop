@@ -1,0 +1,34 @@
+{
+  "id": "dc-jack-screw-adapter-5521",
+  "name": "DC barrel socket to 2-way screw terminal adapter, female, 5.5 x 2.1 mm",
+  "kind": "connector",
+  "blurb": "A DC socket with two screw clamps moulded on its back: the adapter plugs in at one end and the two wires of the build are clamped under the screws, with no soldering.",
+  "body": { "w": 13.5, "d": 35.3, "h": 11.3 },
+  "maxHeight": 11.3,
+  "decals": [
+    { "kind": "circle", "face": "top", "x": 4.25, "y": 31, "r": 1.6, "fill": "none" },
+    { "kind": "circle", "face": "top", "x": 9.25, "y": 31, "r": 1.6, "fill": "none" },
+    { "kind": "text", "face": "top", "x": 3.5, "y": 26, "text": "+", "size": 2.5 },
+    { "kind": "text", "face": "top", "x": 8.5, "y": 26, "text": "-", "size": 2.5 }
+  ],
+  "pins": [
+    { "name": "+", "role": "passive", "x": 4.25, "y": 31, "note": "The clamp marked + on the adapter: it goes to the centre pin of the socket. Read the + and - moulded next to the screws; which side they are on differs between makers, so do not go by this drawing. The marks assume a centre-positive adapter: measure across the two clamps with the adapter plugged in before connecting the build. Strip about 5 mm, push the wire in under the screw and tighten; nothing is soldered." },
+    { "name": "-", "role": "passive", "x": 9.25, "y": 31, "note": "The clamp marked -: it goes to the sleeve of the socket. Ground on a centre-positive adapter." }
+  ],
+  "ports": [
+    { "name": "plug", "faces": "y-", "x": 6.75, "y": 0, "z": -5.65, "w": 5.5, "h": 5.5, "shape": "round", "margin": 2.5 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "wire" },
+  "sourcing": {
+    "search": ["DC barrel jack to screw terminal adapter female 5.5x2.1", "female DC power adapter 2.1mm jack to screw terminal block", "DC-kontakt hunn 5,5x2,1 skrueterminal adapter"],
+    "priceUsd": 2
+  },
+  "verify": "No maker drawing exists for this adapter. The outline (35.3 x 13.5 x 11.3 mm) is what one shop, Addicore, states for its AD470; other shops give 36 x 14 mm and about 30 mm long, so measure yours. Not from any source, drawn for recognition only: where the two screws are (about 5 mm apart is typical for these), which side is +, and the height of the plug opening (put at the middle of the body). Measure the opening's position before a case wall depends on it; the port is the 5.5 mm barrel plus 2.5 mm for the plug's grip. Plug size 5.5 x 2.1 mm is as sold (Adafruit 368 calls it a 2.1 mm jack). No current or voltage rating is published by the shops opened; treat it as a low-current part and feel whether it gets warm above 2 A. The guide words each step as soldering: read it as 'clamp under the screw'. In a case the adapter is not fixed by anything: glue or strap it.",
+  "sources": [
+    "https://www.addicore.com/products/5-5mm-dc-female-barrel-jack-adapter-with-screw-terminals (shop page, opened and read: 5.5 mm jack, 2.1 mm centre pin, outer dimensions 35.3 x 13.5 x 11.3 mm; no pitch, rating or polarity given)",
+    "https://www.adafruit.com/product/368 (shop page, opened and read: 2.1 mm DC jack on one end and a screw terminal block on the other, terminals labelled positive/negative assuming a positive tip; no dimensions)",
+    "Search result snippets only, not opened: one seller lists 3.6 x 1.4 cm, another about 30 mm long, another screws about 5 mm apart"
+  ],
+  "confidence": "typical"
+}
