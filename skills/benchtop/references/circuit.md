@@ -153,23 +153,31 @@ When the library lacks a part, write `<projectDir>/parts/<id>.json`. Project par
 override library parts of the same id, which is also how you correct a library part for
 one build.
 
-1. Find the datasheet or the manufacturer's mechanical drawing. A retailer listing is a
-   last resort. If a local parts catalog is available, start there
-   (`bun scripts/catalog.ts find "<part>"`, then `show <id>`): it lists source-linked
-   dimensions and the cached drawings to open. `references/catalog.md` has the reading
-   rules, which matter: a PCB outline is not the assembled height, and a branded
-   board's size says nothing about a clone's.
-2. Use an existing file only as a structural template. Do not carry over its pad
+1. For a board or module, ask the parts catalog before anything else. A snapshot ships
+   with the skill, so this needs no setup: `bun scripts/catalog.ts find "<exact model>"`,
+   then `bun scripts/catalog.ts pads <part_id>`. If `pads` lists a dataset, the maker's
+   CAD file has been parsed and you do not type pad positions:
+   `bun scripts/catalog.ts import-part <part_id> --id <id> --out <projectDir>/parts/<id>.json`
+   writes the draft and prints what it left for you; steps 5 to 9 below still apply to
+   those fields. `references/catalog.md` ("Pad positions from CAD") has the flags and the
+   traps. Import only the exact board or module you will buy, same maker and revision: a
+   branded board's pads and size say nothing about a clone's.
+2. No pad data in the catalog, or a plain component the catalog does not hold: find the
+   datasheet or the manufacturer's mechanical drawing. A retailer listing is a last
+   resort. `bun scripts/catalog.ts show <part_id>` lists source-linked dimensions and the
+   drawings to open, when the part is in the catalog at all. `references/catalog.md` has
+   the reading rules, which matter: a PCB outline is not the assembled height.
+3. Use an existing file only as a structural template. Do not carry over its pad
    positions, connector locations, hole positions or heights to another clone. Fields
    are documented in `scripts/lib/types.ts`. Keep incomplete research records in
    `assets/geometry-evidence/` or the project's research folder until the required
    fields can be filled from evidence.
-3. Origin is the top-left corner seen from above, component side up, in the orientation
+4. Origin is the top-left corner seen from above, component side up, in the orientation
    the silkscreen reads; x right, y down, millimetres. Controller boards have USB at y = 0.
-4. `pins`: one per pad, named as printed, at real pad centres. Set `role`; `volts`,
+5. `pins`: one per pad, named as printed, at real pad centres. Set `role`; `volts`,
    `minVolts`, `maxVolts` on supply pins; `dir` and `needs` on signals with a fixed
    direction or a required capability; `gpio` and `caps` on controller pins.
-5. `shapes`: the three to eight things that make the part recognisable, with real
+6. `shapes`: the three to eight things that make the part recognisable, with real
    heights. `ports`: every opening a case would need. A module whose header pins are its
    pads (microphone, buzzer, amplifier, relay) tags the header box `"header"` and puts
    the pins at their real places under it: the drawings then put each pad, and the end of
@@ -179,20 +187,22 @@ one build.
    `body.w` is then one unit long; the pins stay at the input end; the project's `units`
    makes the body, the LED shapes (`led-1` ... `led-N`) and the spanning port as long as
    the build needs, once, when the project is loaded.
-6. `electrical`: supply current typical and peak, logic level, I2C addresses and whether
+7. `electrical`: supply current typical and peak, logic level, I2C addresses and whether
    pull-ups are fitted. Add `"bringUp": "pulse"` only if switching the part on for 400 ms
    in a test can do no harm (an LED, a buzzer); leave it out for anything that moves,
    heats or switches a load, and the bring-up test will hold that pin still. On an input
    that is active when low, set `"idle": "high"` on the pin so the test never rests it at
    the level that switches it on.
-7. `sources`: the URLs you actually read. `confidence: "datasheet"` only when outline and
+8. `sources`: the URLs you actually read. `confidence: "datasheet"` only when outline and
    pads came from a manufacturer drawing; otherwise `"typical"` with a `verify` note
    saying what to measure.
-8. Run `bun scripts/check-parts.ts <projectDir>/parts`.
+9. Run `bun scripts/check-parts.ts <projectDir>/parts`.
 
 Do not guess a dimension to make a part file pass. If it is unpublished, retain it as
 unknown in a research record and list the measurements needed. A typical model can
 illustrate a concept if identified as such; it cannot establish connector cutouts,
-carrier-board pad positions or a case fit. Numeric placeholders from `import-part`
-are incomplete drafts, not evidence. Deliver the supported subsystem while waiting
-for the missing geometry; see `scope-and-assessment.md`.
+carrier-board pad positions or a case fit. A draft from `import-part` is the maker's
+file, not a measurement of the board you bought, and the values the command lists as
+not derived are placeholders, not evidence: replace each from a source before a case
+or a board depends on it. Deliver the supported subsystem while waiting for the
+missing geometry; see `scope-and-assessment.md`.
