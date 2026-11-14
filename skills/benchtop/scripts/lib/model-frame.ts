@@ -4,6 +4,11 @@
 // CAD file, and heights and connector openings from a STEP model. Each has its own axes and origin,
 // and the catalog does not say how they relate. This module works that out, or declines to.
 //
+// Two kinds of evidence fix the orientation. Connectors named by the same reference designator in
+// both sources come first. Drilled holes come second: every through-hole pad in the CAD file is a
+// hole in the model's PCB, so a correct orientation puts the model's holes on the pads. Holes decide
+// when no connector is shared, and veto a connector fit they contradict.
+//
 // A board lies flat in both, so the relation is one of eight: a quarter-turn rotation, optionally
 // reflected, plus a shift. A reflection does not by itself mean the model is seen from the underside:
 // a pad frame whose Y axis points down (KiCad) needs one to hold a model seen from the top. The
@@ -95,10 +100,42 @@ export interface Registration {
    * positions alone had to decide it.
    */
   side_evidence: number;
+  /**
+   * How the underside question was settled. "paired": by the matched connectors counted in
+   * side_evidence. "one_face": no connector is shared, but the CAD file puts every part on one face
+   * and the model has every housing on one face, which says the same thing without pairing them.
+   * Null: positions or holes had to decide it.
+   */
+  side_basis: "paired" | "one_face" | null;
   /** Root mean square of those distances. Housing centre against pad centroid, so a few mm is normal. */
   residual_mm: number;
   /** The residual of the next best candidate. The gap to it is what makes the answer unique. */
   runner_up_residual_mm: number | null;
+  /** What picked the orientation. */
+  basis: "connectors" | "holes";
+  /**
+   * Through-hole pads of the CAD file that have a hole of the model on them under this transform,
+   * and the same count for the best other orientation. Null when either source has too few holes.
+   * With basis "connectors" this is a check that took no part in the fit.
+   */
+  hole_check: {
+    pad_holes: number;
+    matched: number;
+    /** Best count among the other orientations that were still in play after the side evidence. */
+    best_other_matched: number;
+    /**
+     * Best count among the orientations the side evidence ruled out, or null when it ruled none out.
+     * When this equals `matched`, the hole pattern is mirror-symmetric and the holes do not show which
+     * face the model is seen from: that rests on the side evidence alone (see `side_basis`).
+     */
+    best_excluded_matched: number | null;
+    /**
+     * The holes single out this orientation with all eight in play: enough pads have a hole on them,
+     * and neither the other orientations nor the ruled-out ones come close. False means the
+     * orientation also leans on the side evidence.
+     */
+    holes_alone_decide: boolean;
+  } | null;
   /** How many connectors the fit rests on. With one, only its distance from the board's centre lines separates the candidates. */
   feature_count: number;
   /**
@@ -124,7 +161,20 @@ export interface RegisterInput {
   padGroups: PadFeature[];
   /** Which way the pad frame's Y axis points when the board is seen from the top. EAGLE is "up", KiCad is "down". */
   padFrameY: "up" | "down";
+  /** Centres of holes drilled through the model's PCB, model frame. Leave out vias: they have no counterpart in the pad data. */
+  modelHoles?: Vec[];
+  /** Centres of the CAD file's through-hole pads and holes, pad frame. */
+  padHoles?: Vec[];
 }
+
+/** A model hole within this distance of a through-hole pad is that pad's hole. */
+export const HOLE_TOLERANCE_MM = 0.25;
+/** Fewer holes than this say too little to pick an orientation. */
+export const MIN_HOLES = 4;
+/** Holes pick an orientation when this share of the pads have a hole on them... */
+export const MIN_HOLE_SHARE = 0.8;
+/** ...and no other orientation reaches this share of that count. */
+export const MAX_OTHER_HOLE_SHARE = 0.6;
 
 /** The two outlines must agree in size this closely to be the same board. */
 export const EXTENT_TOLERANCE_MM = 0.5;
@@ -197,8 +247,17 @@ function choose(cands: { transform: Transform; extent_delta_mm: number }[], pair
   return { ok: true, best: best.c, residual: best.r, runnerUp: next ? next.r : null };
 }
 
+/** How many pad holes have a model hole on them under a transform. */
+function holesMatched(tr: Transform, modelHoles: Vec[], padHoles: Vec[]): number {
+  const moved = modelHoles.map((h) => toPadFrame(tr, h));
+  let n = 0;
+  for (const p of padHoles) if (moved.some((m) => Math.abs(m[0] - p[0]) <= HOLE_TOLERANCE_MM && Math.abs(m[1] - p[1]) <= HOLE_TOLERANCE_MM && dist(m, p) <= HOLE_TOLERANCE_MM)) n++;
+  return n;
+}
+
 export function registerModel(input: RegisterInput): RegistrationResult {
-  let cands = candidateTransforms(input.modelPcb, input.outline, input.padFrameY);
+  const allCands = candidateTransforms(input.modelPcb, input.outline, input.padFrameY);
+  let cands = allCands;
   if (!cands.length) {
     const me = [input.modelPcb.max[0] - input.modelPcb.min[0], input.modelPcb.max[1] - input.modelPcb.min[1]].map((n) => round(n, 2));
     const oe = [input.outline.max[0] - input.outline.min[0], input.outline.max[1] - input.outline.min[1]].map((n) => round(n, 2));
@@ -222,10 +281,55 @@ export function registerModel(input: RegisterInput): RegistrationResult {
   const votes = pairs.map((p) => p.underside).filter((v): v is boolean => v !== null);
   const agreed = votes.length > 0 && votes.every((v) => v === votes[0]);
   const sideEvidence = agreed ? votes.length : 0;
+  let sideBasis: Registration["side_basis"] = agreed ? "paired" : null;
   if (agreed) cands = cands.filter((c) => c.transform.seen_from_underside === votes[0]);
+  if (!votes.length) {
+    // Nothing pairs up, but when every housing in the model is on one face and every part in the CAD
+    // file is on one face, the two faces are the same face whichever part is which.
+    const faces = [...new Set(input.connectors.map((c) => c.side).filter((x): x is "above" | "below" => !!x))];
+    const sides = [...new Set(input.padGroups.map((g) => g.side).filter((x): x is "top" | "bottom" => !!x))];
+    if (faces.length === 1 && sides.length === 1) {
+      const underside = (faces[0] === "above") !== (sides[0] === "top");
+      cands = cands.filter((c) => c.transform.seen_from_underside === underside);
+      sideBasis = "one_face";
+    }
+  }
 
-  const picked = choose(cands, pairs);
-  if (!picked.ok) return picked;
+  const modelHoles = input.modelHoles ?? [];
+  const padHoles = input.padHoles ?? [];
+  const holesUsable = modelHoles.length >= MIN_HOLES && padHoles.length >= MIN_HOLES;
+  const holeScores = holesUsable ? cands.map((c) => ({ c, n: holesMatched(c.transform, modelHoles, padHoles) })).sort((a, b) => b.n - a.n) : [];
+  const holeCheck = (chosen: Transform): Registration["hole_check"] => {
+    if (!holesUsable) return null;
+    const mine = holeScores.find((h) => h.c.transform === chosen)!;
+    const excluded = allCands.filter((c) => !cands.includes(c));
+    const other = Math.max(0, ...holeScores.filter((h) => h !== mine).map((h) => h.n));
+    const ruledOut = excluded.length ? Math.max(...excluded.map((c) => holesMatched(c.transform, modelHoles, padHoles))) : null;
+    return {
+      pad_holes: padHoles.length, matched: mine.n, best_other_matched: other, best_excluded_matched: ruledOut,
+      holes_alone_decide: mine.n >= padHoles.length * MIN_HOLE_SHARE && Math.max(other, ruledOut ?? 0) <= mine.n * MAX_OTHER_HOLE_SHARE,
+    };
+  };
+  // Holes alone pick an orientation when nearly every pad has a hole on it and no other orientation comes close.
+  const byHoles = holesUsable && holeScores[0]!.n >= padHoles.length * MIN_HOLE_SHARE && (holeScores[1]?.n ?? 0) <= holeScores[0]!.n * MAX_OTHER_HOLE_SHARE ? holeScores[0]!.c : null;
+
+  const byConnectors = choose(cands, pairs);
+  let basis: Registration["basis"] = "connectors";
+  let picked: { best: (typeof cands)[number]; residual: number; runnerUp: number | null };
+  if (byConnectors.ok) {
+    // The connectors agree on an orientation. If the holes clearly pick a different one, neither is trusted.
+    if (byHoles && byHoles.transform !== byConnectors.best.transform) {
+      return { ok: false, reason: "the connectors and the drilled holes point to different orientations" };
+    }
+    picked = byConnectors;
+  } else if (byHoles) {
+    basis = "holes";
+    const moved = modelHoles.map((h) => toPadFrame(byHoles.transform, h));
+    const ds = padHoles.map((p) => Math.min(...moved.map((m) => dist(m, p)))).filter((d) => d <= HOLE_TOLERANCE_MM);
+    picked = { best: byHoles, residual: rms(ds), runnerUp: null };
+  } else {
+    return holesUsable ? { ok: false, reason: `${byConnectors.reason}; the drilled holes do not single one out either (${holeScores[0]!.n} and ${holeScores[1]?.n ?? 0} of ${padHoles.length} pads matched)` } : byConnectors;
+  }
   const tr = picked.best.transform;
 
   const holdout: Registration["holdout"] = [];
@@ -262,6 +366,9 @@ export function registerModel(input: RegisterInput): RegistrationResult {
       extent_delta_mm: round(picked.best.extent_delta_mm, 2),
       features: pairs.map((p) => ({ ref: p.ref, distance_mm: round(dist(toPadFrame(tr, p.model), p.pad), 2) })),
       side_evidence: sideEvidence,
+      side_basis: sideBasis,
+      basis,
+      hole_check: holeCheck(tr),
       feature_count: pairs.length,
       residual_mm: round(picked.residual, 2),
       runner_up_residual_mm: picked.runnerUp == null ? null : round(picked.runnerUp, 2),
