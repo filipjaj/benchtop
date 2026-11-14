@@ -1,0 +1,24 @@
+{
+  "id": "capacitor-ceramic-5mm-pitch",
+  "name": "Radial ceramic capacitor, 5.0 mm lead spacing (through-hole)",
+  "kind": "passive",
+  "blurb": "Small 100 nF capacitor with leads bent to 5 mm that goes across a chip's supply pins, close to the chip; no polarity. Value is set per project.",
+  "body": { "w": 5, "d": 2.6, "h": 4 },
+  "maxHeight": 6.6,
+  "pins": [
+    { "name": "1", "role": "passive", "x": 0, "y": 1.3, "z": -4, "lead": 30, "note": "Ceramic capacitors have no polarity: either lead goes either way." },
+    { "name": "2", "role": "passive", "x": 5, "y": 1.3, "z": -4, "lead": 30 }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 5, "ref": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" },
+  "sourcing": {
+    "search": ["100nF ceramic capacitor radial 5.08mm pitch X7R 50V", "0.1uF monolithic ceramic capacitor 5mm lead spacing", "keramisk kondensator 100nF 5mm"],
+    "priceUsd": 0.05
+  },
+  "verify": "From the Vishay K series size 15 drawing (the usual size for 100 nF X7R 50 V): body at most 4.0 wide, 4.0 high and 2.6 thick, lead wire 0.5 mm, flat bent leads (style H5) 5.0 +- 0.8 mm apart, seating height at most 2.6 mm. The body is only 4.0 mm wide, but the check wants every pin inside the body, so the drawn body is the 5.0 mm envelope of the lead span, as in resistor-axial; the real body is narrower and sits centred between the leads. maxHeight 6.6 is body 4.0 plus the 2.6 mm seating height. These are maxima and one maker's numbers; other makers and other values have slightly different bodies. The KiCad footprint named is the nearest generic one, not this part's own. Drawing-only fields: z -4 puts the leads at the underside of the body; lead 30 mm is the bulk lead length (30 +- 5 mm).",
+  "sources": [
+    "https://www.vishay.com/docs/45171/kseries.pdf page 2, lead configuration and dimensions: size code 15 gives Wb max 4.0, H max 4.0, T max 2.6, seating height H5 2.6; H5 spacing 5.0 +- 0.8; bulk lead length 30 +- 5 mm; ordering code lead diameter 0.50 mm",
+    "KiCad Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm: nearest generic 5.00 mm footprint"
+  ],
+  "confidence": "datasheet"
+}

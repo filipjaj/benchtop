@@ -1,0 +1,28 @@
+{
+  "id": "capacitor-electrolytic-10mm",
+  "name": "Radial electrolytic capacitor, 10 x 16 mm (through-hole)",
+  "kind": "passive",
+  "blurb": "Large upright can capacitor for smoothing a power rail or a motor supply; has a + and a - lead and must go in the right way round. Value and voltage are set per project.",
+  "body": { "w": 10, "d": 10, "h": 1 },
+  "maxHeight": 16,
+  "shapes": [
+    { "kind": "cyl", "tag": "can", "x": 5, "y": 5, "z": 0, "r": 5, "h": 15 }
+  ],
+  "pins": [
+    { "name": "+", "aliases": ["anode", "positive"], "role": "passive", "x": 2.5, "y": 5, "z": -1, "lead": 15, "note": "Positive: the longer lead, on the side without the stripe. Goes toward the more positive side of the circuit." },
+    { "name": "-", "aliases": ["cathode", "negative"], "role": "passive", "x": 7.5, "y": 5, "z": -1, "lead": 15, "note": "Negative: the shorter lead, on the side with the stripe printed on the sleeve. Goes toward GND. Fitted backwards the part fails, sometimes by venting." }
+  ],
+  "electrical": {},
+  "footprint": { "mount": "tht", "pitch": 5, "ref": "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm" },
+  "sourcing": {
+    "search": ["radial electrolytic capacitor 10x16mm 1000uF 25V", "electrolytic capacitor 10mm 470uF 50V 105C", "elektrolyttkondensator radial 10x16 mm"],
+    "priceUsd": 0.3
+  },
+  "verify": "Can diameter 10 mm and lead spacing 5.0 mm are from the Rubycon PK dimension table and agree with the Nichicon UVR table (phiD 10, P 5.0, lead 0.6); the 16 mm length is the standard size listed there for 1000 uF 25 V and 470 uF 50 V. Cans 12.5 mm tall (1000 uF 16 V, 330 and 470 uF 35 V) and 20 mm tall (1000 uF 35 V) share the same footprint; set the height from the part you buy. The sleeve adds up to 0.5 mm to the diameter and up to 1.5 mm to the length, so measure your parts if the enclosure sits close. The value and the voltage rating are set per project (value); the rating must exceed the rail with margin. Drawing-only fields: the 1 mm base slice plus one cylinder is a drawing device for a single can, z -1 puts the legs at the underside of the slice, and lead 15 mm is the minimum lead length in the table.",
+  "sources": [
+    "https://www.rubycon.co.jp/wp-content/uploads/catalog-aluminum/PK.pdf, dimensions drawing and table: phiD 10, lead phid 0.6, spacing F 5.0, leads at least 15 mm with the + lead at least 4 mm longer, sleeve at most phiD + 0.5; size table for 10 x 12.5, 10 x 16 and 10 x 20 values",
+    "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-uvr.pdf, UVR dimensions: phiD 10 gives P 5.0 and lead 0.6; 1000 uF 10 V is 10 x 12.5, 1000 uF 16 V is 10 x 16",
+    "KiCad Capacitor_THT:CP_Radial_D10.0mm_P5.00mm: pad 1 is +, 5.00 mm spacing"
+  ],
+  "confidence": "datasheet"
+}
