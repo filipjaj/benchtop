@@ -15,13 +15,24 @@
     { "name": "1", "role": "passive", "x": 2.5, "y": 3.5, "note": "Left clamp with the wire openings facing you. The outside wire is not soldered: strip 5 mm, push it into the opening under this screw and tighten. On a carrier PCB the leg under this screw is soldered to the board; in a hand-wired build solder the inside wire to that leg." },
     { "name": "2", "role": "passive", "x": 7.5, "y": 3.5, "note": "Right clamp with the wire openings facing you." }
   ],
+  "ports": [
+    { "name": "wire entry", "faces": "y+", "x": 5.0, "y": 7.5, "z": -5, "w": 10, "h": 10, "shape": "rect", "margin": 0.5 }
+  ],
   "electrical": {},
-  "footprint": { "mount": "tht", "pitch": 5, "ref": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" },
+  "footprint": {
+    "mount": "tht",
+    "pitch": 5,
+    "ref": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal"
+  },
   "sourcing": {
-    "search": ["KF301-2P screw terminal block 5mm", "PCB screw terminal 2 pin 5.08mm blue", "skrueterminal 2-pol 5 mm kretskort"],
+    "search": [
+      "KF301-2P screw terminal block 5mm",
+      "PCB screw terminal 2 pin 5.08mm blue",
+      "skrueterminal 2-pol 5 mm kretskort"
+    ],
     "priceUsd": 0.3
   },
-  "verify": "Outline and legs are from a reseller's copy of the KF301 drawing, not from the maker (Cixi Kefa) directly: 10 x 7.5 mm, 10 mm tall, legs 5.00 mm apart, 2.5 mm in from each end and 3.5 mm from the back face, 4.5 mm long, 1.0 mm thick (1.4 mm holes). Blocks sold as 5.08 mm fit the same holes at 2 and 3 ways; the green KF128 and Phoenix MKDS types are deeper and taller, so measure depth and height of yours before a case depends on them. Wire openings are on the front face (y = 7.5); their size and height are drawn for recognition, not from the drawing. Each pad is drawn on top of the block at its screw, above the leg. Rating on the sheet: 16 A, wire AWG 24 to 16, strip 4.5 to 5 mm, M2.5 screw, 0.4 Nm. The guide words every step as soldering: for the outside wires read it as 'clamp under the screw'.",
+  "verify": "Outline and legs are from a reseller's copy of the KF301 drawing, not from the maker (Cixi Kefa) directly: 10 x 7.5 mm, 10 mm tall, legs 5.00 mm apart, 2.5 mm in from each end and 3.5 mm from the back face, 4.5 mm long, 1.0 mm thick (1.4 mm holes). Blocks sold as 5.08 mm fit the same holes at 2 and 3 ways; the green KF128 and Phoenix MKDS types are deeper and taller, so measure depth and height of yours before a case depends on them. Wire openings are on the front face (y = 7.5); their size and height are drawn for recognition, not from the drawing. The 'wire entry' port is the whole front face of the block (from the outline), so a case wall the block stands against is opened over the full face; the real openings are in the lower part of it. Each pad is drawn on top of the block at its screw, above the leg. Rating on the sheet: 16 A, wire AWG 24 to 16, strip 4.5 to 5 mm, M2.5 screw, 0.4 Nm. The guide words every step as soldering: for the outside wires read it as 'clamp under the screw'.",
   "sources": [
     "http://www.handsontec.com/dataspecs/terminal%20block-5mm.pdf (Handson Technology KF301-2P sheet, opened and read: PCB layout and side view with 5.00 pitch, 7.50 depth, 10.00 height, 2.50 end margin, 3.50 leg to edge, 4.50 leg length, 1.00 leg, 1.40 hole; 16 A, AWG 16-24, strip 4.5-5 mm)",
     "https://gitlab.com/kicad/libraries/kicad-footprints/-/raw/master/TerminalBlock_Phoenix.pretty/TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal.kicad_mod (KiCad footprint of the Phoenix part this type copies, opened: pads 5.00 apart, 1.3 mm drill)"
