@@ -3,7 +3,7 @@
 
 import { describe, expect, test } from "bun:test";
 import { buildGuide, checksPages, coverCount } from "./guide";
-import { BOARD, DISPLAY, project } from "./lib/drawing-fixtures";
+import { DISPLAY, project } from "./lib/drawing-fixtures";
 import { findChrome, measurePages, overflowText } from "./lib/page-fit";
 import { resolveProject } from "./lib/project";
 import type { Connection, PartDef, PartUse, Project } from "./lib/types";

@@ -26,9 +26,6 @@ export const proj = (x: number, y: number, z: number): Pt => [(x - y) * C, (x + 
  */
 export const VIEW: V3 = [1, 1, Math.SQRT2 * Math.tan(ELEVATION)];
 
-/** How far toward the camera a point is. Larger is nearer. */
-export const depthOf = (p: V3): number => (p[0] * VIEW[0] + p[1] * VIEW[1] + p[2] * VIEW[2]) / Math.hypot(...VIEW);
-
 /**
  * Lift a page offset back into space. `side` moves a point sideways on the page and
  * `up` moves it up the page, neither changing the other, so any page point near a

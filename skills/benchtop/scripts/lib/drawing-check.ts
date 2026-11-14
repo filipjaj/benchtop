@@ -11,7 +11,6 @@
 // guide.ts runs these on every drawing of every build and prints one line per problem.
 
 import {
-  type Block,
   type Pt,
   type V3,
   backtrack,
