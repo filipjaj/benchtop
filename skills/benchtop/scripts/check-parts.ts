@@ -15,8 +15,14 @@ const KINDS = ["board", "sensor", "display", "actuator", "power", "passive", "in
 const ROLES = ["power-in", "power-out", "gnd", "io", "passive", "nc"];
 // Connectors and antennas legitimately hang over the board edge by a few millimetres.
 const OVERHANG = 4;
+/**
+ * A leg can sit just outside the moulded body: the switch lug of a PCB barrel jack is 0.2 mm
+ * past the housing on the maker's own drawing. Further out than this, the pin is far more
+ * likely in the wrong frame or the wrong unit, which is what the rule is there to catch.
+ */
+export const PIN_OVERHANG = 1;
 
-function check(def: PartDef, file: string): string[] {
+export function check(def: PartDef, file: string): string[] {
   const e: string[] = [];
   const need = (ok: boolean, msg: string) => {
     if (!ok) e.push(msg);
@@ -62,7 +68,10 @@ function check(def: PartDef, file: string): string[] {
       seen.add(n);
     }
     need(ROLES.includes(p.role), `pin ${p.name}: role "${p.role}" invalid`);
-    need(p.x >= 0 && p.x <= def.body.w && p.y >= 0 && p.y <= def.body.d, `pin ${p.name} at (${p.x}, ${p.y}) is outside the ${def.body.w} x ${def.body.d} body`);
+    need(
+      p.x >= -PIN_OVERHANG && p.x <= def.body.w + PIN_OVERHANG && p.y >= -PIN_OVERHANG && p.y <= def.body.d + PIN_OVERHANG,
+      `pin ${p.name} at (${p.x}, ${p.y}) is more than ${PIN_OVERHANG} mm outside the ${def.body.w} x ${def.body.d} body`,
+    );
     if (p.role === "power-out") need(typeof p.volts === "number", `power-out pin ${p.name} needs volts`);
   }
   let top = def.body.h;
@@ -90,33 +99,35 @@ function check(def: PartDef, file: string): string[] {
   return e;
 }
 
-const dirs = process.argv.slice(2).length ? process.argv.slice(2) : [LIBRARY_DIR];
-let failed = 0;
-let count = 0;
-for (const dir of dirs) {
-  for (const file of (await readdir(dir)).filter((n) => n.endsWith(".json")).sort()) {
-    count++;
-    let errors: string[];
-    let parsed: PartDef | null = null;
-    try {
-      // Parsed JSON is untyped; check() validates the fields it reads.
-      parsed = (await Bun.file(join(dir, file)).json()) as PartDef;
-      errors = check(parsed, file);
-    } catch (err) {
-      errors = [`not valid JSON: ${(err as Error).message}`];
+if (import.meta.main) {
+  const dirs = process.argv.slice(2).length ? process.argv.slice(2) : [LIBRARY_DIR];
+  let failed = 0;
+  let count = 0;
+  for (const dir of dirs) {
+    for (const file of (await readdir(dir)).filter((n) => n.endsWith(".json")).sort()) {
+      count++;
+      let errors: string[];
+      let parsed: PartDef | null = null;
+      try {
+        // Parsed JSON is untyped; check() validates the fields it reads.
+        parsed = (await Bun.file(join(dir, file)).json()) as PartDef;
+        errors = check(parsed, file);
+      } catch (err) {
+        errors = [`not valid JSON: ${(err as Error).message}`];
+      }
+      if (errors.length) {
+        failed++;
+        console.log(`FAIL ${file}`);
+        for (const m of errors) console.log(`     ${m}`);
+      } else {
+        console.log(`ok   ${file}`);
+        if (parsed?.geometryEvidence?.status === "unresolved") console.log(`     PHYSICAL GEOMETRY UNRESOLVED: logical planning only; ${parsed.geometryEvidence.reason}`);
+      }
+      // Information, not an error: a draft from `import-part` records a hash of the geometry it wrote.
+      const edited = parsed ? editedAfterImport(parsed) : null;
+      if (edited) console.log(`     INFO ${edited}`);
     }
-    if (errors.length) {
-      failed++;
-      console.log(`FAIL ${file}`);
-      for (const m of errors) console.log(`     ${m}`);
-    } else {
-      console.log(`ok   ${file}`);
-      if (parsed?.geometryEvidence?.status === "unresolved") console.log(`     PHYSICAL GEOMETRY UNRESOLVED: logical planning only; ${parsed.geometryEvidence.reason}`);
-    }
-    // Information, not an error: a draft from `import-part` records a hash of the geometry it wrote.
-    const edited = parsed ? editedAfterImport(parsed) : null;
-    if (edited) console.log(`     INFO ${edited}`);
   }
+  console.log(`\n${count - failed}/${count} parts pass structural checks (not source or fit verification)`);
+  process.exit(failed ? 1 : 0);
 }
-console.log(`\n${count - failed}/${count} parts pass structural checks (not source or fit verification)`);
-process.exit(failed ? 1 : 0);
