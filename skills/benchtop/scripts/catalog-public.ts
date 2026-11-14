@@ -29,7 +29,7 @@ import { Database } from "bun:sqlite";
 import { copyFileSync, existsSync, renameSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
 
-export const PUBLIC_BUILDER_VERSION = "2";
+export const PUBLIC_BUILDER_VERSION = "3";
 
 /** Source authorities whose facts are kept: the manufacturer's own claims, documents and CAD. */
 export const KEEP_AUTHORITIES = [
@@ -123,13 +123,29 @@ const LOCAL_PATH = /(?:\/(?:Users|home|private|tmp|var\/folders)\/|\b[A-Za-z]:\\
 const LOCAL_PATH_SQL = (col: string) =>
   `(${col} LIKE '%/Users/%' OR ${col} LIKE '%/home/%' OR ${col} LIKE '%/private/%' OR ${col} LIKE '%/var/folders/%')`;
 
-/** Drops every JSON member whose string value is a local path; other strings get the path replaced. */
+/**
+ * JSON keys dropped wherever the scrub parses JSON: text quoted from the source (rule 3) and
+ * pointers into the catalog builder's own workspace (captures, renders, downloaded originals).
+ * Nothing in the skill reads them. Content-addressed cache keys (`references/<hash>`) and CAD
+ * assembly paths stay: the importer uses them and they name no machine.
+ */
+export const DROP_KEY = /^(evidence_fragments|source_evidence_fragments|full_evidence_as_submitted|local_path|render_path|capture_path|raw_file)$/;
+/** A path relative to the catalog builder's workspace, whatever key holds it. */
+const WORKSPACE_PATH = /^work\//;
+/** SQL test for text that may hold a DROP_KEY member. */
+const DROP_KEY_SQL = (col: string) =>
+  `(${col} LIKE '%evidence_fragments%' OR ${col} LIKE '%full_evidence%' OR ${col} LIKE '%"local_path"%' OR ${col} LIKE '%"render_path"%' OR ${col} LIKE '%"capture_path"%' OR ${col} LIKE '%"raw_file"%' OR ${col} LIKE '%"work/%')`;
+
+/**
+ * Drops every JSON member whose key matches DROP_KEY or whose string value is a local path;
+ * other strings get the path replaced.
+ */
 export function stripLocalPaths(text: string): string {
-  const isLocal = (v: unknown) => typeof v === "string" && new RegExp(`^${LOCAL_PATH.source}$`).test(v);
+  const isLocal = (v: unknown) => typeof v === "string" && (WORKSPACE_PATH.test(v) || new RegExp(`^${LOCAL_PATH.source}$`).test(v));
   const clean = (v: unknown): unknown => {
     if (Array.isArray(v)) return v.filter((x) => !isLocal(x)).map(clean);
     if (v && typeof v === "object") {
-      return Object.fromEntries(Object.entries(v).filter(([, x]) => !isLocal(x)).map(([k, x]) => [k, clean(x)]));
+      return Object.fromEntries(Object.entries(v).filter(([k, x]) => !DROP_KEY.test(k) && !isLocal(x)).map(([k, x]) => [k, clean(x)]));
     }
     return typeof v === "string" ? v.replace(LOCAL_PATH, "<local file>") : v;
   };
@@ -146,8 +162,9 @@ export function stripLocalPaths(text: string): string {
 }
 
 function scrubLocalPaths(db: Database, table: string, key: string, col: string): void {
-  const rows = db.query<Record<string, string | number>, []>(`SELECT "${key}" AS k, "${col}" AS v FROM "${table}" WHERE ${LOCAL_PATH_SQL(`"${col}"`)} OR "${col}" GLOB '*[A-Za-z]:\\*'`).all();
-  const update = db.prepare(`UPDATE "${table}" SET "${col}" = ? WHERE "${key}" = ?`);
+  const c = `"${col}"`;
+  const rows = db.query<Record<string, string | number>, []>(`SELECT "${key}" AS k, ${c} AS v FROM "${table}" WHERE ${LOCAL_PATH_SQL(c)} OR ${c} GLOB '*[A-Za-z]:\\*' OR ${DROP_KEY_SQL(c)}`).all();
+  const update = db.prepare(`UPDATE "${table}" SET ${c} = ? WHERE "${key}" = ?`);
   for (const r of rows) {
     const next = stripLocalPaths(String(r.v));
     if (next !== r.v) update.run(next, r.k);
@@ -194,6 +211,9 @@ export function makePublic(db: Database): PublicReport {
   db.exec(partScoped("specifications"));
   db.exec(`DELETE FROM specifications WHERE NOT ${keptSource("source_id")} OR ${proseSpec}`);
   db.exec(`UPDATE specifications SET evidence_text = ''`);
+  // scope_note is our own annotation (the cards read its canonical_voltage and selected_i2c_address
+  // flags), but some notes carry the quoted source sentences and capture paths they were built from.
+  if (columns(db, "specifications").includes("scope_note")) scrubLocalPaths(db, "specifications", "spec_id", "scope_note");
 
   // 3. Data issues are our own findings; keep those about kept parts that cite no retailer.
   //    Capture-metadata notes carry the scraped page itself (text, JSON-LD, prices): never ours to publish.
@@ -270,6 +290,7 @@ export function auditPublic(db: Database): string[] {
       .map((c) => `"${c.name}"`);
     for (const c of textCols) {
       if (n(`SELECT count(*) AS n FROM "${t}" WHERE ${LOCAL_PATH_SQL(c)}`)) problems.push(`${t}.${c.replaceAll('"', "")} holds a local file path`);
+      if (n(`SELECT count(*) AS n FROM "${t}" WHERE ${DROP_KEY_SQL(c)}`)) problems.push(`${t}.${c.replaceAll('"', "")} holds quoted source text or a workspace path`);
       if (n(`SELECT count(*) AS n FROM "${t}" WHERE ${c} LIKE '%"@context"%' OR ${c} LIKE '%"offers"%'`)) problems.push(`${t}.${c.replaceAll('"', "")} holds scraped product JSON-LD`);
     }
   }
