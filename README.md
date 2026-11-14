@@ -1,5 +1,18 @@
 # Benchtop
 
+**Describe a thing. Get a box you can build.**
+
+<p align="center">
+  <a href="https://filipjaj.github.io/benchtop/nokta/"><img src="docs/img/nokta.png" width="640" alt="Nokta, a handheld game console designed with Benchtop"></a>
+</p>
+
+<p align="center">
+  <a href="https://filipjaj.github.io/benchtop/"><b>Website</b></a> ·
+  <a href="https://filipjaj.github.io/benchtop/nokta/video/"><b>Build video</b></a> ·
+  <a href="https://filipjaj.github.io/benchtop/fifty/"><b>Fifty example projects</b></a> ·
+  <a href="#install"><b>Install</b></a>
+</p>
+
 A Claude Code skill that takes a microcontroller or 3D-printing project from "I want a
 thing that..." to a folder someone can build from:
 
@@ -14,6 +27,41 @@ thing that..." to a folder someone can build from:
 
 Everything is generated from one `project.json`. Nothing is drawn or typed by hand, so the
 guide, the firmware pins and the case cannot disagree with each other.
+
+## Examples
+
+### Nokta, a game console
+
+A pocket console with a 2.8 inch screen, a D-pad, seven games and a USB-charged battery.
+The package includes a four-minute animated build video generated from the same guide.
+
+<a href="https://filipjaj.github.io/benchtop/nokta/video/"><img src="docs/img/video.png" alt="Nokta build video, title frame"></a>
+
+[Package](https://filipjaj.github.io/benchtop/nokta/) ·
+[Build video](https://filipjaj.github.io/benchtop/nokta/video/) ·
+[Guide](https://filipjaj.github.io/benchtop/nokta/guide/)
+
+### Benchtop Fifty
+
+Fifty real open-source hardware projects (WLED, Meshtastic, ZMK, Retro-Go, GP2040-CE and
+more), each designed by the skill from a one-paragraph brief with no one at the keyboard.
+Every project has a case you can turn around in 3D, a wiring plan and an illustrated guide.
+
+| | |
+| --- | --- |
+| <a href="https://filipjaj.github.io/benchtop/fifty/"><img src="docs/img/fifty.png" alt="Benchtop Fifty gallery"></a> | <a href="https://filipjaj.github.io/benchtop/fifty/#p45"><img src="docs/img/lomme.png" alt="Lomme, a Retro-Go handheld, with its 3D case"></a> |
+
+[Browse all fifty](https://filipjaj.github.io/benchtop/fifty/)
+
+### Luft, a first build
+
+<a href="https://filipjaj.github.io/benchtop/luft/"><img src="docs/img/luft.png" width="360" align="right" alt="Luft desk air monitor"></a>
+
+A desk air monitor: temperature, humidity and pressure on a small OLED. Four parts, one
+evening. [Package](https://filipjaj.github.io/benchtop/luft/) ·
+[Download the kit](https://filipjaj.github.io/benchtop/luft/luft.zip)
+
+<br clear="right">
 
 ## Status
 
