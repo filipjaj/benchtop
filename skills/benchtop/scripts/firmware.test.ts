@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { bringupCpp, mainCpp, platformioIni, rp2040I2cBus } from "./firmware";
 import { FAMILIES, type Lookup, platformSpec, resolveBoard } from "./lib/platform";
 import { pinMapDetailed } from "./lib/pinmap";
-import { loadProject, resolveProject } from "./lib/project";
+import { loadPartDefs, loadProject, resolveProject } from "./lib/project";
 import type { PartDef, PinDef, Project } from "./lib/types";
 
 const [ESP32, RP2040, AVR] = FAMILIES as [(typeof FAMILIES)[number], (typeof FAMILIES)[number], (typeof FAMILIES)[number]];
@@ -102,6 +102,9 @@ describe("a stepper-driver build", () => {
         gpio(10),
         gpio(11),
         gpio(35, ["input-only", "adc"]),
+        gpio(36, ["input-only", "adc"]),
+        gpio(25),
+        gpio(37, ["adc"]),
         at("GND", "gnd"), at("GND_2", "gnd"),
         at("3V3", "power-out", { volts: 3.3 }), at("3V3_2", "power-out", { volts: 3.3 }),
       ]),
@@ -111,7 +114,9 @@ describe("a stepper-driver build", () => {
         at("ALM+", "io", { dir: "out", note: "Alarm opto transistor collector (open collector)." }),
         at("PUL-", "gnd"),
       ]),
-      def("pot", "input", passive3),
+      def("pot", "input", [at("1", "passive"), at("2", "passive", { aliases: ["W"] }), at("3", "passive")]),
+      // KY-040 style: SW is stated as an output, but it is a contact that only closes to GND.
+      def("encoder", "input", [at("SW", "io", { dir: "out", note: "Push button, closes to GND when pressed." }), at("GND", "gnd")]),
       def("toggle", "input", [at("1", "passive"), at("COM", "passive"), at("3", "passive")]),
       def("terminal", "connector", passive3),
       def("socket", "connector", ["1", "2", "3", "4"].map((n) => at(n, "passive"))),
@@ -128,7 +133,8 @@ describe("a stepper-driver build", () => {
       { ref: "mcu", part: "board" }, { ref: "drv", part: "driver" }, { ref: "pot", part: "pot" },
       { ref: "pot2", part: "pot" }, { ref: "dirsw", part: "toggle" }, { ref: "key", part: "toggle" },
       { ref: "estop", part: "terminal" }, { ref: "pedal", part: "socket" }, { ref: "pir", part: "pir" },
-      { ref: "r1", part: "resistor" }, { ref: "led", part: "led" },
+      { ref: "r1", part: "resistor" }, { ref: "led", part: "led" }, { ref: "pot3", part: "pot" },
+      { ref: "enc", part: "encoder" }, { ref: "sel", part: "toggle" },
     ],
     connections: [
       { from: "mcu.GPIO50", to: "drv.PUL+", net: "STEP" },
@@ -153,6 +159,14 @@ describe("a stepper-driver build", () => {
       { from: "r1.1", to: "mcu.GPIO11" },
       { from: "r1.2", to: "mcu.3V3_2" },
       { from: "mcu.GPIO35", to: "led.A", net: "ONLY_IN" },
+      { from: "mcu.3V3_2", to: "pot3.3" },
+      { from: "pot3.1", to: "mcu.GND_2" },
+      { from: "mcu.GPIO36", to: "pot3.2", net: "POT_ONLY_IN" },
+      { from: "mcu.GPIO25", to: "enc.SW", net: "ENC_SW" },
+      { from: "enc.GND", to: "mcu.GND" },
+      { from: "mcu.GPIO37", to: "sel.COM", net: "SEL" },
+      { from: "sel.1", to: "mcu.3V3" },
+      { from: "sel.3", to: "mcu.GND_2" },
       { from: "pir.OUT", to: "mcu.GPIO33" },
     ],
     firmware: { framework: "arduino", board: "esp32-p4", behaviour: "Hold ENA high." },
@@ -192,6 +206,8 @@ describe("a stepper-driver build", () => {
     expect(c).toContain("pinMode(PIN_ESTOP, INPUT_PULLUP);");
     expect(c).toContain("pinMode(PIN_DIR_SW, INPUT_PULLUP);");
     expect(c).toContain("pinMode(PIN_KEY, INPUT);");
+    // dir "out" on an input part is a contact, not a push-pull output.
+    expect(c).toContain("pinMode(PIN_ENC_SW, INPUT_PULLUP);");
     const pir = resolveProject(project, defs);
     expect(bringupCpp(pir, pinMapDetailed(pir), ESP32)).toContain("pinMode(PIN_PEDAL_SW, INPUT);");
   });
@@ -203,6 +219,13 @@ describe("a stepper-driver build", () => {
     expect(c).not.toMatch(/pinMode\(PIN_POT, /);
     expect(use("PIN_POT_NO_ADC").use).toBe("input");
     expect(c).toContain("pinMode(PIN_POT_NO_ADC, INPUT);");
+    // An input-only ADC pin (classic ESP32 GPIO34-39) is the usual pot pin: still analog.
+    expect(use("PIN_POT_ONLY_IN").use).toBe("analog");
+    expect(c).toContain("analogRead(PIN_POT_ONLY_IN)");
+    expect(c).not.toMatch(/pinMode\(PIN_POT_ONLY_IN, /);
+    // The common of an SPDT toggle is not a wiper, whatever its throws are wired to.
+    expect(use("PIN_SEL").use).toBe("input");
+    expect(c).toContain("digitalRead(PIN_SEL)");
   });
 
   test("4: explicit dir decides before the part's kind, and an input-only pin is never an output", () => {
@@ -231,6 +254,49 @@ describe("a stepper-driver build", () => {
     expect(s3.ok && platformSpec(s3.family)).toBe(`espressif32@${ESP32.version}`);
     const p4 = await resolveBoard("esp32-p4", none);
     expect(p4.ok && p4.family.comment.join("\n")).toContain("55.03.312-1");
+  });
+});
+
+// The same rules on bundled catalog parts, wired the way a builder would.
+describe("bundled parts on a classic ESP32", async () => {
+  const defs = await loadPartDefs();
+  const project: Project = {
+    schema: 1, slug: "probe", name: "Probe", tagline: "", summary: "",
+    build: { path: "wire", difficulty: 1, minutes: 1 },
+    power: { source: "usb", volts: 5, budgetMa: 500 },
+    parts: [
+      { ref: "mcu", part: "esp32-devkit-v1" }, { ref: "pot", part: "potentiometer-9mm-vertical" },
+      { ref: "enc", part: "rotary-encoder-ky040" }, { ref: "sw", part: "slide-switch-ss12d00" },
+    ],
+    connections: [
+      { from: "mcu.D34", to: "pot.2", net: "POT" },
+      { from: "pot.1", to: "mcu.GND" },
+      { from: "pot.3", to: "mcu.3V3" },
+      { from: "mcu.D25", to: "enc.SW", net: "ENC_SW" },
+      { from: "mcu.D26", to: "enc.CLK", net: "ENC_CLK" },
+      { from: "enc.GND", to: "mcu.GND.2" },
+      { from: "enc.+", to: "mcu.3V3" },
+      { from: "mcu.D32", to: "sw.COM", net: "SEL" },
+      { from: "sw.A", to: "mcu.3V3" },
+      { from: "sw.B", to: "mcu.GND.2" },
+    ],
+    firmware: { framework: "arduino", board: "esp32dev", behaviour: "Read inputs." },
+  };
+  const loaded = resolveProject(project, defs);
+  const c = bringupCpp(loaded, pinMapDetailed(loaded), ESP32);
+
+  test("a pot on input-only D34 is read with analogRead and no pinMode", () => {
+    expect(c).toContain("analogRead(PIN_POT)");
+    expect(c).not.toMatch(/pinMode\(PIN_POT, /);
+  });
+
+  test("KY-040 SW, a contact to GND stated as dir out, keeps the internal pull-up", () => {
+    expect(c).toContain("pinMode(PIN_ENC_SW, INPUT_PULLUP);");
+  });
+
+  test("an SS12D00 common between 3V3 and GND on an ADC pin is a digital level, not a wiper", () => {
+    expect(c).toContain("digitalRead(PIN_SEL)");
+    expect(c).not.toContain("analogRead(PIN_SEL)");
   });
 });
 

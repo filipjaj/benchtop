@@ -160,10 +160,13 @@ Read the serial output top to bottom:
   decides the pin mode. A switch or button contact, a screw-terminal or connector contact, and
   an open-collector output (a pin with `"dir": "out"` whose note says "open collector" or
   "open drain", such as a stepper driver's alarm opto) get `INPUT_PULLUP`, so released reads 1
-  and pressed reads 0. A push-pull output (`"dir": "out"`, no such note) or a net with a pull
-  resistor already fitted gets `INPUT`. A pot wiper (the middle pin of an input or sensor part
-  whose other pins go to a supply and ground) on a pin with the `adc` cap, or a pin whose part
-  says `"needs": ["adc"]`, is read with `analogRead` and no pull-up. A stated `dir` on the other
+  and pressed reads 0. So does a `"dir": "out"` pin of an `input` part (the KY-040's SW): those
+  are contacts. A push-pull output (`"dir": "out"` on any other kind, no such note) or a net
+  with a pull resistor already fitted gets `INPUT`. A pot wiper (a pin named or aliased `W`, or
+  whose note says "wiper", of an input or sensor part whose other pins go to a supply and
+  ground) on a pin with the `adc` cap, `input-only` pins included, or a pin whose part says
+  `"needs": ["adc"]`, is read with `analogRead` and no pull-up. The common of an SPDT switch
+  wired the same way is a level and stays digital. A stated `dir` on the other
   end beats the guess from the part's kind; an `input-only` controller pin is never an output,
   and has no internal pull-up, so the test says when it needs an external one. A pull-up makes
   a broken wire read 1: for a signal where 1 means healthy (an E-STOP), decide the fail-safe
