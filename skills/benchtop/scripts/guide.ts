@@ -23,6 +23,7 @@ import type { PcbLayout } from "./lib/pcb-layout";
 import { strictGeometry, warnUnresolvedGeometry } from "./lib/geometry-evidence";
 import { JOINTS, JOINT_SEQUENCE, TOOLS, WARNING, WIRE_PREP } from "./lib/pictograms";
 import { guessFamily } from "./lib/platform";
+import { pluggedLead, screwEnd, wireEnds } from "./lib/consumables";
 import { type Loaded, loadProject, main } from "./lib/project";
 import { fileUrl, findChromes } from "./lib/tools";
 import * as scenes from "./lib/scenes";
@@ -83,29 +84,35 @@ function page(body: string, n: number, code: string, cls = ""): string {
 }
 
 /**
- * The cover's second number. It counts what the builder does, once: a soldered wire has two
- * joints, one at each end; a push-on lead is one connection however many ends it has; a
- * carrier board has one joint per pin; a factory-assembled board has parts to press in.
+ * The cover's numbers after the minutes. They count what the builder does, once: each wire end
+ * that is soldered is a joint, each end clamped under a screw is a screw clamp (counted apart,
+ * never as a joint), the ends of a lead that plugs in are neither; a push-on lead is one
+ * connection however many ends it has; a carrier board has one joint per pin; a
+ * factory-assembled board has parts to press in.
  */
-export function coverCount(loaded: Loaded, P: PcbLayout | null): { n: number; label: string } {
+export function coverCount(loaded: Loaded, P: PcbLayout | null): { n: number; label: string }[] {
   const { build } = loaded.project;
   if (P) {
     return build.path === "pcb-assembled"
-      ? { n: P.parts.length, label: "parts to press in" }
-      : { n: P.parts.reduce((n, p) => n + p.def.pins.length, 0), label: "solder joints" };
+      ? [{ n: P.parts.length, label: "parts to press in" }]
+      : [{ n: P.parts.reduce((n, p) => n + p.def.pins.length, 0), label: "solder joints" }];
   }
-  const wires = loaded.project.connections.length;
-  return build.joint === "dupont" ? { n: wires, label: "connections" } : { n: wires * 2, label: "solder joints" };
+  if (build.joint === "dupont") return [{ n: loaded.project.connections.length, label: "connections" }];
+  const ends = wireEnds(loaded);
+  const clamps = { n: ends.screw, label: "screw clamps" };
+  // A build whose every end is under a screw shows no "0 solder joints".
+  if (!ends.solder && ends.screw) return [clamps];
+  return [{ n: ends.solder, label: "solder joints" }, ...(ends.screw ? [clamps] : [])];
 }
 
-function coverPage(loaded: Loaded, hero: string, count: { n: number; label: string }): string {
+function coverPage(loaded: Loaded, hero: string, counts: { n: number; label: string }[]): string {
   const { project } = loaded;
   const dots = [1, 2, 3].map((i) => `<i class="${i <= project.build.difficulty ? "on" : ""}"></i>`).join("");
   return (
     `<section class="page cover"><h1>${esc(project.name.toUpperCase())}</h1>` +
     `<div class="hero">${hero}</div>` +
     `<div class="facts"><div><b>${project.build.minutes}</b><span>minutes</span></div>` +
-    `<div><b>${count.n}</b><span>${count.label}</span></div>` +
+    counts.map((c) => `<div><b>${c.n}</b><span>${c.label}</span></div>`).join("") +
     `<div><b class="dots">${dots}</b><span>difficulty</span></div></div>` +
     `<p class="tag">${esc(project.tagline)}</p>` +
     unverifiedCover(loaded) +
@@ -125,11 +132,13 @@ function toolsFor(loaded: Loaded): string[] {
   let tools: string[];
   if (build.path === "pcb-assembled") tools = [];
   else if (build.path === "wire" && build.joint === "dupont") tools = ["multimeter"];
-  else if (build.path === "wire") tools = ["iron", "solder", "stripper", "cutters", "multimeter"];
+  else if (build.path === "wire") tools = soldersJoints(loaded) ? ["iron", "solder", "stripper", "cutters", "multimeter"] : ["stripper", "cutters", "multimeter"];
   else tools = ["iron", "solder", "cutters", "multimeter"];
   // A USB cable is a tool when the build is powered over USB or the firmware is loaded over it.
   if (power.source === "usb" || firmware) tools.push("usb");
-  if (enclosure) tools.push("screwdriver", "printer");
+  // A wire end under a screw needs the screwdriver even without a case.
+  if (enclosure || clamps(loaded)) tools.push("screwdriver");
+  if (enclosure) tools.push("printer");
   return tools;
 }
 
@@ -149,7 +158,9 @@ function prepPage(loaded: Loaded): string {
       `<figure>${JOINTS.starved}<figcaption>Too little solder</figcaption></figure>` +
       `<figure>${JOINTS.bridge}<figcaption>Solder joining two pins</figcaption></figure></div>`;
     if (loaded.project.build.path === "wire") {
-      html += `<div class="panel prep">${WIRE_PREP}<p>Strip 3 mm, twist the strands, and tin the end before you solder it to a pad.</p></div>`;
+      // Solder under a screw creeps, and the clamp works loose; the screw ends are told apart in their steps.
+      const screws = clamps(loaded) ? " Do not tin a wire that goes under a screw: a tinned end settles under the screw and works loose." : "";
+      html += `<div class="panel prep">${WIRE_PREP}<p>Strip 3 mm, twist the strands, and tin the end before you solder it to a pad.${screws}</p></div>`;
     }
   }
   const work = soldering ? "solder or change a wire" : "change a wire";
@@ -231,6 +242,17 @@ function inventoryPages(loaded: Loaded, L: EnclosureLayout | null, names: Names)
   return { pages: flowBlocks(blocks), problems: dedupe(problems), count: groups.size };
 }
 
+/**
+ * How to make the ends of a step that go under a screw (PinDef.screw). No solder and no tin:
+ * a tinned end settles under the screw and the clamp works loose. A push-on build never
+ * mentions solder (references/guide.md), so it gets the clamp steps without that warning.
+ */
+function clampText(ends: { part: PlacedPart; pin: string }[], soldered: boolean): string {
+  const which = ends.length > 1 ? "Both ends go" : `The end at the ${esc(inSentence(partLabel(ends[0]!.part)))} <b>${esc(ends[0]!.pin)}</b> goes`;
+  const how = "strip 5 mm, twist the strands tight or crimp on a ferrule, push the end fully in, tighten the screw and tug the wire to check it holds.";
+  return soldered ? `${which} under a screw, not into solder: ${how} Do not tin it.` : `${which} under a screw: ${how}`;
+}
+
 /** Captions above the bubbles must print at least this high (about 7.5 pt). */
 const MIN_CAPTION_MM = 2.6;
 
@@ -265,19 +287,29 @@ function wiringSteps(loaded: Loaded, names: Names): Step[] {
     const [a, b] = art.ends;
     let note = "";
     // A lead that ends on a connector contact is plugged in, whatever the build's joint.
-    const plugged = art.ends.some((e) => e.part.def.pins.some((p) => p.plug === true && (p.name === e.pin || (p.aliases ?? []).includes(e.pin))));
+    const plugged = pluggedLead(art.ends);
+    // An end under a screw is clamped, whatever the build's joint: solder there creeps and loosens.
+    const screwed = plugged ? [] : art.ends.filter((e) => screwEnd(e.part, e.pin));
     for (const e of plugged ? [] : art.ends) {
       const key = `${e.ref}.${e.pin}`;
-      if (used.has(key)) note = `The ${esc(e.pin)} pad on the ${esc(inSentence(partLabel(e.part)))} already holds a wire. Add this one beside it.`;
+      if (used.has(key)) {
+        note = screwed.includes(e)
+          ? `The ${esc(e.pin)} clamp on the ${esc(inSentence(partLabel(e.part)))} already holds a wire. Put this one in the same clamp and tighten the screw on both; a twin ferrule holds two wires best.`
+          : `The ${esc(e.pin)} pad on the ${esc(inSentence(partLabel(e.part)))} already holds a wire. Add this one beside it.`;
+      }
       used.set(key, i);
     }
+    const verb = plugged
+      ? `Plug in the <b>${esc(art.color)}</b> lead`
+      : `${screwed.length === 2 ? "Clamp" : screwed.length ? `${joint} and clamp` : joint} a <b>${esc(art.color)}</b> wire`;
     const hex = WIRE_HEX[art.color] ?? art.color;
     const caption =
       `<div class="recipe"><span class="wire" style="--c:${hex}"></span>` +
-      `<span class="verb">${plugged ? `Plug in the <b>${esc(art.color)}</b> lead` : `${joint} a <b>${esc(art.color)}</b> wire`}</span>` +
+      `<span class="verb">${verb}</span>` +
       `<span class="end">${esc(partLabel(a.part))} <b>${esc(a.pin)}</b></span><span class="to"></span>` +
       `<span class="end">${esc(partLabel(b.part))} <b>${esc(b.pin)}</b></span></div>` +
       (c.why ? `<p class="why">${esc(c.why)}</p>` : "") +
+      (screwed.length ? `<p class="note">${clampText(screwed, loaded.project.build.joint !== "dupont")}</p>` : "") +
       (note ? `<p class="note">${note}</p>` : "") +
       [...new Set(art.ends.filter((e) => isUnverified(e.part)).map((e) => e.ref))]
         .map((ref) => `<p class="note">Layout of the ${esc(inSentence(partLabel(loaded.byRef.get(ref)!)))} not verified. Measure yours before printing the case.</p>`)
@@ -349,13 +381,19 @@ function enclosureSteps(loaded: Loaded, L: EnclosureLayout, names: Names): Step[
 // Texts that follow the project: how the joints are made, how it is powered, what is flashed
 // ---------------------------------------------------------------------------
 
-/** True when the builder solders: hand-wired with soldered joints, or a carrier board they populate. */
+/**
+ * True when the builder solders: hand-wired with soldered joints, or a carrier board they
+ * populate. A hand-wired build whose every wire end is clamped or plugged has nothing to solder.
+ */
 const soldersJoints = (loaded: Loaded): boolean => {
   const { build } = loaded.project;
   if (build.path === "pcb-assembled") return false;
-  if (build.path === "wire") return build.joint !== "dupont";
+  if (build.path === "wire") return build.joint !== "dupont" && wireEnds(loaded).solder > 0;
   return true;
 };
+
+/** True when a hand-wired build has wire ends that are clamped under a screw (PinDef.screw). */
+const clamps = (loaded: Loaded): boolean => loaded.project.build.path === "wire" && wireEnds(loaded).screw > 0;
 
 /** What the builder does to cut power, by what powers the build. */
 function powerOff(loaded: Loaded): string {
@@ -416,11 +454,15 @@ export function checksPages(loaded: Loaded): string[] {
   const cap = PAGE.h - lineMm(15) - PAGE_GAP;
 
   const first: { html: string; h: number }[] = [];
-  const look = soldersJoints(loaded)
-    ? "Look. Every joint is a shiny cone. No solder touches a neighbouring pad. No stray strands of wire."
-    : loaded.project.build.path === "pcb-assembled"
-      ? "Look. Every part sits flat and every pin is in its hole. Nothing touches a neighbouring pin."
-      : "Look. Every lead is pushed fully onto its pin. No bare metal touches a neighbouring pin.";
+  const look =
+    (soldersJoints(loaded)
+      ? "Look. Every joint is a shiny cone. No solder touches a neighbouring pad. No stray strands of wire."
+      : loaded.project.build.path === "pcb-assembled"
+        ? "Look. Every part sits flat and every pin is in its hole. Nothing touches a neighbouring pin."
+        : clamps(loaded) && loaded.project.build.joint !== "dupont"
+          ? "Look. No bare metal touches a neighbouring pin. No stray strands of wire."
+          : "Look. Every lead is pushed fully onto its pin. No bare metal touches a neighbouring pin.") +
+    (clamps(loaded) ? " Tug every wire under a screw: none moves." : "");
   first.push(li(`<li><b>Look.</b> ${esc(look.replace(/^Look\. /, ""))}</li>`, look.length));
   if (rails.length && gnd) {
     const perRow = Math.max(1, Math.floor((textW + 6) / (36 + 6)));

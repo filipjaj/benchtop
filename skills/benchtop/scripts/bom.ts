@@ -1,7 +1,7 @@
 // Usage: bun bom.ts <projectDir>
 // Writes <projectDir>/out/bom.csv and <projectDir>/out/bom.md and prints the estimated total.
 
-import { consumables as listConsumables } from "./lib/consumables";
+import { consumables as listConsumables, wireEnds } from "./lib/consumables";
 import { strictGeometry, unresolvedGeometry } from "./lib/geometry-evidence";
 import { ESTIMATE_WORDS, formatTotals, listJoin, type Money, shippingSummary, sumByCurrency } from "./lib/pricing";
 import { mkdir } from "node:fs/promises";
@@ -118,6 +118,9 @@ await main(async () => {
   // Wire, solder, heat-shrink and case screws: one shared list (lib/consumables.ts),
   // so the BOM and the shopping page always ask for the same things.
   const { path, joint } = project.build;
+  // Ends under a screw (PinDef.screw) are not joints of the build's kind; say how many, as the guide's cover does.
+  const screws = path === "wire" ? wireEnds(loaded).screw : 0;
+  const clamped = screws ? `, with ${screws} wire end${screws === 1 ? "" : "s"} clamped under a screw instead` : "";
   const consumables: Row[] = (await listConsumables(loaded)).map((c) => ({
     refs: "",
     qty: c.qty,
@@ -204,7 +207,7 @@ await main(async () => {
   const md = [
     `# Bill of materials: ${project.name}`,
     "",
-    `Build path: ${path}${joint ? `, ${joint} joints` : ""}. ${
+    `Build path: ${path}${joint ? `, ${joint} joints${clamped}` : ""}. ${
       sourcing && sourced.length > 0
         ? `The USD columns are rough estimates for budgeting; the actual columns are prices found on ${sourcing.checkedAt}, in ${listJoin(currencies)} as each shop shows them and never converted, for the listing named (a multi-pack is priced as the pack).`
         : `Prices are rough single-unit street prices in USD, ${ESTIMATE_WORDS}.`

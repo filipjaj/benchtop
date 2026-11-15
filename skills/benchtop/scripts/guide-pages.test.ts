@@ -3,6 +3,7 @@
 
 import { describe, expect, test } from "bun:test";
 import { buildGuide, checksPages, coverCount } from "./guide";
+import { wireEnds } from "./lib/consumables";
 import { DISPLAY, project } from "./lib/drawing-fixtures";
 import { findChrome, measurePages, overflowText } from "./lib/page-fit";
 import { resolveProject } from "./lib/project";
@@ -21,9 +22,13 @@ function rowPart(id: string, n: number): PartDef {
   };
 }
 
-function many(n: number, tweak: (p: Project) => void = () => {}) {
-  const a = rowPart("rowa", n);
-  const b = rowPart("rowb", n);
+/** The same row of pads, every one a screw clamp (PinDef.screw), like a terminal block. */
+function clampPart(id: string, n: number): PartDef {
+  const p = rowPart(id, n);
+  return { ...p, pins: p.pins.map((pin) => ({ ...pin, screw: true })) };
+}
+
+function many(n: number, tweak: (p: Project) => void = () => {}, b = rowPart("rowb", n), a = rowPart("rowa", n)) {
   const parts: PartUse[] = [{ ref: "a", part: a.id, label: "Left bar" }, { ref: "b", part: b.id, label: "Right bar" }];
   const connections: Connection[] = Array.from({ length: n }, (_, i) => ({ from: `a.p${i}`, to: `b.p${i}`, net: `NET_NUMBER_${i}` }));
   const p = project(parts, connections);
@@ -34,14 +39,28 @@ function many(n: number, tweak: (p: Project) => void = () => {}) {
 describe("the cover", () => {
   test("counts what the builder does once: a push-on connection is one, a soldered wire has two joints", () => {
     const solder = many(8);
-    expect(coverCount(solder, null)).toEqual({ n: 16, label: "solder joints" });
+    expect(coverCount(solder, null)).toEqual([{ n: 16, label: "solder joints" }]);
     const dupont = many(8, (p) => (p.build.joint = "dupont"));
     // The doubled number was wire ends labelled as connections.
-    expect(coverCount(dupont, null)).toEqual({ n: 8, label: "connections" });
+    expect(coverCount(dupont, null)).toEqual([{ n: 8, label: "connections" }]);
+  });
+
+  test("a wire end under a screw is a screw clamp, not a solder joint", () => {
+    // Added 2026-11-15: every wire end was counted as a solder joint, terminal blocks included.
+    expect(coverCount(many(4, () => {}, clampPart("rowb", 4)), null)).toEqual([
+      { n: 4, label: "solder joints" },
+      { n: 4, label: "screw clamps" },
+    ]);
+    // The BOM's line says the same count; a lead that plugs in has neither joints nor clamps.
+    const plugA = { ...rowPart("rowa", 2), pins: rowPart("rowa", 2).pins.map((p) => ({ ...p, plug: true })) };
+    expect(wireEnds(many(2, () => {}, clampPart("rowb", 2), plugA))).toEqual({ solder: 0, screw: 0, plug: 4 });
+    expect(wireEnds(many(2, () => {}, clampPart("rowb", 2)))).toEqual({ solder: 2, screw: 2, plug: 0 });
+    // Nothing soldered at all: no "0 solder joints".
+    expect(coverCount(many(3, () => {}, clampPart("rowb", 3), clampPart("rowa", 3)), null)).toEqual([{ n: 6, label: "screw clamps" }]);
   });
 
   test("a project with no wires says zero, not a made-up number", () => {
-    expect(coverCount(many(0), null).n).toBe(0);
+    expect(coverCount(many(0), null)[0]!.n).toBe(0);
   });
 
   test("the cover of a built guide shows that number and the minutes", async () => {
@@ -52,7 +71,7 @@ describe("the cover", () => {
 });
 
 describe("texts that follow the project", () => {
-  const build = (tweak: (p: Project) => void) => buildGuide(many(3, tweak));
+  const build = (tweak: (p: Project) => void, b?: PartDef, a?: PartDef) => buildGuide(many(3, tweak, b, a));
 
   test("a push-on build says nothing about solder, and a soldered one does", async () => {
     const dupont = (await build((p) => (p.build.joint = "dupont"))).html;
@@ -61,6 +80,42 @@ describe("texts that follow the project", () => {
     expect(dupont).toContain("pushed fully onto its pin");
     const solder = (await build(() => {})).html;
     expect(solder).toContain("shiny cone");
+    // Added 2026-11-15: the clamp text said "not into solder ... Do not tin it." on push-on builds too.
+    // The style sheet names solder classes; only the words the builder reads count.
+    const clamped = (await build((p) => (p.build.joint = "dupont"), clampPart("rowb", 3))).html.replace(/<style>[\s\S]*?<\/style>/, "");
+    expect(clamped).toContain("tighten the screw");
+    expect(clamped).not.toMatch(/solder/i);
+    expect(clamped).not.toMatch(/\btin\b/i);
+  });
+
+  test("a wire end under a screw is clamped, not soldered or tinned", async () => {
+    // Added 2026-11-15: every end of a soldered build was worded as soldered, terminal blocks included.
+    const html = (await build((p) => (p.connections[2]!.to = "b.p0"), clampPart("rowb", 3))).html;
+    const steps = html.split('<div class="step">').slice(1);
+    expect(steps).toHaveLength(3);
+    for (const s of steps) {
+      expect(s).toContain("Solder and clamp a");
+      expect(s).toContain(`The end at the right bar <b>p`);
+      for (const how of ["strip 5 mm", "ferrule", "tighten the screw", "tug the wire", "Do not tin it."]) expect(s).toContain(how);
+    }
+    // A second wire into the same clamp goes in with the first, not "beside" it as on a pad.
+    expect(steps[2]).toContain("The p0 clamp on the right bar already holds a wire. Put this one in the same clamp");
+    expect(steps[2]).not.toContain("Add this one beside it");
+    // The soldered ends still get their tinning advice, and the screw ends are excepted from it.
+    expect(html).toContain("tin the end before you solder it to a pad. Do not tin a wire that goes under a screw");
+    expect(html).toContain("Tug every wire under a screw: none moves.");
+    expect(html).toContain("Small screwdriver");
+
+    // Nothing soldered: no soldering lesson, no iron, no shiny cone.
+    const both = (await build(() => {}, clampPart("rowb", 3), clampPart("rowa", 3))).html;
+    expect(both).toContain("Clamp a <b>");
+    expect(both).toContain("Both ends go under a screw");
+    for (const solder of ["shiny cone", "tin the end", "Soldering iron", "Solder a <b>"]) expect(both).not.toContain(solder);
+
+    // A build without screw terminals reads as before.
+    const plain = (await build(() => {})).html;
+    expect(plain).not.toContain("under a screw");
+    expect(plain).toContain("Solder a <b>");
   });
 
   test("power words follow the power source", async () => {
@@ -93,6 +148,18 @@ describe("texts that follow the project", () => {
       expect(html).not.toContain("pio run");
     }
     expect((await build(() => {})).html).not.toContain("Flash");
+  });
+});
+
+describe("step numbers", () => {
+  test("run 1 to N with no gap, and every step a message names is printed on the page it names", async () => {
+    const guide = await buildGuide(many(9));
+    const pages = guide.html.split('<section class="page').slice(1);
+    const onPage = pages.map((p) => [...p.matchAll(/class="num">(\d+)</g)].map((m) => Number(m[1])));
+    expect(onPage.flat()).toEqual(Array.from({ length: 9 }, (_, i) => i + 1));
+    const named = [...guide.findings, ...guide.notes].filter((f) => f.step !== undefined);
+    expect(named.length).toBeGreaterThan(0);
+    for (const f of named) expect(onPage[f.page - 1]).toContain(f.step!);
   });
 });
 

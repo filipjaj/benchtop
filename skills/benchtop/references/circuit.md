@@ -176,7 +176,11 @@ one build.
    the silkscreen reads; x right, y down, millimetres. Controller boards have USB at y = 0.
 5. `pins`: one per pad, named as printed, at real pad centres. Set `role`; `volts`,
    `minVolts`, `maxVolts` on supply pins; `dir` and `needs` on signals with a fixed
-   direction or a required capability; `gpio` and `caps` on controller pins.
+   direction or a required capability; `gpio` and `caps` on controller pins. Mark a pin
+   whose wire is clamped under a screw (a terminal block, a stepper driver's signal
+   terminal, a relay's load contacts) with `"screw": true`, and a contact a lead plugs
+   into with `"plug": true`. The guide then words that end as clamped or plugged instead
+   of soldered, and counts it apart from the solder joints. A screw pin is never tinned.
 6. `shapes`: the three to eight things that make the part recognisable, with real
    heights. `ports`: every opening a case would need. A module whose header pins are its
    pads (microphone, buzzer, amplifier, relay) tags the header box `"header"` and puts

@@ -105,6 +105,13 @@ export interface PinDef {
    */
   plug?: boolean;
   /**
+   * The pin is a screw clamp (a terminal block, a relay's load contacts): a wire that ends
+   * here is stripped and clamped under the screw, never soldered or tinned, because solder
+   * under a screw creeps and the clamp works loose. The guide words that end of the step
+   * that way, and the cover and the BOM count it apart from the solder joints.
+   */
+  screw?: boolean;
+  /**
    * Set by `catalog.ts import-part`: where each value it filled in on this pin came from, as the
    * catalog pin row and the published text it read. Absent on a pin set by hand, and on a value a
    * person has since changed it is stale. Nothing in a build reads it; it is for the human who

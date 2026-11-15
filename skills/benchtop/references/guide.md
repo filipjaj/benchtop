@@ -27,9 +27,28 @@ A page that is still taller than its box is a `drawing:` finding that names the 
 what is cut off, and `--strict` fails on it. With no Chrome, Chromium or Edge it cannot
 measure, and prints a `warning:` line saying so instead of saying nothing.
 
-**The cover's numbers.** Minutes come from `build.minutes`. The second number is what the
-builder does, counted once: a soldered wire is two joints, a push-on connection is one, a
-carrier board has one joint per pin, a factory-assembled board has parts to press in.
+**The cover's numbers.** Minutes come from `build.minutes`. The next number is what the
+builder does, counted once: each soldered wire end is a joint, a push-on connection is one,
+a carrier board has one joint per pin, a factory-assembled board has parts to press in. A
+wire end on a pin marked `"screw": true` (a terminal block, a relay's load contacts) is a
+screw clamp, not a joint: the cover shows the clamps as a number of their own, and the
+ends of a lead that plugs in (`"plug": true`) are neither. The BOM's "Build path" line says
+the same.
+
+**Wire ends under a screw.** In a soldered build a step whose wire ends on a `"screw": true`
+pin says "Solder and clamp" (or "Clamp" when both ends are), and tells the builder to strip
+5 mm, twist the strands or crimp a ferrule, tighten the screw, tug the wire and not tin
+that end; a second wire in the same clamp goes in with the first. The preparation page adds
+"do not tin a wire that goes under a screw", the screwdriver joins the tools, and the
+checks ask for a tug on every clamped wire. A build with nothing left to solder gets no
+soldering lesson and no iron. A push-on build says "Push on and clamp" and gives the same
+clamp steps without the solder and tinning warning, so it still never mentions solder. The drawings are unchanged: the dot still marks where the
+wire ends.
+
+**Step numbers.** Steps are numbered 1 to N in build order with no gap. Two short steps can
+share a page, so a page can carry two numbers (for example 5 and 6) and the next page starts
+at 7; reading only the first number of each page makes it look as if one were missing. The
+drawing check's `page P, step S` lines use the same numbers.
 
 **Texts that follow the project.** The joint wording follows `build.joint` (a push-on build
 never mentions solder or a "shiny cone"), the power wording follows `power.source`
