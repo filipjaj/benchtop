@@ -35,9 +35,10 @@ BOM, sourcing, guide, concept sheet, landing page, firmware scaffold) has no dep
 | Step | Needs | If missing |
 | --- | --- | --- |
 | Enclosure, PCB | `bun install --cwd scripts` once (JSCAD, tscircuit, pinned) | The script prints the command and exits 3. Tell the user what will be installed, then run it. |
-| Guide PDF, screenshots | Chrome, Chromium or Edge | HTML still works; the user prints to PDF from a browser. |
-| Compiling firmware | PlatformIO (`pio`) | Scaffold is still written; say it is uncompiled. |
-| 3D renders | Blender on PATH | `render.ts` exits 3 with one line; the page falls back to the line drawing and the 3D viewer. |
+| Guide PDF, screenshots | Chrome, Chromium or Edge (also found in their Windows install folders; `BENCHTOP_CHROME` overrides) | HTML still works; the user prints to PDF from a browser. |
+| Compiling firmware | PlatformIO (`pio` on PATH, or its default install `~/.platformio/penv`) | Scaffold is still written; say it is uncompiled. |
+| 3D renders | Blender (`BLENDER_EXE`, PATH, or the usual install folder) | `render.ts` exits 3 with one line; the page falls back to the line drawing and the 3D viewer. |
+| Package zip | `zip`, or the `tar` built into Windows | `package.ts` skips the zip; the folder is complete. |
 
 Work in a project folder the user chooses (ask once; default `./<slug>/`). All commands
 take that folder: `bun <skill>/scripts/<name>.ts <projectDir>`.

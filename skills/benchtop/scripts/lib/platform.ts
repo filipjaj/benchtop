@@ -6,6 +6,8 @@
 // pinned versions below are the part that is a hand-kept table: each family is built and
 // checked by hand, and only a family in this table gets a platformio.ini.
 
+import { findPio, pioEnv } from "./tools";
+
 export type FamilyId = "esp32" | "rp2040" | "avr";
 
 export interface Family {
@@ -110,7 +112,9 @@ export function parseBoards(json: string, board: string): Lookup {
 /** Asks PlatformIO. It reads its cached registry, so this takes about a second. */
 export async function pioLookup(board: string): Promise<Lookup> {
   try {
-    const proc = Bun.spawn(["pio", "boards", "--json-output", board], { stdout: "pipe", stderr: "ignore", timeout: 30_000 });
+    const pio = findPio();
+    if (!pio) return { kind: "unavailable" };
+    const proc = Bun.spawn([pio, "boards", "--json-output", board], { stdout: "pipe", stderr: "ignore", timeout: 30_000, env: pioEnv() });
     const [out, code] = await Promise.all([new Response(proc.stdout).text(), proc.exited]);
     return code === 0 ? parseBoards(out, board) : { kind: "unavailable" };
   } catch {

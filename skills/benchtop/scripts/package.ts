@@ -18,6 +18,7 @@ import { formatFinding } from "./lib/drawing-check";
 import { pricing } from "./lib/pricing";
 import { buildShopping } from "./shopping";
 import { type Download, type SiteContext, renderSite } from "./lib/site";
+import { zipCommand } from "./lib/tools";
 import type { PlacedPart } from "./lib/types";
 
 const exists = async (p: string): Promise<boolean> => !!(await stat(p).catch(() => null));
@@ -188,7 +189,9 @@ await main(async () => {
 
   const cost = pricing(loaded);
   const zipName = `${project.slug}.zip`;
-  const wantZip = !process.argv.includes("--no-zip") && !!Bun.which("zip");
+  const zipPath = join(loaded.dir, "dist", zipName);
+  const zipCmd = process.argv.includes("--no-zip") ? null : zipCommand(zipPath, project.slug);
+  const wantZip = !!zipCmd;
   const ctx: SiteContext = {
     hero: guide.hero,
     model,
@@ -222,17 +225,16 @@ await main(async () => {
   ];
   await Bun.write(join(dist, "README.md"), lines.join("\n"));
 
-  if (wantZip) {
-    const zipPath = join(loaded.dir, "dist", zipName);
+  if (zipCmd) {
     await rm(zipPath, { force: true });
-    const proc = Bun.spawn(["zip", "-qr", zipPath, project.slug], { cwd: join(loaded.dir, "dist"), stdout: "ignore", stderr: "inherit" });
+    const proc = Bun.spawn(zipCmd, { cwd: join(loaded.dir, "dist"), stdout: "ignore", stderr: "inherit" });
     if ((await proc.exited) === 0) {
       // The page links to the zip as a sibling so the folder works when served as a site root.
       await cp(zipPath, join(dist, zipName));
       console.log(zipPath);
     }
   } else if (!process.argv.includes("--no-zip")) {
-    console.log("zip skipped: no `zip` command found. The folder is complete without it.");
+    console.log(`zip skipped: no \`zip\` command${process.platform === "win32" ? " (or Windows tar)" : ""} found. The folder is complete without it.`);
   }
   console.log(join(dist, "index.html"));
   console.log(`${downloads.length} downloads linked: ${downloads.map((d) => d.kind).join(", ")}`);
