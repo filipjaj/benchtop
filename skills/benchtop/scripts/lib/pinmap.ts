@@ -20,7 +20,15 @@ export interface PinEntryDetail extends PinEntry {
   /** Everything else on the net. */
   others: NetPin[];
   use: PinUse;
+  /**
+   * Inputs only: nothing on the net drives both levels or holds it, so the controller's
+   * internal pull-up must (a switch or connector contact, an open-collector output).
+   */
+  pullUp: boolean;
 }
+
+/** How a part file says an output only pulls low; there is no field for it, the note is where it is written. */
+const OPEN_COLLECTOR = /open[- ]?(collector|drain)/i;
 
 function ident(s: string): string {
   return s
@@ -29,17 +37,25 @@ function ident(s: string): string {
     .replace(/^_+|_+$/g, "");
 }
 
-function classify(others: NetPin[]): PinUse {
+function classify(controller: NetPin, others: NetPin[], isWiper: (np: NetPin) => boolean): PinUse {
   const pins = others.map((o) => o.pin);
+  const caps = controller.pin.caps ?? [];
   if (pins.some((p) => /^SDA$/i.test(p.name) || p.aliases?.some((a) => /^SDA$/i.test(a)))) return "bus-sda";
   if (pins.some((p) => /^SCL$/i.test(p.name) || p.aliases?.some((a) => /^SCL$/i.test(a)))) return "bus-scl";
   if (pins.some((p) => p.needs?.some((n) => n === "i2c" || n === "spi" || n === "uart"))) return "bus-other";
   if (pins.some((p) => p.needs?.includes("adc"))) return "analog";
+  // A pot wiper is a voltage, not a level: read it with the ADC when the pin has one. Checked
+  // before the input-only guard: GPIO34-39 on a classic ESP32 are the usual pot pins.
+  if (caps.includes("adc") && others.some(isWiper)) return "analog";
   // dir is stated from the peripheral's side: "out" means the peripheral drives the pin.
+  // A stated dir beats every guess below, which only look at what kind of part it is.
   if (pins.some((p) => p.dir === "out")) return "input";
+  // An input-only pin (ESP32 GPIO34-39) cannot drive, whatever wants driving on the other end.
+  if (caps.includes("input-only")) return "input";
   if (pins.some((p) => p.dir === "in")) return "output";
   if (others.some((o) => o.part.def.kind === "input" || o.part.def.kind === "sensor")) return "input";
   if (others.some((o) => ["actuator", "light", "audio", "display"].includes(o.part.def.kind))) return "output";
+  // Nothing says which way: an input cannot fight whatever is on the other end, an output can.
   return "input";
 }
 
@@ -75,6 +91,38 @@ export function pinMapDetailed(loaded: Loaded): PinEntryDetail[] {
     // A button is a peripheral, not a pass-through.
     return pins[0]!.part.def.kind === "input" ? undefined : pins;
   };
+  const netAt = (np: NetPin): Net => netOf.get(`${np.ref}.${np.pin.name}`)!;
+  const onSupply = (n: Net): boolean => n.pins.some((p) => p.pin.role === "power-out" || p.pin.role === "power-in");
+  const onGround = (n: Net): boolean => n.pins.some((p) => p.pin.role === "gnd");
+  /**
+   * A pot wiper: a passive pin named or described as the wiper, of a control or sensor whose
+   * other pins reach a supply and ground, so it sits between the two. The name matters: the
+   * common of an SPDT switch with its throws on 3V3 and GND is wired the same way, but it is
+   * a level, not a voltage. A connector is left out: its contacts are separate wires.
+   */
+  const isWiper = (np: NetPin): boolean => {
+    if (np.pin.role !== "passive" || (np.part.def.kind !== "input" && np.part.def.kind !== "sensor")) return false;
+    if (![np.pin.name, ...(np.pin.aliases ?? [])].some((n) => /^(W|WIPER)$/i.test(n)) && !/wiper/i.test(np.pin.note ?? "")) return false;
+    const rest = (connected.get(np.ref) ?? []).filter((q) => q.pin.name !== np.pin.name).map(netAt);
+    return rest.some(onSupply) && rest.some(onGround);
+  };
+  /**
+   * Holds the net at a level by itself: a push-pull output or a wiper. An open collector only
+   * pulls low, and an output of an input part (a button, an encoder, a switch module) is a
+   * contact: the KY-040's SW says dir "out" but only closes to GND.
+   */
+  const drives = (np: NetPin): boolean =>
+    (np.pin.dir === "out" && np.part.def.kind !== "input" && !OPEN_COLLECTOR.test(np.pin.note ?? "")) || isWiper(np);
+  /**
+   * A resistor from the net straight to a rail: a pull resistor or a divider leg is fitted
+   * already. Only a passive part counts: a two-way connector to ground is a contact.
+   */
+  const fittedPull = (net: Net): boolean =>
+    net.pins.some((np) => {
+      const pair = np.part.def.kind === "passive" ? seriesPair(np.ref) : undefined;
+      const far = pair?.find((p) => p.pin.name !== np.pin.name);
+      return !!far && isRail(netAt(far));
+    });
 
   interface Found {
     np: NetPin;
@@ -117,6 +165,7 @@ export function pinMapDetailed(loaded: Loaded): PinEntryDetail[] {
     }
     if (!stem) stem = `GPIO${controller.pin.gpio}`;
     if (!stem.startsWith("PIN_")) stem = `PIN_${stem}`;
+    const use = classify(controller, others, isWiper);
     entries.push({
       name: claim(stem),
       gpio: controller.pin.gpio!,
@@ -124,7 +173,8 @@ export function pinMapDetailed(loaded: Loaded): PinEntryDetail[] {
       comment: commentParts.join(", "),
       controller,
       others,
-      use: classify(others),
+      use,
+      pullUp: use === "input" && !others.some(drives) && !fittedPull(net),
     });
   }
   return entries;

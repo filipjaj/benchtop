@@ -28,7 +28,12 @@ asks PlatformIO (`pio boards --json-output <board>`) which platform the board be
 falls back to the board name when PlatformIO is not installed or does not know the id. Three
 platforms are supported, each pinned to an exact version in `scripts/lib/platform.ts`:
 
-- `espressif32` (ESP32, C3, S3 and the rest): Arduino core 3.x.
+- `espressif32` (ESP32, C3, S3 and the rest): Arduino core 3.x. The registry's 8.0.0 has no
+  ESP32-P4, C5 or C61 board ("Unknown board ID"), so a board id naming one of those chips
+  (`esp32-p4`, `esp32-c5-devkitc-1`, `esp32-c61-devkitc1`, ...) gets pioarduino's fork instead,
+  pinned to a git tag: `https://github.com/pioarduino/platform-espressif32.git#55.03.312-1`
+  (Arduino core 3.3.12), the tag a working ESP32-P4 Arduino project builds with. The generated
+  scaffold has not been compiled on it; C5 and C61 have not been built at all.
 - `raspberrypi` (RP2040: `pico`, `rpipico`, `rpipicow`; RP2350 untested) with the arduino-pico
   (earlephilhower) core, selected by `board_build.core = earlephilhower`. The platform's default
   core is Arduino-Mbed, which has no Wi-Fi on the Pico W, no `Serial.printf` and no `Wire.setSDA`.
@@ -140,13 +145,32 @@ Read the serial output top to bottom:
   Nothing answering at all means power, ground, or SDA and SCL swapped. One part missing means
   its own wiring, or its address jumper is set to an address not in the part definition.
 - `[out]` every output is first put at its idle level (the level at which the part on it does
-  nothing: HIGH for a low-triggered relay or buzzer). Then only parts whose part file says
+  nothing: HIGH for a low-triggered relay or buzzer, or for a stepper driver's ENA). This is
+  the first thing `setup()` does, in `bringup.cpp` and in the generated `main.cpp`, before
+  `Serial` waits up to 3 s for the host; keep it first when you write `main.cpp`. The level is
+  set before the pin becomes an output (on ESP32 with `gpio_set_level`, because Arduino core 3
+  ignores a `digitalWrite` before `pinMode`). From reset until `setup()` runs the pin still
+  floats for a few hundred ms: where that matters (ENA, a relay), fit a pull resistor to the
+  idle level. Then only parts whose part file says
   `electrical.bringUp: "pulse"` are switched on for 400 ms: an LED, a buzzer. Everything else
   is held at idle and named on the serial port with the reason: relays, servos, motor drivers,
   LED-strip data lines, and any part file that says nothing. The bring-up test never moves or
   switches a load. Test those parts from `main.cpp`, with the load disconnected the first time.
-- `[in]` once a second: `PIN_BUTTON=1`. Press the button: the value must flip. Buttons use the
-  internal pull-up, so released reads 1 and pressed reads 0.
+- `[in]` once a second: `PIN_BUTTON=1`. Press the button: the value must flip. The wiring
+  decides the pin mode. A switch or button contact, a screw-terminal or connector contact, and
+  an open-collector output (a pin with `"dir": "out"` whose note says "open collector" or
+  "open drain", such as a stepper driver's alarm opto) get `INPUT_PULLUP`, so released reads 1
+  and pressed reads 0. So does a `"dir": "out"` pin of an `input` part (the KY-040's SW): those
+  are contacts. A push-pull output (`"dir": "out"` on any other kind, no such note) or a net
+  with a pull resistor already fitted gets `INPUT`. A pot wiper (a pin named or aliased `W`, or
+  whose note says "wiper", of an input or sensor part whose other pins go to a supply and
+  ground) on a pin with the `adc` cap, `input-only` pins included, or a pin whose part says
+  `"needs": ["adc"]`, is read with `analogRead` and no pull-up. The common of an SPDT switch
+  wired the same way is a level and stays digital. A stated `dir` on the other
+  end beats the guess from the part's kind; an `input-only` controller pin is never an output,
+  and has no internal pull-up, so the test says when it needs an external one. A pull-up makes
+  a broken wire read 1: for a signal where 1 means healthy (an E-STOP), decide the fail-safe
+  level in `main.cpp` and fit the resistor that gives it.
 
 A `[MISS]` is a wiring fault until proven otherwise. Do not write driver code around it.
 
@@ -159,8 +183,8 @@ Monitor opens at 115200. Exit with Ctrl+C. Close the monitor before uploading; i
 
 `platformio.ini` pins the platform (`espressif32`, `raspberrypi` or `atmelavr`) to an exact
 version, with the reason in a comment. Do not change it to a bare name. To bump one, edit its
-entry in `FAMILIES` in `scripts/lib/platform.ts`, rebuild both environments on a board of that
-family, and check bring-up still passes.
+entry in `FAMILIES` in `scripts/lib/platform.ts` (the pioarduino tag is `ESP32_PIOARDUINO`
+there), rebuild both environments on a board of that family, and check bring-up still passes.
 
 Pico upload: `pio run -e bringup -t upload` needs the board in BOOTSEL mode (hold BOOTSEL while
 plugging in USB) the first time; it then re-enumerates as a serial port. Uno and Nano upload over

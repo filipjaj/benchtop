@@ -16,6 +16,8 @@ export interface Family {
   platform: string;
   /** Exact version written to platformio.ini. Bump deliberately, see the comment on each. */
   version: string;
+  /** Set when the platform comes from a git repository, not the registry: `version` is then a tag. */
+  url?: string;
   /** Short name for messages. */
   label: string;
   /** Comment lines written above `platform =`, saying why it is pinned. */
@@ -73,6 +75,33 @@ export const FAMILIES: readonly Family[] = [
 ];
 
 export const familyByPlatform = (platform: string): Family | undefined => FAMILIES.find((f) => f.platform === platform);
+
+/**
+ * ESP32-P4, C5 and C61 boards. The registry's espressif32 (8.0.0, see above) has no board for
+ * these chips: PlatformIO stops with "Unknown board ID". pioarduino's fork of the same platform
+ * has them, and reports itself as "espressif32" too, so the board id picks it, not the lookup.
+ */
+export const ESP32_PIOARDUINO: Family = {
+  ...FAMILIES[0]!,
+  url: "https://github.com/pioarduino/platform-espressif32.git",
+  version: "55.03.312-1",
+  label: "ESP32 (pioarduino)",
+  comment: [
+    "; ESP32-P4, C5 and C61 are not in the registry's espressif32 (8.0.0 has no such board:",
+    "; \"Unknown board ID\"), so this is pioarduino's fork, pinned to a git tag. 55.03.312-1",
+    "; (Arduino core 3.3.12) is the tag a working ESP32-P4 Arduino project builds with, checked",
+    "; 2026-11-15. C5 and C61 boards are listed in it but were not built. Bump it deliberately",
+    "; and rebuild both envs.",
+  ],
+};
+
+const PIOARDUINO_BOARD = /esp32[-_]?(p4|c5|c61)|(^|[-_])(p4|c5|c61)([-_]|$)/i;
+
+/** The family a board really builds with: an ESP32 chip the registry platform lacks moves to pioarduino. */
+const forBoard = (family: Family, board: string): Family => (family.id === "esp32" && PIOARDUINO_BOARD.test(board) ? ESP32_PIOARDUINO : family);
+
+/** The `platform =` value: name@version from the registry, or url#tag from git. */
+export const platformSpec = (f: Family): string => (f.url ? `${f.url}#${f.version}` : `${f.platform}@${f.version}`);
 
 /** What `pio boards` said about a board id. */
 export type Lookup =
@@ -154,10 +183,10 @@ export async function resolveBoard(board: string, lookup: (b: string) => Promise
     if (found.frameworks.length && !found.frameworks.includes("arduino")) {
       return { ok: false, reason: `board "${board}" has no Arduino framework in PlatformIO (it offers: ${found.frameworks.join(", ")}). The scaffold only writes Arduino projects, so it writes include/pins.h and no platformio.ini.` };
     }
-    return { ok: true, family, how: "PlatformIO" };
+    return { ok: true, family: forBoard(family, board), how: "PlatformIO" };
   }
   const guess = guessFamily(board);
-  if (guess) return { ok: true, family: guess, how: "board name" };
+  if (guess) return { ok: true, family: forBoard(guess, board), how: "board name" };
   if (found.kind === "unavailable") {
     // Cannot tell, and nothing compiles without PlatformIO anyway: keep the long-standing default.
     return { ok: true, family: FAMILIES[0]!, how: "board name" };
