@@ -48,7 +48,8 @@ function makeSource(): void {
     CREATE VIEW v_curated AS SELECT * FROM parts WHERE selection_rank <= 1000;
     INSERT INTO metadata VALUES ('created_at_utc', '2026-11-13T22:19:14+00:00'), ('schema_version', '2');
   `);
-  const src = db.prepare(`INSERT INTO sources VALUES (?, ?, 'pub', 'page', 'manufacturer', '2026-11-13', ?, ?, 'html', ?)`);
+  // query(), not prepare(): close() finalizes cached statements, so Windows can delete the file afterwards.
+  const src = db.query(`INSERT INTO sources VALUES (?, ?, 'pub', 'page', 'manufacturer', '2026-11-13', ?, ?, 'html', ?)`);
   for (let i = 1; i <= 6; i++) src.run(i, `https://example.test/${i}`, `hash${i}`, `long page text ${i}`.repeat(50), `note ${i}`);
   db.exec(`
     INSERT INTO parts VALUES ('a:1','Board One','development_board',1,1), ('a:2','Sensor Two','sensor',2,2),
@@ -63,8 +64,8 @@ function makeSource(): void {
     INSERT INTO market_evidence VALUES (1,'pico','https://example.test/ali/pico',6), (2,'uno','https://example.test/ali/uno',5);
     INSERT INTO parts_fts(part_id,name,specifications) VALUES ('a:1','Board One','voltage 3.3 V'), ('a:out','Unranked Plain','voltage 5 V');
   `);
-  db.prepare(`INSERT INTO geometry_objects VALUES (1,'a:1',2,'pcb_pad_centers',?)`).run(JSON.stringify({ payload_schema_version: 1, frame: "eagle", pads: [PAD] }));
-  db.prepare(`INSERT INTO geometry_objects VALUES (2,'a:1',2,'pcb_outline_and_drills',?)`).run(JSON.stringify({ outline: [[0, 0], [10, 0]] }));
+  db.query(`INSERT INTO geometry_objects VALUES (1,'a:1',2,'pcb_pad_centers',?)`).run(JSON.stringify({ payload_schema_version: 1, frame: "eagle", pads: [PAD] }));
+  db.query(`INSERT INTO geometry_objects VALUES (2,'a:1',2,'pcb_outline_and_drills',?)`).run(JSON.stringify({ outline: [[0, 0], [10, 0]] }));
   db.close();
 }
 

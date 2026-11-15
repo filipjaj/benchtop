@@ -165,9 +165,14 @@ function scrubLocalPaths(db: Database, table: string, key: string, col: string):
   const c = `"${col}"`;
   const rows = db.query<Record<string, string | number>, []>(`SELECT "${key}" AS k, ${c} AS v FROM "${table}" WHERE ${LOCAL_PATH_SQL(c)} OR ${c} GLOB '*[A-Za-z]:\\*' OR ${DROP_KEY_SQL(c)}`).all();
   const update = db.prepare(`UPDATE "${table}" SET ${c} = ? WHERE "${key}" = ?`);
-  for (const r of rows) {
-    const next = stripLocalPaths(String(r.v));
-    if (next !== r.v) update.run(next, r.k);
+  // An unfinalized statement keeps the file open after close(), and Windows then refuses the rename.
+  try {
+    for (const r of rows) {
+      const next = stripLocalPaths(String(r.v));
+      if (next !== r.v) update.run(next, r.k);
+    }
+  } finally {
+    update.finalize();
   }
 }
 
@@ -258,6 +263,7 @@ export function makePublic(db: Database): PublicReport {
   setMeta.run("public_builder_version", PUBLIC_BUILDER_VERSION);
   setMeta.run("public_kept_authorities", KEEP_AUTHORITIES.join(","));
   setMeta.run("license", LICENSE_NOTE);
+  setMeta.finalize();
   db.exec("COMMIT");
 
   const rows = Object.fromEntries(names.map((n) => [n, { before: before[n]!, after: count(n) }]));

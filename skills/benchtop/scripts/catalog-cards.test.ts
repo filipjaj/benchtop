@@ -730,7 +730,8 @@ function makeCatalog(): void {
     INSERT INTO parts_fts(part_id, name, brand, category, families, specifications) VALUES ('m:board', 'Maker Board One', 'Maker', 'development_board', 'Arduino UNO', 'operating voltage 5V atmega328p'),
       ('s:sensor', 'Climate Sensor Breakout', '', 'sensor', '', 'i2c address 0x76 bme280');
   `);
-  db.prepare(`INSERT INTO geometry_objects VALUES (1, 'm:board', 'pcb_pad_centers', 1, 'rev A', 'https://maker.test/files/board.brd', 'sha-board', ?, 'parser_derived_native_pad_centers_not_physical_fit_verified', NULL)`).run(JSON.stringify(padPayload));
+  // query(), not prepare(): close() finalizes cached statements, so Windows can delete the file afterwards.
+  db.query(`INSERT INTO geometry_objects VALUES (1, 'm:board', 'pcb_pad_centers', 1, 'rev A', 'https://maker.test/files/board.brd', 'sha-board', ?, 'parser_derived_native_pad_centers_not_physical_fit_verified', NULL)`).run(JSON.stringify(padPayload));
   db.close();
 }
 
