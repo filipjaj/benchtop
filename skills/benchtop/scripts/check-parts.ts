@@ -30,6 +30,8 @@ export function check(def: PartDef, file: string): string[] {
   need(def.id === file.replace(/\.json$/, ""), `id "${def.id}" does not match file name`);
   need(KINDS.includes(def.kind), `kind "${def.kind}" is not one of ${KINDS.join("|")}`);
   need(typeof def.blurb === "string" && def.blurb.length > 10, "blurb missing");
+  // import-part leaves a TODO when the catalog has no description; the shopping page would show it to a buyer.
+  need(!/^\s*TODO\b/.test(def.blurb ?? ""), "blurb is still a TODO: write one plain line on what the part does");
   need(def.body?.w > 0 && def.body?.d > 0 && def.body?.h > 0, "body needs positive w, d, h");
   need(typeof def.maxHeight === "number" && Number.isFinite(def.maxHeight) && def.maxHeight > 0, "maxHeight needs a positive finite number");
   need(Array.isArray(def.pins) && def.pins.length > 0, "pins missing");

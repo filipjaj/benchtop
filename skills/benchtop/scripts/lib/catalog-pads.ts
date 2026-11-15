@@ -70,6 +70,9 @@ interface PartRow {
   part_id: string;
   name: string;
   brand: string | null;
+  /** Read by import-part only, for the draft's kind and blurb. */
+  category?: string | null;
+  description?: string | null;
 }
 
 /** A pin-table row as the importer reads it. Columns an older catalog lacks come back null or empty. */
@@ -819,6 +822,8 @@ export interface ImportResult {
   /** Ports taken from the 3D model's connector openings, and how well the model matched these pads. Null when none were imported. */
   model_ports: { names: string[]; features: number; side_evidence: number; residual_mm: number; rotation_deg: number; reflected: boolean } | null;
   warnings: string[];
+  /** What part.kind was read from; null when it is DEFAULT_KIND because nothing in the catalog names one (then `missing` says to check it). */
+  kind_from: string | null;
   /** Fields the type or check-parts needs that the catalog cannot supply. */
   missing: string[];
 }
@@ -1179,8 +1184,38 @@ function envelopeBox(pads: Box, mm: [number, number]): Box | null {
 
 // ---------------------------------------------------------------------------------------
 
+/**
+ * Catalog categories that name one part kind. The others (wireless_and_interface, prototyping,
+ * other_electronics, ...) hold several kinds: an ADC breakout and a radio module share one.
+ */
+const KIND_OF_CATEGORY: Record<string, PartDef["kind"]> = {
+  development_board: "board",
+  sensor: "sensor",
+  display: "display",
+  motor_and_driver: "actuator",
+  power: "power",
+  audio: "audio",
+  input_and_switch: "input",
+  lighting: "light",
+  connector_and_cable: "connector",
+};
+/** The kind when nothing names one. Not "board": check-parts asks a board for gnd, gpio and logicVolts, which a breakout has no reason to carry. */
+export const DEFAULT_KIND: PartDef["kind"] = "sensor";
+
+/** The draft's kind and what it was read from; `from` is null when it is DEFAULT_KIND for want of anything better. */
+export function inferKind(category: string | null | undefined, pins: PinDef[]): { kind: PartDef["kind"]; from: string | null } {
+  const byCategory = category ? KIND_OF_CATEGORY[category] : undefined;
+  if (byCategory) return { kind: byCategory, from: `catalog category ${category}` };
+  // A part whose own pin table numbers GPIOs has a microcontroller on it.
+  if (pins.some((p) => typeof p.gpio === "number")) return { kind: "board", from: `GPIO numbers in the published pin text (catalog category ${category ?? "none"} names no kind)` };
+  return { kind: DEFAULT_KIND, from: null };
+}
+
+/** Starts a blurb a person still has to write; check-parts rejects it, so it never reaches a shopping page unread. */
+export const BLURB_TODO = "TODO: one plain line on what this part does in a build (the catalog has no description to take it from).";
+
 export function importPart(db: Database, root: string, o: ImportOptions): ImportResult {
-  const part = one<PartRow>(db, `SELECT part_id, name, brand FROM parts WHERE part_id = ?`, o.partId);
+  const part = one<PartRow>(db, `SELECT part_id, name, brand, category, description FROM parts WHERE part_id = ?`, o.partId);
   if (!part) throw new PadsError(`no part with id "${o.partId}". Run: find <text> to get an exact id.`);
   const rows = datasetRows(db, o.partId, o.geometryId);
   if (!rows.length) {
@@ -1364,28 +1399,28 @@ export function importPart(db: Database, root: string, o: ImportOptions): Import
     }
     const name = unique(base);
     if (name !== base) renamed.add(base);
+    // The CAD reference.pad is provenance, not an alias: "JP1.1" is not printed on the part, and
+    // as an alias it reaches the guide and pin maps, where it reads like a controller's own JP1.
     const pin: PinDef = { name, role: "io", x: placed.points[i]!.x, y: placed.points[i]!.y };
-    if (name !== refPad && !used.has(refPad)) {
-      used.add(refPad);
-      pin.aliases = [refPad];
-    }
+    const from: NonNullable<PinDef["importedFrom"]> = { pad: refPad };
     // Roles and GPIO numbers come from the published pin row. The one thing taken from a
     // net label is ground, and only for a pad with no published row to say otherwise: a
     // pad the board's own CAD ties to a net named GND is ground. A net label never gives a GPIO number.
     const facts = read ? pinFacts(read) : null;
     if (facts?.gnd) {
       pin.role = "gnd";
-      pin.importedFrom = { role: facts.gnd };
+      from.role = facts.gnd;
       fromText.gnd++;
     } else if (!read && p.net_name && GROUND_NAME.test(p.net_name.trim())) {
       pin.role = "gnd";
-      pin.importedFrom = { role: `CAD net name "${p.net_name.trim()}" on pad ${refPad} (no published pin row)` };
+      from.role = `CAD net name "${p.net_name.trim()}" on pad ${refPad} (no published pin row)`;
       fromNet.gnd++;
     } else if (facts?.gpio) {
       pin.gpio = facts.gpio.n;
-      pin.importedFrom = { gpio: facts.gpio.from };
+      from.gpio = facts.gpio.from;
       fromText.gpio++;
     }
+    pin.importedFrom = from;
     // A supply pin by its source type or its name: the catalog does not say input or output, nor the volts.
     if (!facts?.gnd && (facts?.power || POWER_NAME.test(base))) powerPins.push(name);
     return pin;
@@ -1475,10 +1510,11 @@ export function importPart(db: Database, root: string, o: ImportOptions): Import
       ? `The module size is the bounding box of ALL ${all_.length} pads in the footprint, not the module edge (the catalog has no usable envelope for it): the real module is larger, and the origin is the top-left pad centre extreme. Measure the module and move the pads.`
       : `The board size is the bounding box of ALL ${all_.length} pads in the dataset, not the board edge: the real board is larger, and the origin is the top-left pad centre extreme, not the board corner. Measure the board and move the pads.`;
   const headerList = taken.map((h) => h.reference + (h.pads ? ":" + h.pads.join(";") : "")).join(", ");
+  // The shopping page shows a buyer the first sentence, so it is plain words; the file it was read from follows.
   const verify = [
     isModule
-      ? `Pad positions are the LAND PATTERN of the module (the footprint that mounts it on a carrier PCB, footprint-local frame; ${fileLabel}), not coordinates measured on the module or on a bought board.`
-      : `Pad positions${outlineKind === "outline supplied on the command line" ? "" : " and board outline"} are parsed from the maker's CAD file (${fileLabel}), not measured on a bought board.`,
+      ? `Pad positions are the LAND PATTERN of the module (the footprint that mounts it on a carrier PCB), not coordinates measured on the module or on a bought board. Footprint file (footprint-local frame): ${fileLabel}.`
+      : `Pad positions${outlineKind === "outline supplied on the command line" ? "" : " and board outline"} are taken from the maker's CAD file, not measured on a bought board. CAD file: ${fileLabel}.`,
     outlineSentence,
     `Frame: ${isModule ? "footprint-local frame" : "CAD frame"} X right, Y ${frame.yDir} converted to origin at the top-left of the ${outlineKind} seen from above, x right, y down; rotation ${rot} degrees clockwise${mirror ? ", mirrored left-right" : ""}. Check that the USB connector is at y = 0 and the pins match the silkscreen before relying on it.`,
     `Only ${pins.length} of ${all_.length} pads were imported (${headerList}${taken.some((h) => h.from === "default") ? `; these ${isModule ? "contact rows" : "pad groups"} were taken by default, as the card generator's classification (the import report gives the basis of each), and --header overrides them` : ""}).`,
@@ -1495,13 +1531,13 @@ export function importPart(db: Database, root: string, o: ImportOptions): Import
       : []),
   ].join(" ");
 
+  const kind = inferKind(part.category, pins);
   const def: PartDef = {
     id: o.id,
     name: part.name,
-    kind: "board",
-    blurb: isModule
-      ? `Draft from the land pattern of ${part.name}: contact positions only, everything else still to fill in.`
-      : `Draft from the maker's CAD pads for ${part.name}: pad positions only, everything else still to fill in.`,
+    kind: kind.kind,
+    // A buyer reads the blurb on the shopping page; where the draft came from is in verify and sources.
+    blurb: part.description?.trim() ? clip(part.description, 200) : BLURB_TODO,
     body: { w: placed.w, d: placed.d, h: bodyH },
     maxHeight: maxH,
     pins,
@@ -1578,7 +1614,8 @@ export function importPart(db: Database, root: string, o: ImportOptions): Import
       ? { names: ports.map((p) => `${p.name} on ${p.faces}`), features: portReg.feature_count, side_evidence: portReg.side_evidence, residual_mm: portReg.residual_mm, rotation_deg: portReg.transform.rotation_deg, reflected: portReg.transform.reflected }
       : null,
     warnings,
-    missing: missingFields(def, thickness !== null || modelThickness !== null, o.fileName, powerPins, mh !== null),
+    kind_from: kind.from,
+    missing: missingFields(def, thickness !== null || modelThickness !== null, o.fileName, powerPins, mh !== null, kind.from === null ? { category: part.category ?? null } : undefined),
   };
 }
 
@@ -1586,17 +1623,35 @@ export function importPart(db: Database, root: string, o: ImportOptions): Import
  * What check-parts.ts (or the type) needs that an import cannot know. Mirrors only the rules
  * a draft is expected to trip; the authoritative run is `bun check-parts.ts`.
  */
-export function missingFields(def: PartDef, hasThickness: boolean, fileName?: string, powerPins: string[] = [], hasModelHeight = false): string[] {
+export function missingFields(
+  def: PartDef,
+  hasThickness: boolean,
+  fileName?: string,
+  powerPins: string[] = [],
+  hasModelHeight = false,
+  /** Set when def.kind is DEFAULT_KIND because the catalog named no kind. */
+  kindDefault?: { category: string | null },
+): string[] {
   const m: string[] = [];
+  if (kindDefault) {
+    m.push(
+      `kind (set to "${def.kind}" by default: ${kindDefault.category ? `catalog category "${kindDefault.category}"` : "the catalog"} names no part kind and the pin text names no GPIO numbers; check it, one of board|sensor|display|actuator|power|passive|input|audio|connector|light)`,
+    );
+  }
+  if (/^TODO\b/.test(def.blurb)) m.push("blurb (a TODO: one plain line on what the part does, which the shopping page shows a buyer)");
   const notGround = def.pins.filter((p) => p.role !== "gnd");
   if (!def.pins.some((p) => p.role === "gnd")) m.push("a pin with role gnd (no imported pin is named or typed as ground in the published pin text; set roles from the pinout)");
-  if (!def.pins.some((p) => typeof p.gpio === "number")) m.push("gpio numbers on the io pins (pad numbers are not GPIO numbers)");
-  else {
-    const without = notGround.filter((p) => typeof p.gpio !== "number").map((p) => p.name);
-    if (without.length) {
-      m.push(`gpio numbers on ${without.length} of ${notGround.length} non-ground pins (${without.slice(0, 10).join(", ")}${without.length > 10 ? ", ..." : ""}): the published text names exactly one GPIOn only where it is unambiguous; set the rest from the pinout`);
+  // GPIO numbers are a controller board's; a module it drives has none to give.
+  if (def.kind === "board") {
+    if (!def.pins.some((p) => typeof p.gpio === "number")) m.push("gpio numbers on the io pins (pad numbers are not GPIO numbers)");
+    else {
+      const without = notGround.filter((p) => typeof p.gpio !== "number").map((p) => p.name);
+      if (without.length) {
+        m.push(`gpio numbers on ${without.length} of ${notGround.length} non-ground pins (${without.slice(0, 10).join(", ")}${without.length > 10 ? ", ..." : ""}): the published text names exactly one GPIOn only where it is unambiguous; set the rest from the pinout`);
+      }
     }
   }
+  // check-parts requires it only of a board, but the circuit rules read it on every part for the volts a pin survives.
   if (typeof def.electrical?.logicVolts !== "number") m.push("electrical.logicVolts");
   if (!(def.sourcing?.priceUsd > 0)) m.push("sourcing.priceUsd (currently 0)");
   if (!hasThickness) m.push(`body.h (placeholder ${def.body.h}; PCB thickness)`);
@@ -1617,6 +1672,7 @@ export function formatImport(r: ImportResult, outFile: string): string {
       .map((h) => `${h.reference}${h.pads ? `:${h.pads.join(";")}` : ""} (${h.from === "default" ? `default; ${h.kind}; ${h.basis.join("; ")}` : "--header"})`)
       .join(", ")}`,
   );
+  L.push(r.kind_from ? `kind ${r.part.kind} from ${r.kind_from}` : `kind ${r.part.kind} is a DEFAULT: nothing in the catalog names one; check it`);
   L.push(`${r.imported_pads} of ${r.dataset_pads} pads imported | pin names from: pin_definitions ${r.name_sources.pin_definitions}, net ${r.name_sources.net_name}, reference.pad ${r.name_sources.reference_pad}`);
   L.push(
     r.outline === "outline supplied on the command line"
