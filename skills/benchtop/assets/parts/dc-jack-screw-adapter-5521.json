@@ -12,8 +12,8 @@
     { "kind": "text", "face": "top", "x": 8.5, "y": 26, "text": "-", "size": 2.5 }
   ],
   "pins": [
-    { "name": "+", "role": "passive", "x": 4.25, "y": 31, "note": "The clamp marked + on the adapter: it goes to the centre pin of the socket. Read the + and - moulded next to the screws; which side they are on differs between makers, so do not go by this drawing. The marks assume a centre-positive adapter: measure across the two clamps with the adapter plugged in before connecting the build. Strip about 5 mm, push the wire in under the screw and tighten; nothing is soldered." },
-    { "name": "-", "role": "passive", "x": 9.25, "y": 31, "note": "The clamp marked -: it goes to the sleeve of the socket. Ground on a centre-positive adapter." }
+    { "name": "+", "role": "passive", "screw": true, "x": 4.25, "y": 31, "note": "The clamp marked + on the adapter: it goes to the centre pin of the socket. Read the + and - moulded next to the screws; which side they are on differs between makers, so do not go by this drawing. The marks assume a centre-positive adapter: measure across the two clamps with the adapter plugged in before connecting the build. Strip about 5 mm, push the wire in under the screw and tighten; nothing is soldered." },
+    { "name": "-", "role": "passive", "screw": true, "x": 9.25, "y": 31, "note": "The clamp marked -: it goes to the sleeve of the socket. Ground on a centre-positive adapter." }
   ],
   "ports": [
     { "name": "plug", "faces": "y-", "x": 6.75, "y": 0, "z": -5.65, "w": 5.5, "h": 5.5, "shape": "round", "margin": 2.5 }

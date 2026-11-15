@@ -17,9 +17,9 @@
     { "name": "VCC", "role": "power-in", "x": 2, "y": 10.46, "volts": 5, "minVolts": 4.5, "maxVolts": 5.5, "note": "5 V only. It powers the coil and the optocoupler LED; a 3.3 V pin will not pull the relay in." },
     { "name": "GND", "role": "gnd", "x": 2, "y": 13, "note": "Ground. Share it with the microcontroller." },
     { "name": "IN", "role": "io", "x": 2, "y": 15.54, "dir": "in", "maxVolts": 5, "idle": "high", "note": "Most boards are active-low: the relay clicks on when IN is pulled LOW. On a 3.3 V controller with VCC at 5 V, a HIGH output may not switch it fully off; use the board's jumper or a 3.3 V-trigger module if it chatters." },
-    { "name": "NO", "role": "passive", "x": 47.5, "y": 7.92, "note": "Normally open: connected to COM only while the relay is on. Low-voltage loads only." },
-    { "name": "COM", "role": "passive", "x": 47.5, "y": 13, "note": "Common contact. The load's supply wire goes here. Low-voltage loads only; do not connect mains." },
-    { "name": "NC", "role": "passive", "x": 47.5, "y": 18.08, "note": "Normally closed: connected to COM while the relay is off." }
+    { "name": "NO", "role": "passive", "screw": true, "x": 47.5, "y": 7.92, "note": "Normally open: connected to COM only while the relay is on. Low-voltage loads only." },
+    { "name": "COM", "role": "passive", "screw": true, "x": 47.5, "y": 13, "note": "Common contact. The load's supply wire goes here. Low-voltage loads only; do not connect mains." },
+    { "name": "NC", "role": "passive", "screw": true, "x": 47.5, "y": 18.08, "note": "Normally closed: connected to COM while the relay is off." }
   ],
   "holes": [
     { "x": 3, "y": 3, "dia": 3.1 },
