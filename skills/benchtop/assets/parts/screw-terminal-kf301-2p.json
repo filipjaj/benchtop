@@ -12,7 +12,7 @@
     { "kind": "rect", "face": "left", "x": 6, "y": 5.5, "w": 3, "h": 3.5, "fill": "black", "r": 0.5 }
   ],
   "pins": [
-    { "name": "1", "role": "passive", "screw": true, "x": 2.5, "y": 3.5, "note": "Left clamp with the wire openings facing you. The outside wire is not soldered: strip 5 mm, push it into the opening under this screw and tighten. On a carrier PCB the leg under this screw is soldered to the board; in a hand-wired build solder the inside wire to that leg." },
+    { "name": "1", "role": "passive", "screw": true, "x": 2.5, "y": 3.5, "note": "Left clamp with the wire openings facing you. The outside wire is not soldered: strip 5 mm, push it into the opening under this screw and tighten. On a carrier PCB the leg under this screw is soldered to the board; in a hand-wired build the inside wire goes under the same screw (a twin ferrule holds two wires)." },
     { "name": "2", "role": "passive", "screw": true, "x": 7.5, "y": 3.5, "note": "Right clamp with the wire openings facing you." }
   ],
   "ports": [
