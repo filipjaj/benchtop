@@ -234,7 +234,7 @@ await main(async () => {
       console.log(zipPath);
     }
   } else if (!process.argv.includes("--no-zip")) {
-    console.log("zip skipped: no `zip` command (or Windows tar) found. The folder is complete without it.");
+    console.log(`zip skipped: no \`zip\` command${process.platform === "win32" ? " (or Windows tar)" : ""} found. The folder is complete without it.`);
   }
   console.log(join(dist, "index.html"));
   console.log(`${downloads.length} downloads linked: ${downloads.map((d) => d.kind).join(", ")}`);

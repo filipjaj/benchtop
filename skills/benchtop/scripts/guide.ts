@@ -24,7 +24,7 @@ import { strictGeometry, warnUnresolvedGeometry } from "./lib/geometry-evidence"
 import { JOINTS, JOINT_SEQUENCE, TOOLS, WARNING, WIRE_PREP } from "./lib/pictograms";
 import { guessFamily } from "./lib/platform";
 import { type Loaded, loadProject, main } from "./lib/project";
-import { fileUrl, findChrome } from "./lib/tools";
+import { fileUrl, findChromes } from "./lib/tools";
 import * as scenes from "./lib/scenes";
 import type { PlacedPart } from "./lib/types";
 
@@ -753,19 +753,21 @@ export function explainLines(loaded: Loaded): string[] {
 
 async function printPdf(htmlPath: string, pdfPath: string): Promise<boolean> {
   await rm(pdfPath, { force: true });
-  const chrome = await findChrome();
-  if (!chrome) return false;
-  const proc = Bun.spawn(
-    [chrome, "--headless=new", "--disable-gpu", `--user-data-dir=${join(tmpdir(), `benchtop-chrome-${process.pid}`)}`, "--no-pdf-header-footer", "--virtual-time-budget=4000", `--print-to-pdf=${pdfPath}`, fileUrl(htmlPath)],
-    { stdout: "ignore", stderr: "ignore" },
-  );
-  // Chrome sometimes exits non-zero after writing a good file, or lingers after it;
-  // the file is the evidence, not the exit code.
-  const timer = setTimeout(() => proc.kill(), 60_000);
-  await proc.exited;
-  clearTimeout(timer);
-  const made = Bun.file(pdfPath);
-  return (await made.exists()) && made.size > 1000;
+  // A browser that does not write the file (a broken install) hands over to the next one.
+  for (const chrome of await findChromes()) {
+    const proc = Bun.spawn(
+      [chrome, "--headless=new", "--disable-gpu", `--user-data-dir=${join(tmpdir(), `benchtop-chrome-${process.pid}`)}`, "--no-pdf-header-footer", "--virtual-time-budget=4000", `--print-to-pdf=${pdfPath}`, fileUrl(htmlPath)],
+      { stdout: "ignore", stderr: "ignore" },
+    );
+    // Chrome sometimes exits non-zero after writing a good file, or lingers after it;
+    // the file is the evidence, not the exit code.
+    const timer = setTimeout(() => proc.kill(), 60_000);
+    await proc.exited;
+    clearTimeout(timer);
+    const made = Bun.file(pdfPath);
+    if ((await made.exists()) && made.size > 1000) return true;
+  }
+  return false;
 }
 
 if (import.meta.main) {

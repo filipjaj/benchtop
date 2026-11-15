@@ -12,8 +12,22 @@ import { pathToFileURL } from "node:url";
 
 export type Env = Record<string, string | undefined>;
 
-/** Windows keeps the case it was given ("ProgramFiles"), a copied env may be upper case. */
-const get = (env: Env, key: string): string | undefined => env[key] ?? env[key.toUpperCase()];
+/**
+ * Windows env names are case-insensitive: process.env handles that, but a copied env keeps
+ * whatever case it was given ("ProgramFiles", "PROGRAMFILES", "Path").
+ */
+const get = (env: Env, key: string): string | undefined => {
+  if (env[key] !== undefined) return env[key];
+  const k = Object.keys(env).find((n) => n.toUpperCase() === key.toUpperCase());
+  return k === undefined ? undefined : env[k];
+};
+
+/** An override (BENCHTOP_CHROME, BLENDER_EXE) that names a missing file is said, then skipped. */
+const override = (env: Env, key: string): string | undefined => {
+  const own = get(env, key);
+  if (own && !existsSync(own)) console.error(`${key}=${own} does not exist; looking in the usual places instead.`);
+  return own && existsSync(own) ? own : undefined;
+};
 
 const which = (bin: string, env: Env): string | null => Bun.which(bin, { PATH: get(env, "PATH") ?? "" });
 
@@ -24,7 +38,7 @@ const MAC_CHROME = [
 ];
 const CHROME_ON_PATH = ["google-chrome", "chromium", "chromium-browser", "chrome", "msedge"];
 
-/** Install folders to look in, in order: BENCHTOP_CHROME, macOS apps, then the Windows installs. */
+/** Install paths to look at on this platform: the macOS apps or the Windows installs. */
 export function chromePaths(env: Env = process.env, platform: string = process.platform): string[] {
   // Chrome and Edge install per machine (Program Files) or per user (LOCALAPPDATA).
   const roots = platform === "win32" ? ["ProgramFiles", "ProgramFiles(x86)", "LOCALAPPDATA"].map((k) => get(env, k)).filter((r): r is string => !!r) : [];
@@ -33,17 +47,24 @@ export function chromePaths(env: Env = process.env, platform: string = process.p
     join(r, "Chromium", "Application", "chrome.exe"),
     join(r, "Microsoft", "Edge", "Application", "msedge.exe"),
   ]);
-  return [get(env, "BENCHTOP_CHROME"), ...MAC_CHROME, ...win].filter((p): p is string => !!p);
+  const mac = platform === "darwin" ? MAC_CHROME : [];
+  return [...mac, ...win];
+}
+
+/**
+ * Every Chrome-family browser found, best first (BENCHTOP_CHROME, installs, PATH), so a
+ * caller can fall through to the next one when a browser is broken.
+ */
+export async function findChromes(env: Env = process.env, platform: string = process.platform): Promise<string[]> {
+  const own = override(env, "BENCHTOP_CHROME");
+  const installs = chromePaths(env, platform).filter((p) => existsSync(p));
+  const onPath = CHROME_ON_PATH.map((bin) => which(bin, env)).filter((p): p is string => !!p);
+  return [...new Set([own, ...installs, ...onPath].filter((p): p is string => !!p))];
 }
 
 /** Path of a Chrome-family browser that can run headless, or null. */
 export async function findChrome(env: Env = process.env, platform: string = process.platform): Promise<string | null> {
-  for (const p of chromePaths(env, platform)) if (await Bun.file(p).exists()) return p;
-  for (const bin of CHROME_ON_PATH) {
-    const found = which(bin, env);
-    if (found) return found;
-  }
-  return null;
+  return (await findChromes(env, platform))[0] ?? null;
 }
 
 /**
@@ -56,8 +77,8 @@ export function fileUrl(path: string, suffix = "", windows = process.platform ==
 
 /** Blender: BLENDER_EXE, then PATH, then the usual installs (newest Windows version first). */
 export function findBlender(env: Env = process.env, platform: string = process.platform): string | null {
-  const own = get(env, "BLENDER_EXE");
-  if (own && existsSync(own)) return own;
+  const own = override(env, "BLENDER_EXE");
+  if (own) return own;
   const onPath = which("blender", env);
   if (onPath) return onPath;
   const installs: string[] = [];

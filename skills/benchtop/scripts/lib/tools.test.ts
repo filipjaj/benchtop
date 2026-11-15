@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { chromePaths, fileUrl, findBlender, findChrome, findPio, pioEnv, zipCommand } from "./tools";
+import { chromePaths, fileUrl, findBlender, findChrome, findChromes, findPio, pioEnv, zipCommand } from "./tools";
 
 const tmp = mkdtempSync(join(tmpdir(), "benchtop-tools-"));
 afterAll(() => rmSync(tmp, { recursive: true, force: true }));
@@ -33,8 +33,35 @@ describe("findChrome", () => {
   });
 
   test("elsewhere the Windows folders are not looked at, and nothing found is null", async () => {
-    expect(chromePaths({ ProgramFiles: "P" }, "linux").some((p) => p.startsWith("P"))).toBe(false);
+    expect(chromePaths({ ProgramFiles: "P" }, "linux")).toEqual([]);
     expect(await findChrome({ ...bare, ProgramFiles: join(tmp, "pf") }, "linux")).toBeNull();
+  });
+
+  // The /Applications paths belong to macOS only, so the tests above hold on a Mac with Chrome.
+  test("the macOS apps are looked at on macOS only", () => {
+    expect(chromePaths({}, "darwin")[0]).toBe("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
+    expect(chromePaths({ ProgramFiles: "P" }, "win32").every((p) => p.startsWith("P"))).toBe(true);
+  });
+
+  test("every browser found is listed, so a broken first one can be skipped", async () => {
+    const own = touch("own2", "chrome.exe");
+    const pf = join(tmp, "pf2");
+    const chrome = touch("pf2", "Google", "Chrome", "Application", "chrome.exe");
+    const edge = touch("pf2", "Microsoft", "Edge", "Application", "msedge.exe");
+    expect(await findChromes({ ...bare, BENCHTOP_CHROME: own, ProgramFiles: pf }, "win32")).toEqual([own, chrome, edge]);
+  });
+
+  test("a BENCHTOP_CHROME that does not exist is said, and the search goes on", async () => {
+    const edge = touch("pf3", "Microsoft", "Edge", "Application", "msedge.exe");
+    const said: string[] = [];
+    const err = console.error;
+    console.error = (m: string) => said.push(m);
+    try {
+      expect(await findChrome({ ...bare, BENCHTOP_CHROME: join(tmp, "nope.exe"), ProgramFiles: join(tmp, "pf3") }, "win32")).toBe(edge);
+    } finally {
+      console.error = err;
+    }
+    expect(said.join(" ")).toContain("BENCHTOP_CHROME");
   });
 });
 
@@ -58,6 +85,20 @@ describe("findBlender", () => {
     expect(findBlender({ ...bare, ProgramFiles: pf }, "win32")).toBe(newest);
     expect(findBlender({ ...bare, ProgramFiles: pf }, "linux")).toBeNull();
   });
+
+  test("a BLENDER_EXE that does not exist is said, and the search goes on", () => {
+    const pf = join(tmp, "blpf2");
+    const only = touch("blpf2", "Blender Foundation", "Blender 4.2", "blender.exe");
+    const said: string[] = [];
+    const err = console.error;
+    console.error = (m: string) => said.push(m);
+    try {
+      expect(findBlender({ ...bare, BLENDER_EXE: join(tmp, "nope.exe"), ProgramFiles: pf }, "win32")).toBe(only);
+    } finally {
+      console.error = err;
+    }
+    expect(said.join(" ")).toContain("BLENDER_EXE");
+  });
 });
 
 describe("PlatformIO", () => {
@@ -68,6 +109,13 @@ describe("PlatformIO", () => {
     expect(findPio(bare, "win32", home)).toBe(exe);
     expect(findPio(bare, "linux", home)).toBe(bin);
     expect(findPio(bare, "linux", join(tmp, "nobody"))).toBeNull();
+  });
+
+  // A copied Windows env usually spells it "Path"; PATH must still be searched.
+  test("PATH is read whatever case the env spells it in", () => {
+    const dir = join(tmp, "pathbin");
+    for (const name of ["pio", "pio.exe"]) chmodSync(touch("pathbin", name), 0o755);
+    expect(findPio({ Path: dir }, process.platform, join(tmp, "nobody"))?.startsWith(dir)).toBe(true);
   });
 
   test("MSYSTEM is dropped on Windows only", () => {
