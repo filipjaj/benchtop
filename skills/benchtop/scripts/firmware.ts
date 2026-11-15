@@ -9,7 +9,7 @@
 
 import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
-import { type Family, FAMILIES, isEsp32, resolveBoard } from "./lib/platform";
+import { type Family, FAMILIES, isEsp32, platformSpec, resolveBoard } from "./lib/platform";
 import { type PinEntryDetail, bringUpPlan, pinMapDetailed, stalePinNames } from "./lib/pinmap";
 import { type Loaded, ProjectError, loadProject, main } from "./lib/project";
 
@@ -76,7 +76,7 @@ export function platformioIni(fw: Firmware, family: Family = ESP32): string {
     "; Shared by both environments.",
     "[env]",
     ...family.comment,
-    `platform = ${family.platform}@${family.version}`,
+    `platform = ${platformSpec(family)}`,
     `board = ${fw.board}`,
     "framework = arduino",
     "monitor_speed = 115200",
@@ -130,6 +130,31 @@ export function rp2040I2cBus(sda: number, scl: number): "Wire" | "Wire1" | null 
   if (sda % 4 === 0 && scl % 4 === 1) return "Wire";
   if (sda % 4 === 2 && scl % 4 === 3) return "Wire1";
   return null;
+}
+
+/** Outputs that setup() takes over: not flash or USB pins, which belong to the chip itself. */
+const drivenOutputs = (pins: PinEntryDetail[]): PinEntryDetail[] =>
+  pins.filter((p) => p.use === "output" && !(p.controller.pin.caps ?? []).some((c) => c === "flash" || c === "usb"));
+
+/**
+ * The first statements of setup(): every output at its idle level, before Serial or anything
+ * else that waits. A pin is left floating until then, and an opto-isolated ENA that floats
+ * reads as enabled. The level is set before the output driver is switched on, so the pin
+ * never shows the other level. How differs: AVR keeps a digitalWrite made before pinMode;
+ * Arduino-ESP32 core 3 ignores it (the pin is not yet a GPIO to it), so the register is set
+ * with gpio_set_level; arduino-pico's pinMode may reset the level, so it is written again after.
+ */
+export function idleOutputs(pins: PinEntryDetail[], family: Family = ESP32): string[] {
+  const outs = drivenOutputs(pins);
+  if (!outs.length) return [];
+  const c = ["  // Outputs to their idle level first: until here they float, and a driver input may read that as on."];
+  for (const p of outs) {
+    const idle = bringUpPlan(p).idle;
+    c.push(family.id === "esp32" ? `  gpio_set_level((gpio_num_t)${p.name}, ${idle === "HIGH" ? 1 : 0});` : `  digitalWrite(${p.name}, ${idle});`);
+    c.push(`  pinMode(${p.name}, OUTPUT);`);
+    if (family.id !== "avr") c.push(`  digitalWrite(${p.name}, ${idle});`);
+  }
+  return c;
 }
 
 /**
@@ -266,19 +291,15 @@ export function bringupCpp(loaded: Loaded, pins: PinEntryDetail[], family: Famil
     c.push("}", "");
   }
 
-  c.push("void setup() {", "  Serial.begin(115200);", "  uint32_t t0 = millis();", "  while (!Serial && millis() - t0 < 3000) delay(10);", "  delay(300);");
+  // Idle levels first, for every output, before Serial waits up to 3 s for the host and before
+  // any output is exercised: a low-triggered relay must not sit at LOW meanwhile.
+  c.push("void setup() {", ...idleOutputs(pins, family));
+  c.push("  Serial.begin(115200);", "  uint32_t t0 = millis();", "  while (!Serial && millis() - t0 < 3000) delay(10);", "  delay(300);");
   c.push(`  Serial.println(${lit(`\n=== bring-up: ${loaded.project.slug} ===`)});`, "  printPinMap();");
   if (sda && scl) c.push("  scanI2c();");
   else if (expected.length) c.push(`  Serial.println(${lit("[i2c] parts expect I2C addresses but no SDA/SCL net reaches the controller")});`);
 
-  // Idle levels first, for every output, before any of them is exercised: a low-triggered
-  // relay must not sit at LOW while the test works its way down the list.
-  const plans = outs.map((p) => ({ p, plan: bringUpPlan(p) }));
-  for (const { p, plan } of plans) {
-    if ((p.controller.pin.caps ?? []).some((c2) => c2 === "flash" || c2 === "usb")) continue;
-    c.push(`  digitalWrite(${p.name}, ${plan.idle});`, `  pinMode(${p.name}, OUTPUT);`);
-  }
-  for (const { p, plan } of plans) {
+  for (const { p, plan } of outs.map((p) => ({ p, plan: bringUpPlan(p) }))) {
     if (!plan.pulse) {
       c.push(`  Serial.println(${lit(`[out] ${p.name} GPIO${p.gpio} held ${plan.idle}, not switched: ${plan.target}. Reason: ${plan.why}.`)});`);
       continue;
@@ -295,10 +316,15 @@ export function bringupCpp(loaded: Loaded, pins: PinEntryDetail[], family: Famil
   if (!outs.length) c.push(`  Serial.println(${lit("[out] no output pins in this project")});`);
 
   for (const p of ins) {
+    // analogRead sets up an analogue pin itself; a pull-up would shift the reading.
     if (p.use === "analog") continue;
-    // Buttons wired to ground need the internal pull-up; other inputs are left floating.
-    const pull = p.others.some((o) => o.part.def.kind === "input") ? "INPUT_PULLUP" : "INPUT";
-    c.push(`  pinMode(${p.name}, ${pull});`);
+    // The wiring decides (pinmap.ts): a contact or an open collector needs the pull-up, a
+    // push-pull output or a fitted pull resistor does not.
+    if (p.pullUp && (p.controller.pin.caps ?? []).includes("input-only")) {
+      c.push(`  pinMode(${p.name}, INPUT);`, `  Serial.println(${lit(`[in] ${p.name} GPIO${p.gpio} needs a pull-up, but this input-only pin has no internal pull-up: fit 10 kohm to 3V3 or it floats`)});`);
+      continue;
+    }
+    c.push(`  pinMode(${p.name}, ${p.pullUp ? "INPUT_PULLUP" : "INPUT"});`);
   }
   c.push(`  Serial.println(${lit("[in] reporting inputs once a second")});`, "}", "");
 
@@ -313,7 +339,7 @@ export function bringupCpp(loaded: Loaded, pins: PinEntryDetail[], family: Famil
 
 // ----------------------------------------------------------------------- main.cpp
 
-function mainCpp(loaded: Loaded, fw: Firmware): string {
+export function mainCpp(loaded: Loaded, fw: Firmware, pins: PinEntryDetail[] = [], family: Family = ESP32): string {
   const behaviour = fw.behaviour.replace(/\*\//g, "* /");
   return [
     "/*",
@@ -328,6 +354,7 @@ function mainCpp(loaded: Loaded, fw: Firmware): string {
     '#include "pins.h"',
     "",
     "void setup() {",
+    ...idleOutputs(pins, family),
     "  Serial.begin(115200);",
     "}",
     "",
@@ -411,12 +438,12 @@ async function run(): Promise<void> {
         break;
       }
       const family = target.family;
-      console.log(`platform: ${family.platform}@${family.version} for board ${fw.board} (${family.label}, from ${target.how === "PlatformIO" ? "PlatformIO's board list" : "the board name"})`);
+      console.log(`platform: ${platformSpec(family)} for board ${fw.board} (${family.label}, from ${target.how === "PlatformIO" ? "PlatformIO's board list" : "the board name"})`);
       await mkdir(join(out, "src"), { recursive: true });
       log.push(await write(join(out, "platformio.ini"), platformioIni(fw, family), "always", force));
       log.push(await write(join(out, "include", "pins.h"), pinsHeader(loaded, pins), "always", force));
       log.push(await write(join(out, "src", "bringup.cpp"), bringupCpp(loaded, pins, family), "always", force));
-      log.push(await write(join(out, "src", "main.cpp"), mainCpp(loaded, fw), "missing", force));
+      log.push(await write(join(out, "src", "main.cpp"), mainCpp(loaded, fw, pins, family), "missing", force));
       console.log(log.join("\n"));
       // main.cpp is kept across runs while pins.h is rewritten, so a net renamed in
       // project.json leaves main.cpp using a constant that no longer exists.
