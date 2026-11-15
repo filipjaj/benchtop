@@ -85,7 +85,11 @@ describe("unresolved physical geometry", () => {
     const output = await new Response(child.stdout).text();
     const errors = await new Response(child.stderr).text();
     expect(await child.exited).toBe(0);
-    expect(`${output}\n${errors}`.split("\n").filter((l) => l.startsWith("warning:"))).toHaveLength(1);
+    // Without Chrome the guide also warns that the pages were not measured; that is about the
+    // machine, not the geometry, so it is left out of the count.
+    const warnings = `${output}\n${errors}`.split("\n").filter((l) => l.startsWith("warning:") && !l.includes("pages were not measured"));
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain("UNVERIFIED geometry");
     expect(output).not.toContain("drawing: ");
     expect(await Bun.file(join(root, "out", "guide", "index.html")).text()).not.toContain("partial planning guide");
   });

@@ -10,34 +10,15 @@
 import { mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileUrl, findChrome } from "./tools";
+
+export { findChrome };
 
 export interface PageOverflow {
   /** 1-based page number in the booklet. */
   page: number;
   /** What was cut off, as the text of the elements that run past the page's usable area. */
   cut: string[];
-}
-
-const CHROME = [
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/Applications/Chromium.app/Contents/MacOS/Chromium",
-  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-  "google-chrome",
-  "chromium",
-  "chromium-browser",
-];
-
-/** Path of a Chrome-family browser that can run headless, or null. */
-export async function findChrome(): Promise<string | null> {
-  for (const bin of CHROME) {
-    if (bin.startsWith("/")) {
-      if (await Bun.file(bin).exists()) return bin;
-    } else {
-      const found = Bun.which(bin);
-      if (found) return found;
-    }
-  }
-  return null;
 }
 
 /**
@@ -101,7 +82,7 @@ export async function measurePages(html: string): Promise<PageOverflow[] | null>
         `--user-data-dir=${join(dir, "profile")}`,
         "--virtual-time-budget=4000",
         "--dump-dom",
-        `file://${file}`,
+        fileUrl(file),
       ],
       { stdout: "pipe", stderr: "ignore" },
     );

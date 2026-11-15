@@ -24,6 +24,7 @@ import { strictGeometry, warnUnresolvedGeometry } from "./lib/geometry-evidence"
 import { JOINTS, JOINT_SEQUENCE, TOOLS, WARNING, WIRE_PREP } from "./lib/pictograms";
 import { guessFamily } from "./lib/platform";
 import { type Loaded, loadProject, main } from "./lib/project";
+import { fileUrl, findChrome } from "./lib/tools";
 import * as scenes from "./lib/scenes";
 import type { PlacedPart } from "./lib/types";
 
@@ -750,33 +751,21 @@ export function explainLines(loaded: Loaded): string[] {
   return out;
 }
 
-const CHROME = [
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/Applications/Chromium.app/Contents/MacOS/Chromium",
-  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-  "google-chrome",
-  "chromium",
-  "chromium-browser",
-];
-
 async function printPdf(htmlPath: string, pdfPath: string): Promise<boolean> {
   await rm(pdfPath, { force: true });
-  for (const bin of CHROME) {
-    const path = bin.startsWith("/") ? bin : Bun.which(bin);
-    if (!path || (bin.startsWith("/") && !(await Bun.file(bin).exists()))) continue;
-    const proc = Bun.spawn(
-      [path, "--headless=new", "--disable-gpu", `--user-data-dir=${join(tmpdir(), `benchtop-chrome-${process.pid}`)}`, "--no-pdf-header-footer", "--virtual-time-budget=4000", `--print-to-pdf=${pdfPath}`, `file://${htmlPath}`],
-      { stdout: "ignore", stderr: "ignore" },
-    );
-    // Chrome sometimes exits non-zero after writing a good file, or lingers after it;
-    // the file is the evidence, not the exit code.
-    const timer = setTimeout(() => proc.kill(), 60_000);
-    await proc.exited;
-    clearTimeout(timer);
-    const made = Bun.file(pdfPath);
-    if ((await made.exists()) && made.size > 1000) return true;
-  }
-  return false;
+  const chrome = await findChrome();
+  if (!chrome) return false;
+  const proc = Bun.spawn(
+    [chrome, "--headless=new", "--disable-gpu", `--user-data-dir=${join(tmpdir(), `benchtop-chrome-${process.pid}`)}`, "--no-pdf-header-footer", "--virtual-time-budget=4000", `--print-to-pdf=${pdfPath}`, fileUrl(htmlPath)],
+    { stdout: "ignore", stderr: "ignore" },
+  );
+  // Chrome sometimes exits non-zero after writing a good file, or lingers after it;
+  // the file is the evidence, not the exit code.
+  const timer = setTimeout(() => proc.kill(), 60_000);
+  await proc.exited;
+  clearTimeout(timer);
+  const made = Bun.file(pdfPath);
+  return (await made.exists()) && made.size > 1000;
 }
 
 if (import.meta.main) {

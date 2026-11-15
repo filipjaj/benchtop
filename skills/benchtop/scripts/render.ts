@@ -21,6 +21,7 @@ import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { loadProject, main } from "./lib/project";
 import { warnUnresolvedGeometry } from "./lib/geometry-evidence";
+import { findBlender } from "./lib/tools";
 
 const IMAGES = ["hero", "hero-alpha", "exploded", "top"] as const;
 type Image = (typeof IMAGES)[number];
@@ -75,9 +76,9 @@ main(async () => {
 
   const loaded = await loadProject(dirArg);
   warnUnresolvedGeometry(loaded, "physical renders, including cached enclosure models");
-  const blender = Bun.which("blender");
+  const blender = findBlender();
   if (!blender) {
-    console.log("renders skipped: Blender is not on PATH. Install it (brew install --cask blender, or blender.org/download) and run this again.");
+    console.log("renders skipped: Blender was not found (BLENDER_EXE, PATH or the usual install folders). Install it (brew install --cask blender, or blender.org/download), or set BLENDER_EXE to blender's full path, and run this again.");
     process.exit(3);
   }
 

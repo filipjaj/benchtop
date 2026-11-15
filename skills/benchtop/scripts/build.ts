@@ -71,7 +71,8 @@ async function run(step: Step, dir: string): Promise<StepResult> {
   const reason = step.skip?.() ?? null;
   if (reason) return { name: step.name, status: "skipped", seconds: 0, why: reason, notes: [], info: [], outputs: [] };
   const t0 = performance.now();
-  const proc = Bun.spawn(["bun", join(here, step.script), dir, ...(step.args ?? [])], { stdout: "pipe", stderr: "pipe" });
+  // The running bun, not "bun" on PATH: a bun started by full path (common on Windows) has no PATH entry.
+  const proc = Bun.spawn([process.execPath, join(here, step.script), dir, ...(step.args ?? [])], { stdout: "pipe", stderr: "pipe" });
   const [out, err, code] = await Promise.all([new Response(proc.stdout).text(), new Response(proc.stderr).text(), proc.exited]);
   const lines = `${out}\n${err}`.split("\n").map((l) => l.trimEnd()).filter(Boolean);
   const { flagged, info } = classify(lines);
