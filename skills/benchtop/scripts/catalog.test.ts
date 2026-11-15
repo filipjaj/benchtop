@@ -445,6 +445,12 @@ describe("pads and import-part commands", () => {
     const def = JSON.parse(readFileSync(out, "utf8")) as PartDef;
     expect(def.id).toBe("t-draft");
     expect(def.pins.map((p) => [p.name, p.x, p.y])).toEqual([["A", 0, 0], ["B", 2.54, 0]]);
+    // The fixture's catalog category is sensor: the draft is not a board, and carries no CAD reference as a pin alias.
+    expect(def.kind).toBe("sensor");
+    expect(text).toContain("kind sensor from catalog category sensor");
+    expect(def.pins.some((p) => p.aliases)).toBe(false);
+    expect(def.blurb).toMatch(/^TODO: /);
+    expect(text).toMatch(/not derived[\s\S]*- blurb \(a TODO/);
     await expect(capture(["import-part", "t:srf", "--header", "J1", "--id", "t-draft", "--out", out])).rejects.toThrow(/--overwrite/);
     await expect(capture(["import-part", "t:srf", "--id", "x"])).rejects.toThrow(/needs --out/);
     expect(existsSync(join(dir, "drafts", "x.json"))).toBe(false);

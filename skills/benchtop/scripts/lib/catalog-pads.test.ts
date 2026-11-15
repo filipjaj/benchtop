@@ -7,6 +7,8 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildBoard, type GeometryRow, type PinDefRow } from "../catalog-cards";
+import { check } from "../check-parts";
+import { firstSentence } from "../shopping";
 import {
   PadsError,
   boxToYDown,
@@ -29,7 +31,7 @@ import { rotPoint } from "./iso";
 import type { PartDef } from "./types";
 
 const SCHEMA = `
-CREATE TABLE parts(part_id TEXT PRIMARY KEY, name TEXT NOT NULL, brand TEXT);
+CREATE TABLE parts(part_id TEXT PRIMARY KEY, name TEXT NOT NULL, brand TEXT, category TEXT, description TEXT);
 CREATE TABLE geometry_objects(
  geometry_id INTEGER PRIMARY KEY, part_id TEXT NOT NULL, kind TEXT NOT NULL, unit TEXT NOT NULL DEFAULT 'mm',
  coordinate_frame TEXT NOT NULL, revision TEXT, source_url TEXT NOT NULL, source_sha256 TEXT,
@@ -64,8 +66,9 @@ interface PadIn {
 let db: Database;
 let nextId = 1;
 
-function addPart(id: string, name = "Test Board"): void {
-  db.query(`INSERT INTO parts(part_id,name,brand) VALUES(?,?,?)`).run(id, name, "Acme");
+/** A development board unless told otherwise, so a draft is a controller board, as most imports are. */
+function addPart(id: string, name = "Test Board", o: { category?: string | null; description?: string } = {}): void {
+  db.query(`INSERT INTO parts(part_id,name,brand,category,description) VALUES(?,?,?,?,?)`).run(id, name, "Acme", o.category === undefined ? "development_board" : o.category, o.description ?? null);
 }
 
 function addPads(part: string, o: { frame: object; text: string; url: string; sha: string; revision?: string; pads: PadIn[] }): number {
@@ -537,7 +540,9 @@ describe("importPart: names and unset fields", () => {
     const r = importPart(db, "/db", { partId: "t:n", headers: [H("J1")], id: "t" });
     expect(r.part.pins.map((p) => p.name)).toEqual(["VIN", "NETB", "J1.3", "NETD"]);
     expect(r.name_sources).toEqual({ pin_definitions: 1, net_name: 2, reference_pad: 1 });
-    expect(r.part.pins[0]!.aliases).toEqual(["J1.1"]);
+    // The CAD reference.pad is provenance, not a label on the part: kept on importedFrom, never as an alias.
+    expect(r.part.pins.every((p) => p.aliases === undefined)).toBe(true);
+    expect(r.part.pins.map((p) => p.importedFrom?.pad)).toEqual(["J1.1", "J1.2", "J1.3", "J1.4"]);
   });
 
   test("without a pin table it sets no gpio, no caps and no role but io, and lists what is missing", () => {
@@ -571,6 +576,88 @@ describe("importPart: names and unset fields", () => {
     expect(text).toContain("no numeric pad data");
     expect(text).toContain(join("/cat", "references/aa/p.png"));
     expect(() => importPart(db, "/cat", { partId: "t:none", headers: [H("J1")], id: "t" })).toThrow(/no numeric pad data/);
+  });
+});
+
+describe("importPart: kind, labels and the buyer-facing text", () => {
+  // The ADS1115 breakout's case: a header named JP1 in the CAD, a pin table, no GPIO numbers.
+  function breakout(id: string, category: string | null, o: { gpioText?: boolean; description?: string } = {}): void {
+    addPart(id, "ADS1115 16-Bit ADC", { category, description: o.description });
+    addPads(id, {
+      frame: DOWN,
+      text: "X right, Y down",
+      url: "https://cad.test/ads.brd",
+      sha: "s",
+      pads: [
+        { ref: "JP1", n: 1, x: 0, y: 0, net: "GND" },
+        { ref: "JP1", n: 2, x: 2.54, y: 0, net: "N2" },
+        { ref: "JP1", n: 3, x: 5.08, y: 2.54, net: null },
+      ],
+    });
+    addPinRows(id, [{ connector: "JP1", n: 2, name: "SDA", fn: o.gpioText ? "GPIO8" : "I2C data" }]);
+  }
+  const imp = (id: string) => importPart(db, "/db", { partId: id, headers: [H("JP1")], id: "ads-test", fileName: "ads-test.json" });
+  const errors = (r: ReturnType<typeof importPart>) => check(r.part, "ads-test.json");
+
+  test("a sensor-category breakout is a sensor, and fails check-parts only on what a person must fill in", () => {
+    breakout("t:ads", "sensor");
+    const r = imp("t:ads");
+    expect(r.part.kind).toBe("sensor");
+    expect(r.kind_from).toBe("catalog category sensor");
+    expect(formatImport(r, "o.json")).toContain("kind sensor from catalog category sensor");
+    expect(r.missing.join("\n")).not.toMatch(/^kind/m);
+    // gpio numbers are a controller board's; a sensor is not asked for them.
+    expect(r.missing.join("\n")).not.toMatch(/gpio numbers/);
+    expect(errors(r)).toEqual([expect.stringMatching(/^blurb is still a TODO/), "sourcing.priceUsd missing"]);
+  });
+
+  test("a category that names no kind and no GPIO numbers: a non-board default that check-parts accepts, listed as to check", () => {
+    breakout("t:ads2", "wireless_and_interface");
+    const r = imp("t:ads2");
+    expect(r.part.kind).not.toBe("board");
+    expect(r.kind_from).toBeNull();
+    expect(r.missing.join("\n")).toMatch(/^kind \(set to "sensor" by default: catalog category "wireless_and_interface" names no part kind/m);
+    expect(formatImport(r, "o.json")).toMatch(/not derived[\s\S]*- kind \(set to "sensor"/);
+    expect(errors(r).filter((e) => !/priceUsd|blurb/.test(e))).toEqual([]);
+  });
+
+  test("development_board, or published GPIO numbers where the category names no kind, make a board", () => {
+    breakout("t:dev", "development_board");
+    expect(imp("t:dev").part.kind).toBe("board");
+    breakout("t:gp", "wireless_and_interface", { gpioText: true });
+    const r = imp("t:gp");
+    expect(r.part.kind).toBe("board");
+    expect(r.kind_from).toMatch(/GPIO numbers in the published pin text/);
+  });
+
+  test("the header's CAD reference designator is never a pin alias; it stays on importedFrom", () => {
+    breakout("t:ads3", "sensor");
+    const pins = imp("t:ads3").part.pins;
+    expect(pins.map((p) => p.name)).toEqual(["GND", "SDA", "JP1.3"]);
+    for (const p of pins) expect(p.aliases).toBeUndefined();
+    expect(pins.map((p) => p.importedFrom?.pad)).toEqual(["JP1.1", "JP1.2", "JP1.3"]);
+  });
+
+  test("the blurb is the catalog's description in plain words, else a TODO; never importer jargon", () => {
+    breakout("t:ads4", "sensor");
+    const todo = imp("t:ads4");
+    expect(todo.part.blurb).toMatch(/^TODO: /);
+    expect(todo.missing.join("\n")).toMatch(/^blurb/m);
+    breakout("t:ads5", "sensor", { description: "Reads four analog voltages  at 16-bit resolution over I2C." });
+    const r = imp("t:ads5");
+    expect(r.part.blurb).toBe("Reads four analog voltages at 16-bit resolution over I2C.");
+    expect(r.missing.join("\n")).not.toMatch(/^blurb/m);
+    for (const b of [todo.part.blurb, r.part.blurb]) expect(b).not.toMatch(/draft|CAD|dataset|pad/i);
+  });
+
+  test("the first verify sentence, which the shopping page shows a buyer, carries no file hash or URL; the provenance follows it", () => {
+    breakout("t:ads6", "sensor");
+    const v = imp("t:ads6").part.verify!;
+    const first = firstSentence(v);
+    expect(first).not.toMatch(/sha256|https?:|revision/);
+    expect(first).toContain("not measured on a bought board");
+    expect(v).toContain("https://cad.test/ads.brd");
+    expect(v).toContain("source_sha256 s");
   });
 });
 
@@ -991,7 +1078,7 @@ describe("importPart: ports from the 3D model's connector openings", () => {
         const ports = r.part.ports!;
         expect(ports).toHaveLength(2);
         for (const [ref, port] of [["X1", ports[0]!], ["X2", ports[1]!]] as const) {
-          const pins = r.part.pins.filter((p) => p.name.startsWith(`${ref}.`) || (p.aliases ?? []).some((a) => a.startsWith(`${ref}.`)));
+          const pins = r.part.pins.filter((p) => (p.importedFrom?.pad ?? "").startsWith(`${ref}.`));
           expect(pins.length).toBe(2);
           const cx = pins.reduce((s, p) => s + p.x, 0) / pins.length;
           const cy = pins.reduce((s, p) => s + p.y, 0) / pins.length;
@@ -1205,6 +1292,7 @@ describe("provenance", () => {
     p.pins[1]!.gpio = 2;
     p.electrical.logicVolts = 3.3;
     p.sourcing.priceUsd = 5;
+    p.blurb = "A test board for the provenance check.";
     return p;
   }
 

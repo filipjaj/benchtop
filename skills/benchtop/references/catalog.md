@@ -182,7 +182,10 @@ Traps the command handles, and what you still do:
 - Pin names: `pin_definitions` when connector (= reference) and number match one row exactly,
   else the net name, else `<reference>.<pad>`. A row whose `notes` JSON binds it to datasets
   (`supported_geometry_ids`, `geometry_bindings`) counts only for the chosen dataset; a row
-  bound elsewhere is ignored. Repeats get `.2`, `.3`; the CAD id stays as an alias.
+  bound elsewhere is ignored. Repeats get `.2`, `.3`. The CAD `<reference>.<pad>` (`JP1.1`) is
+  kept on the pin as `importedFrom.pad`, never as an alias: a reference designator is not
+  printed on the part, and as an alias it would reach the guide and pin maps, where a
+  breakout's `JP1.1` reads like the controller's own `JP1`.
 - A pad number is not a GPIO number. Roles and `gpio` are taken from the published pin row
   (`pin_definitions`), and only where it is unambiguous. A net label sets one thing, ground,
   and never a GPIO number:
@@ -202,7 +205,7 @@ Traps the command handles, and what you still do:
   - Supply pins keep role `io`. The catalog cannot tell an output from an input (`3V3` is an
     output on a dev board and an input on a breakout) and states no volts, so the report lists
     them under "power pins that need role, volts and direction".
-  - Each value set this way is recorded on the pin as `importedFrom` (`{ role?, gpio? }`: the
+  - Each value set this way is recorded on the pin as `importedFrom` (`{ role?, gpio?, pad }`: the
     pin row id, connector, pin number and the text read), so a reader can tell an imported
     value from a hand-set one. Nothing in a build reads it. A pin without a pin-table row gets
     one thing at most: ground, when its CAD net is named `GND`.
@@ -232,6 +235,17 @@ Traps the command handles, and what you still do:
     With `"openings": "auto"` a case opens for every port that ends up at a wall, a breakout's
     two STEMMA QT or Qwiic sockets included. List `openings` in the project to keep only the
     ones the build uses.
+- `kind` comes from the catalog category where it names one (`development_board` -> board,
+  `sensor`, `display`, `motor_and_driver` -> actuator, `power`, `audio`, `input_and_switch` ->
+  input, `lighting` -> light, `connector_and_cable` -> connector). A category that spans kinds
+  (`wireless_and_interface`, `prototyping`, ...) gives a board only when the published pin text
+  numbers GPIOs; otherwise `sensor`, as a default the report lists under "not derived". A board
+  is never the default: check-parts asks a board for gnd, gpio and `logicVolts`, which a
+  breakout such as the ADS1115 has no reason to carry. The report prints where the kind came from.
+- `blurb` is the catalog's description, else a `TODO:` line that check-parts rejects. The
+  shopping page shows a buyer the blurb and the first sentence of `verify`, so neither carries
+  importer notes: the first `verify` sentence says in plain words that the pads come from the
+  maker's CAD file, and the file, revision and hash follow it.
 - Everything else is a placeholder or empty: `caps`, voltages, `sourcing.priceUsd`, and
   `body.h` and `maxHeight` where the catalog has neither a stated thickness nor a model. Prices
   are in shop currencies where the part file wants USD, so check-parts fails on purpose until
