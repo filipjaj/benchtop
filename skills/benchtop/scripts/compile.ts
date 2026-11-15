@@ -18,6 +18,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { resolveBoard } from "./lib/platform";
 import { ProjectError, loadProject, main } from "./lib/project";
+import { findPio, pioEnv } from "./lib/tools";
 
 const SOFT = 3;
 
@@ -46,11 +47,6 @@ export function summarise(env: string, output: string, exitCode: number, seconds
   };
 }
 
-async function which(bin: string): Promise<boolean> {
-  const p = Bun.spawn(["which", bin], { stdout: "ignore", stderr: "ignore" });
-  return (await p.exited) === 0;
-}
-
 if (import.meta.main) {
   await main(async () => {
     const args = process.argv.slice(2);
@@ -76,8 +72,9 @@ if (import.meta.main) {
     }
     const fwDir = join(loaded.dir, "firmware");
     if (!existsSync(join(fwDir, "platformio.ini"))) throw new ProjectError(`no ${join(fwDir, "platformio.ini")}: run firmware.ts first`);
-    if (!(await which("pio"))) {
-      console.log("compile skipped: PlatformIO (pio) is not installed, so the firmware has NOT been compiled. Install it (https://platformio.org/install/cli) and run this again before trusting main.cpp.");
+    const pio = findPio();
+    if (!pio) {
+      console.log("compile skipped: PlatformIO (pio) is not on PATH or in ~/.platformio, so the firmware has NOT been compiled. Install it (https://platformio.org/install/cli) and run this again before trusting main.cpp.");
       process.exit(SOFT);
     }
     // Bring-up first: it is generated, so a failure there is a skill or toolchain problem,
@@ -86,7 +83,7 @@ if (import.meta.main) {
     const results: CompileResult[] = [];
     for (const env of envs) {
       const t0 = performance.now();
-      const proc = Bun.spawn(["pio", "run", "-d", fwDir, "-e", env], { stdout: "pipe", stderr: "pipe" });
+      const proc = Bun.spawn([pio, "run", "-d", fwDir, "-e", env], { stdout: "pipe", stderr: "pipe", env: pioEnv() });
       const [out, err, code] = await Promise.all([new Response(proc.stdout).text(), new Response(proc.stderr).text(), proc.exited]);
       const r = summarise(env, `${out}\n${err}`, code, (performance.now() - t0) / 1000);
       results.push(r);

@@ -2,9 +2,31 @@
 // heat-shrink, and the screws the case was cut for. One list, used by the BOM and the
 // shopping page, derived from the same project data as the guide.
 
-import type { Loaded } from "./project";
+import { type Loaded, findPin, parseEnd } from "./project";
 import { wireColor } from "./scenes";
 import { strictGeometry, unresolvedGeometry } from "./geometry-evidence";
+import type { PlacedPart } from "./types";
+
+/** A wire end on this pin is clamped under a screw (PinDef.screw), not soldered. */
+export const screwEnd = (part: PlacedPart, pin: string): boolean => findPin(part.def, pin)?.screw === true;
+
+/** A lead with an end on a connector contact (PinDef.plug) is plugged in at both ends, as the guide words it. */
+export const pluggedLead = (ends: { part: PlacedPart; pin: string }[]): boolean => ends.some((e) => findPin(e.part.def, e.pin)?.plug === true);
+
+/**
+ * How the wire ends of a hand-wired build are joined, each end counted once: under a screw,
+ * on a lead that plugs in, or soldered. The guide's cover and the BOM say these numbers, so a
+ * screw clamp is never counted as a solder joint.
+ */
+export function wireEnds(loaded: Loaded): { solder: number; screw: number; plug: number } {
+  const n = { solder: 0, screw: 0, plug: 0 };
+  for (const c of loaded.project.connections) {
+    const ends = [c.from, c.to].map(parseEnd).map((e) => ({ part: loaded.byRef.get(e.ref)!, pin: e.pin }));
+    if (pluggedLead(ends)) n.plug += 2;
+    else for (const e of ends) n[screwEnd(e.part, e.pin) ? "screw" : "solder"]++;
+  }
+  return n;
+}
 
 export interface Consumable {
   qty: number;

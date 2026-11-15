@@ -1,7 +1,8 @@
 # Renders
 
 Product images of the finished object, rendered from the same geometry as the printed
-case and the guide drawings. Needs Blender 5 on PATH (`blender`). Everything else in
+case and the guide drawings. Needs Blender 5: `BLENDER_EXE`, then `blender` on PATH, then
+`Program Files\Blender Foundation\Blender *` (newest) or `/Applications/Blender.app`. Everything else in
 the skill works without it.
 
 ## Run
@@ -76,9 +77,9 @@ blue. Look at both: no rectangle, no vertical edges, no haze. Delete them afterw
 
 ## When Blender is missing
 
-render.ts prints one line (`renders skipped: Blender is not on PATH ...`) and exits 3.
+render.ts prints one line (`renders skipped: Blender was not found ...`) and exits 3.
 Nothing else fails. Tell the user the renders were skipped and how to install it
-(`brew install --cask blender`). Do not substitute the isometric guide drawings for the
+(`brew install --cask blender`), or to set `BLENDER_EXE` to an existing blender. Do not substitute the isometric guide drawings for the
 renders on the landing page without saying so. assembly.glb and closed.glb still exist for
 a web 3D viewer.
 

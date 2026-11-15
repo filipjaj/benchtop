@@ -12,27 +12,7 @@
 import { mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-
-const CHROME = [
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/Applications/Chromium.app/Contents/MacOS/Chromium",
-  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-  "google-chrome",
-  "chromium",
-  "chromium-browser",
-];
-
-async function findChrome(): Promise<string | null> {
-  for (const bin of CHROME) {
-    if (bin.startsWith("/")) {
-      if (await Bun.file(bin).exists()) return bin;
-    } else {
-      const found = Bun.which(bin);
-      if (found) return found;
-    }
-  }
-  return null;
-}
+import { fileUrl, findChrome } from "./lib/tools";
 
 const args = process.argv.slice(2);
 const flag = (name: string, fallback: string): string => {
@@ -63,7 +43,7 @@ if (!pages && from > 0) {
   const wrap = join(tmpdir(), `benchtop-shoot-${process.pid}.html`);
   await Bun.write(
     wrap,
-    `<!doctype html><meta charset="utf-8"><style>html,body{margin:0;overflow:hidden}iframe{position:absolute;left:0;top:-${from}px;width:100%;height:${from + Number(height)}px;border:0}</style><iframe src="file://${source}?still=1"></iframe>`,
+    `<!doctype html><meta charset="utf-8"><style>html,body{margin:0;overflow:hidden}iframe{position:absolute;left:0;top:-${from}px;width:100%;height:${from + Number(height)}px;border:0}</style><iframe src="${fileUrl(source, "?still=1")}"></iframe>`,
   );
   source = wrap;
   shotName = `shot-from-${from}.png`;
@@ -87,7 +67,7 @@ for (const t of targets) {
       `--screenshot=${out}`,
       // Only the --from wrapper needs it, to frame one local file inside another.
       ...(from > 0 ? ["--allow-file-access-from-files"] : []),
-      `file://${source}${t.hash}`,
+      fileUrl(source, t.hash),
     ],
     { stdout: "ignore", stderr: "ignore" },
   );

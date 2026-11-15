@@ -17,8 +17,8 @@
     { "name": "SD", "role": "io", "x": 11.43, "y": 17.3, "dir": "in", "maxVolts": 5, "note": "Shutdown and channel select. Leave alone: the board pulls it up, giving the (left+right)/2 mono mix at 5 V. Pull below 0.16 V to mute. A 3.3 V high selects left channel only." },
     { "name": "GND", "role": "gnd", "x": 13.97, "y": 17.3, "note": "Ground." },
     { "name": "VIN", "role": "power-in", "x": 16.51, "y": 17.3, "volts": 5, "minVolts": 2.5, "maxVolts": 5.5, "note": "2.5 to 5.5 V. Use 5 V from a supply that can give 800 mA for full volume; weak USB ports or a 3.3 V regulator will sag and click." },
-    { "name": "SPK+", "aliases": ["+"], "role": "passive", "x": 7.15, "y": 2, "note": "Speaker terminal. Bridge-tied output: connect only to the speaker, never to ground or to another amp." },
-    { "name": "SPK-", "aliases": ["-"], "role": "passive", "x": 10.65, "y": 2, "note": "Speaker terminal, not ground. Do not connect it to GND." }
+    { "name": "SPK+", "aliases": ["+"], "role": "passive", "screw": true, "x": 7.15, "y": 2, "note": "Speaker terminal. Bridge-tied output: connect only to the speaker, never to ground or to another amp." },
+    { "name": "SPK-", "aliases": ["-"], "role": "passive", "screw": true, "x": 10.65, "y": 2, "note": "Speaker terminal, not ground. Do not connect it to GND." }
   ],
   "electrical": {
     "logicVolts": 3.3,

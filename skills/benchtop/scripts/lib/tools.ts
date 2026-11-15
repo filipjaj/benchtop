@@ -1,0 +1,122 @@
+// Where the external tools are: Chrome (PDF, screenshots, page measuring), Blender,
+// PlatformIO and a zip writer. One finder per tool, so macOS, Linux and Windows are
+// handled in one place instead of in every script that needs the tool.
+//
+// Every finder takes the environment and platform as arguments, so the Windows lookup
+// can be tested on any machine.
+
+import { existsSync, readdirSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+
+export type Env = Record<string, string | undefined>;
+
+/**
+ * Windows env names are case-insensitive: process.env handles that, but a copied env keeps
+ * whatever case it was given ("ProgramFiles", "PROGRAMFILES", "Path").
+ */
+const get = (env: Env, key: string): string | undefined => {
+  if (env[key] !== undefined) return env[key];
+  const k = Object.keys(env).find((n) => n.toUpperCase() === key.toUpperCase());
+  return k === undefined ? undefined : env[k];
+};
+
+/** An override (BENCHTOP_CHROME, BLENDER_EXE) that names a missing file is said, then skipped. */
+const override = (env: Env, key: string): string | undefined => {
+  const own = get(env, key);
+  if (own && !existsSync(own)) console.error(`${key}=${own} does not exist; looking in the usual places instead.`);
+  return own && existsSync(own) ? own : undefined;
+};
+
+const which = (bin: string, env: Env): string | null => Bun.which(bin, { PATH: get(env, "PATH") ?? "" });
+
+const MAC_CHROME = [
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "/Applications/Chromium.app/Contents/MacOS/Chromium",
+  "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+];
+const CHROME_ON_PATH = ["google-chrome", "chromium", "chromium-browser", "chrome", "msedge"];
+
+/** Install paths to look at on this platform: the macOS apps or the Windows installs. */
+export function chromePaths(env: Env = process.env, platform: string = process.platform): string[] {
+  // Chrome and Edge install per machine (Program Files) or per user (LOCALAPPDATA).
+  const roots = platform === "win32" ? ["ProgramFiles", "ProgramFiles(x86)", "LOCALAPPDATA"].map((k) => get(env, k)).filter((r): r is string => !!r) : [];
+  const win = roots.flatMap((r) => [
+    join(r, "Google", "Chrome", "Application", "chrome.exe"),
+    join(r, "Chromium", "Application", "chrome.exe"),
+    join(r, "Microsoft", "Edge", "Application", "msedge.exe"),
+  ]);
+  const mac = platform === "darwin" ? MAC_CHROME : [];
+  return [...mac, ...win];
+}
+
+/**
+ * Every Chrome-family browser found, best first (BENCHTOP_CHROME, installs, PATH), so a
+ * caller can fall through to the next one when a browser is broken.
+ */
+export async function findChromes(env: Env = process.env, platform: string = process.platform): Promise<string[]> {
+  const own = override(env, "BENCHTOP_CHROME");
+  const installs = chromePaths(env, platform).filter((p) => existsSync(p));
+  const onPath = CHROME_ON_PATH.map((bin) => which(bin, env)).filter((p): p is string => !!p);
+  return [...new Set([own, ...installs, ...onPath].filter((p): p is string => !!p))];
+}
+
+/** Path of a Chrome-family browser that can run headless, or null. */
+export async function findChrome(env: Env = process.env, platform: string = process.platform): Promise<string | null> {
+  return (await findChromes(env, platform))[0] ?? null;
+}
+
+/**
+ * file:// URL of a local file, with an optional "?only=3" style suffix. `file://${path}`
+ * is wrong on Windows (drive letter, backslashes) and for any path with a space or "#".
+ */
+export function fileUrl(path: string, suffix = "", windows = process.platform === "win32"): string {
+  return pathToFileURL(path, { windows }).href + suffix;
+}
+
+/** Blender: BLENDER_EXE, then PATH, then the usual installs (newest Windows version first). */
+export function findBlender(env: Env = process.env, platform: string = process.platform): string | null {
+  const own = override(env, "BLENDER_EXE");
+  if (own) return own;
+  const onPath = which("blender", env);
+  if (onPath) return onPath;
+  const installs: string[] = [];
+  if (platform === "win32") {
+    for (const root of ["ProgramFiles", "ProgramFiles(x86)"].map((k) => get(env, k))) {
+      const dir = root && join(root, "Blender Foundation");
+      if (!dir || !existsSync(dir)) continue;
+      const versions = readdirSync(dir).filter((d) => d.startsWith("Blender")).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+      installs.push(...versions.map((v) => join(dir, v, "blender.exe")));
+    }
+  }
+  if (platform === "darwin") installs.push("/Applications/Blender.app/Contents/MacOS/Blender");
+  return installs.find((p) => existsSync(p)) ?? null;
+}
+
+/** PlatformIO: PATH, then its default install, which the installer does not add to PATH. */
+export function findPio(env: Env = process.env, platform: string = process.platform, home: string = homedir()): string | null {
+  const own = which("pio", env);
+  if (own) return own;
+  const def = platform === "win32" ? join(home, ".platformio", "penv", "Scripts", "pio.exe") : join(home, ".platformio", "penv", "bin", "pio");
+  return existsSync(def) ? def : null;
+}
+
+/** Environment for pio: PlatformIO refuses to run under MSYS (Git Bash sets MSYSTEM). */
+export function pioEnv(env: Env = process.env, platform: string = process.platform): Env {
+  const out = { ...env };
+  if (platform === "win32") for (const k of Object.keys(out)) if (k.toUpperCase() === "MSYSTEM") delete out[k];
+  return out;
+}
+
+/**
+ * Command that zips `folder` (relative to the working directory) into `zipPath`, or null.
+ * `zip` first; Windows has no zip but ships bsdtar, which writes a zip for a .zip name with -a.
+ */
+export function zipCommand(zipPath: string, folder: string, env: Env = process.env, platform: string = process.platform): string[] | null {
+  const zip = which("zip", env);
+  if (zip) return [zip, "-qr", zipPath, folder];
+  if (platform !== "win32") return null;
+  const tar = join(get(env, "SystemRoot") ?? "C:\\Windows", "System32", "tar.exe");
+  return existsSync(tar) ? [tar, "-a", "-c", "-f", zipPath, folder] : null;
+}
