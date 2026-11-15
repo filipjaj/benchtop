@@ -20,7 +20,7 @@
 // --src defaults to $BENCHTOP_CATALOG, --db to $BENCHTOP_CARDS. The catalog is opened read-only.
 // Exit codes: 0 ok, 1 not found, 2 usage error, 3 source or cards file missing or wrong version.
 
-import { Database } from "bun:sqlite";
+import { Database, type Statement } from "bun:sqlite";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, renameSync, rmSync, statSync } from "node:fs";
 import { resolve } from "node:path";
@@ -1689,6 +1689,14 @@ export function build(srcPath: string, outPath: string): BuildReport {
   const tmp = `${outPath}.tmp`;
   rmSync(tmp, { force: true });
   let dst: Database | null = null;
+  // bun:sqlite's close() keeps the file open while a prepare()d statement is unfinalized,
+  // and Windows then refuses to rename or remove it. Every statement is finalized before close.
+  const stmts: Statement[] = [];
+  const closeDst = (): void => {
+    for (const s of stmts.splice(0)) s.finalize();
+    dst?.close();
+    dst = null;
+  };
   try {
     const version = (src.query("PRAGMA user_version").get() as { user_version: number }).user_version;
     if (version !== CATALOG_SCHEMA_VERSION) throw new SourceError(`catalog has schema version ${version}; the card generator was written for ${CATALOG_SCHEMA_VERSION}`);
@@ -1732,6 +1740,7 @@ export function build(srcPath: string, outPath: string): BuildReport {
     const insCard = out.prepare(`INSERT INTO cards VALUES (?, ?)`);
     const insIndex = out.prepare(`INSERT INTO card_index VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
     const insFts = out.prepare(`INSERT INTO card_fts(part_id, name, brand, category, families, keywords, specifications) VALUES (?,?,?,?,?,?,?)`);
+    stmts.push(insCard, insIndex, insFts);
 
     const stats: Record<string, number> = {};
     const bump = (k: string, by = 1): void => void (stats[k] = (stats[k] ?? 0) + by);
@@ -1816,6 +1825,7 @@ export function build(srcPath: string, outPath: string): BuildReport {
 
     out.exec(`INSERT INTO card_fts(card_fts) VALUES('optimize')`);
     const meta = out.prepare(`INSERT INTO meta VALUES (?, ?)`);
+    stmts.push(meta);
     const sourceCreated = q<{ value: string }>(src, `SELECT value FROM metadata WHERE key = 'created_at_utc'`)[0]?.value ?? "unknown";
     out.transaction(() => {
       meta.run("card_schema_version", String(CARD_SCHEMA_VERSION));
@@ -1834,12 +1844,11 @@ export function build(srcPath: string, outPath: string): BuildReport {
       ].join(" "));
     })();
     out.exec(`PRAGMA user_version = ${CARD_SCHEMA_VERSION}; VACUUM; PRAGMA journal_mode = DELETE;`);
-    out.close();
-    dst = null;
+    closeDst();
     renameSync(tmp, outPath);
     return { out: outPath, bytes: statSync(outPath).size, cards: parts.length, json_bytes: jsonBytes, stats };
   } finally {
-    dst?.close();
+    closeDst();
     src.close();
     rmSync(tmp, { force: true });
   }

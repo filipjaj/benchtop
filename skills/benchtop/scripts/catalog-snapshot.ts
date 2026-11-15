@@ -22,7 +22,7 @@
 // The same source and options produce the same bytes; no wall-clock time is stored.
 // Exit codes: 0 ok, 2 usage error, 3 source missing or unexpected schema, 4 snapshot failed checks.
 
-import { Database } from "bun:sqlite";
+import { Database, type Statement } from "bun:sqlite";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, renameSync, rmSync, statSync } from "node:fs";
 import { resolve } from "node:path";
@@ -296,6 +296,14 @@ export function build(a: Args): BuildReport {
   const tmp = `${a.out}.tmp`;
   rmSync(tmp, { force: true });
   let out: Database | null = null;
+  // bun:sqlite's close() keeps the file open while a prepare()d statement is unfinalized,
+  // and Windows then refuses to rename or remove it. Every statement is finalized before close.
+  const stmts: Statement[] = [];
+  const closeOut = (): void => {
+    for (const s of stmts.splice(0)) s.finalize();
+    out?.close();
+    out = null;
+  };
   try {
     const version = Number((src.query("PRAGMA user_version").get() as { user_version: number }).user_version);
     if (version !== SOURCE_SCHEMA_VERSION) {
@@ -331,6 +339,7 @@ export function build(a: Args): BuildReport {
       if (!data.length) return;
       const cols = Object.keys(data[0]!);
       const stmt = dst.prepare(`INSERT INTO "${table}" (${cols.map((c) => `"${c}"`).join(",")}) VALUES (${cols.map(() => "?").join(",")})`);
+      stmts.push(stmt);
       dst.transaction(() => {
         for (const r of data) {
           for (const c of cols) if ((c === "source_id" || c === "primary_source_id") && typeof r[c] === "number") usedSources.add(r[c] as number);
@@ -388,6 +397,7 @@ export function build(a: Args): BuildReport {
     }
 
     const meta = dst.prepare(`INSERT OR REPLACE INTO metadata(key, value) VALUES (?, ?)`);
+    stmts.push(meta);
     const sourceCreated = rows(src, `SELECT value FROM metadata WHERE key = 'created_at_utc'`)[0]?.value ?? "unknown";
     const sourceParts = Number(rows(src, `SELECT count(*) AS n FROM parts`)[0]!.n);
     const notes: Record<string, string> = {
@@ -423,12 +433,11 @@ export function build(a: Args): BuildReport {
     const integrity = rows(dst, `PRAGMA integrity_check`).map((r) => String(Object.values(r)[0]));
     if (integrity.join() !== "ok") throw new CheckError(`snapshot failed integrity_check: ${integrity.slice(0, 3).join("; ")}`);
     dst.exec("VACUUM; PRAGMA journal_mode = DELETE;");
-    dst.close();
-    out = null;
+    closeOut();
     renameSync(tmp, a.out);
     return { out: a.out, bytes: statSync(a.out).size, parts: keep.size, reasons: sel.reasons, unknownIncludes: sel.unknown, rowCounts };
   } finally {
-    out?.close();
+    closeOut();
     src.close();
     rmSync(tmp, { force: true });
   }
