@@ -243,11 +243,13 @@ function inventoryPages(loaded: Loaded, L: EnclosureLayout | null, names: Names)
 
 /**
  * How to make the ends of a step that go under a screw (PinDef.screw). No solder and no tin:
- * a tinned end settles under the screw and the clamp works loose.
+ * a tinned end settles under the screw and the clamp works loose. A push-on build never
+ * mentions solder (references/guide.md), so it gets the clamp steps without that warning.
  */
-function clampText(ends: { part: PlacedPart; pin: string }[]): string {
+function clampText(ends: { part: PlacedPart; pin: string }[], soldered: boolean): string {
   const which = ends.length > 1 ? "Both ends go" : `The end at the ${esc(inSentence(partLabel(ends[0]!.part)))} <b>${esc(ends[0]!.pin)}</b> goes`;
-  return `${which} under a screw, not into solder: strip 5 mm, twist the strands tight or crimp on a ferrule, push the end fully in, tighten the screw and tug the wire to check it holds. Do not tin it.`;
+  const how = "strip 5 mm, twist the strands tight or crimp on a ferrule, push the end fully in, tighten the screw and tug the wire to check it holds.";
+  return soldered ? `${which} under a screw, not into solder: ${how} Do not tin it.` : `${which} under a screw: ${how}`;
 }
 
 /** Captions above the bubbles must print at least this high (about 7.5 pt). */
@@ -306,7 +308,7 @@ function wiringSteps(loaded: Loaded, names: Names): Step[] {
       `<span class="end">${esc(partLabel(a.part))} <b>${esc(a.pin)}</b></span><span class="to"></span>` +
       `<span class="end">${esc(partLabel(b.part))} <b>${esc(b.pin)}</b></span></div>` +
       (c.why ? `<p class="why">${esc(c.why)}</p>` : "") +
-      (screwed.length ? `<p class="note">${clampText(screwed)}</p>` : "") +
+      (screwed.length ? `<p class="note">${clampText(screwed, loaded.project.build.joint !== "dupont")}</p>` : "") +
       (note ? `<p class="note">${note}</p>` : "") +
       [...new Set(art.ends.filter((e) => isUnverified(e.part)).map((e) => e.ref))]
         .map((ref) => `<p class="note">Layout of the ${esc(inSentence(partLabel(loaded.byRef.get(ref)!)))} not verified. Measure yours before printing the case.</p>`)

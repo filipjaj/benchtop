@@ -41,7 +41,8 @@ pin says "Solder and clamp" (or "Clamp" when both ends are), and tells the build
 that end; a second wire in the same clamp goes in with the first. The preparation page adds
 "do not tin a wire that goes under a screw", the screwdriver joins the tools, and the
 checks ask for a tug on every clamped wire. A build with nothing left to solder gets no
-soldering lesson and no iron. The drawings are unchanged: the dot still marks where the
+soldering lesson and no iron. A push-on build says "Push on and clamp" and gives the same
+clamp steps without the solder and tinning warning, so it still never mentions solder. The drawings are unchanged: the dot still marks where the
 wire ends.
 
 **Step numbers.** Steps are numbered 1 to N in build order with no gap. Two short steps can

@@ -80,6 +80,12 @@ describe("texts that follow the project", () => {
     expect(dupont).toContain("pushed fully onto its pin");
     const solder = (await build(() => {})).html;
     expect(solder).toContain("shiny cone");
+    // Added 2026-11-15: the clamp text said "not into solder ... Do not tin it." on push-on builds too.
+    // The style sheet names solder classes; only the words the builder reads count.
+    const clamped = (await build((p) => (p.build.joint = "dupont"), clampPart("rowb", 3))).html.replace(/<style>[\s\S]*?<\/style>/, "");
+    expect(clamped).toContain("tighten the screw");
+    expect(clamped).not.toMatch(/solder/i);
+    expect(clamped).not.toMatch(/\btin\b/i);
   });
 
   test("a wire end under a screw is clamped, not soldered or tinned", async () => {
